@@ -1,0 +1,4 @@
+PORT = 8080
+NODE_EVN = development
+MAX_NUMBER_SCHEDULE = 10
+URL_REACT=http://localhost:3000
