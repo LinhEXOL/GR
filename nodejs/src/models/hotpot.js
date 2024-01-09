@@ -24,6 +24,15 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "keyMap",
         as: "provinceData",
       });
+      Hotpot.hasOne(models.Markdown, { foreignKey: "hotpotId" });
+      Hotpot.belongsTo(models.Restaurant, {
+        foreignKey: "restaurantId",
+        targetKey: "id",
+      });
+      Hotpot.belongsTo(models.Type, {
+        foreignKey: "typeId",
+        targetKey: "id",
+      });
     }
   }
   Hotpot.init(

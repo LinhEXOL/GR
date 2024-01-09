@@ -4,6 +4,7 @@ export const path = {
   LOGIN: "/login",
   LOG_OUT: "/logout",
   SYSTEM: "/system",
+  DETAIL_HOTPOT: "/detail-hotpot/:id",
 };
 
 export const LANGUAGES = {
@@ -11,10 +12,11 @@ export const LANGUAGES = {
   EN: "en",
 };
 
-export const manageActions = {
-  ADD: "ADD",
+export const CRUD_ACTIONS = {
+  CREATE: "CREATE",
   EDIT: "EDIT",
   DELETE: "DELETE",
+  READ: "READ",
 };
 
 export const dateFormat = {

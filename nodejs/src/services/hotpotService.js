@@ -1,7 +1,9 @@
 import db from "../models/index";
 const _ = require("lodash");
+require("dotenv").config();
 
 const MAX_NUMBER_SCHEDULE = 10;
+//const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 console.log("MAX_NUMBER_SCHEDULE:", MAX_NUMBER_SCHEDULE);
 
@@ -17,7 +19,68 @@ let getAllHotpots = (hotpotId) => {
           where: { id: hotpotId },
         });
       }
-      resolve(hotpots);
+      resolve({ hotpots, data: hotpots });
+      console.log("Type of hotpots:", typeof hotpots);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllHotpotNames = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let hotpotNames = await db.Hotpot.findAll({
+        attributes: {
+          exclude: ["image"],
+        },
+      });
+
+      resolve({
+        errCode: 0,
+        data: hotpotNames,
+      });
+      console.log("Type of hotpotnames:", typeof hotpotNames);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllTypeNames = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let typeNames = await db.Type.findAll({
+        attributes: {
+          exclude: ["image"],
+        },
+      });
+
+      resolve({
+        errCode: 0,
+        data: typeNames,
+      });
+      console.log("Type of typenames:", typeof typeNames);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllRestaurantNames = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let restaurantNames = await db.Restaurant.findAll({
+        attributes: {
+          exclude: ["image"],
+        },
+      });
+
+      resolve({
+        errCode: 0,
+        data: restaurantNames,
+      });
+      console.log("Type of restaurantnames:", typeof restaurantNames);
     } catch (e) {
       reject(e);
     }
@@ -29,7 +92,6 @@ let createNewHotpot = (data) => {
     try {
       await db.Hotpot.create({
         name: data.name,
-        address: data.address,
         phonenumber: data.phonenumber,
         priceId: data.priceId,
         provinceId: data.provinceId,
@@ -37,6 +99,7 @@ let createNewHotpot = (data) => {
         typeId: data.typeId,
         restaurantId: data.restaurantId,
         note: data.note,
+        image: data.image,
       });
       resolve({
         errCode: 0,
@@ -72,7 +135,7 @@ let deleteHotpot = (hotpotId) => {
 let updateHotpotData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.id) {
+      if (!data.id || !data.paymentId || !data.priceId || !data.paymentId) {
         resolve({
           errCode: 2,
           errMessage: "Missing required parameter",
@@ -91,6 +154,9 @@ let updateHotpotData = (data) => {
         hotpot.note = data.note;
         hotpot.priceId = data.priceId;
         hotpot.paymentId = data.paymentId;
+        if (data.image) {
+          hotpot.image = data.image;
+        }
 
         await hotpot.save();
         resolve({
@@ -140,7 +206,7 @@ let getTopHotpot = (limitInput) => {
     try {
       let hotpots = await db.Hotpot.findAll({
         limit: limitInput,
-        order: [["DESC"]],
+        order: [["createdAt", "DESC"]],
       });
       resolve({
         errCode: 0,
@@ -164,7 +230,7 @@ let getDetailHotpotById = (inputId) => {
         let data = await db.Hotpot.findOne({
           where: { id: inputId },
           attributes: {
-            exclude: ["id", "hotpotId"],
+            exclude: ["hotpotId"],
           },
           include: [
             {
@@ -182,10 +248,28 @@ let getDetailHotpotById = (inputId) => {
               as: "paymentData",
               attributes: ["valueEn", "valueVi"],
             },
+            {
+              model: db.Markdown,
+              attributes: ["description", "contentHTML", "contentMarkdown"],
+            },
+            {
+              model: db.Restaurant,
+              attributes: ["name", "address"],
+            },
+            {
+              model: db.Type,
+              attributes: ["name"],
+            },
           ],
           raw: false,
           nest: true,
         });
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+
+        if (!data) data = {};
+
         resolve({
           errCode: 0,
           data,
@@ -200,6 +284,7 @@ let getDetailHotpotById = (inputId) => {
 let bulkCreateSchedule = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("Check data 1", data);
       if (!data.arrSchedule || !data.hotpotId || !data.formatedDate) {
         resolve({
           errCode: 1,
@@ -210,7 +295,7 @@ let bulkCreateSchedule = (data) => {
         if (schedule && schedule.length > 0) {
           schedule = schedule.map((item) => {
             console.log("item:", item);
-            item.maxNumber = MAX_NUMBER_SCHEDULE;
+            //item.maxNumber = MAX_NUMBER_SCHEDULE;
             //item.date = new Date(item.date).getTime();
             return item;
           });
@@ -220,7 +305,7 @@ let bulkCreateSchedule = (data) => {
         //convert date
         let existing = await db.Schedule.findAll({
           where: { hotpotId: data.hotpotId, date: data.formatedDate },
-          attributes: ["hotpotId", "date", "timeType", "maxNumber"],
+          attributes: ["hotpotId", "date", "timeType"],
           raw: true,
         });
 
@@ -232,7 +317,7 @@ let bulkCreateSchedule = (data) => {
         // }
 
         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-          return a.timeType === b.timeType && a.date === b.date;
+          return a.timeType === b.timeType && +a.date === +b.date;
         });
 
         console.log("check different: ", toCreate);
@@ -335,6 +420,53 @@ let getExtraInfoHotpotById = (hotpotId) => {
   });
 };
 
+let saveDetailInfoHotpot = (inputData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !inputData.hotpotId ||
+        !inputData.contentHTML ||
+        !inputData.contentMarkdown ||
+        !inputData.action
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing parameter",
+        });
+      } else {
+        if (inputData.action === "CREATE") {
+          await db.Markdown.create({
+            contentHTML: inputData.contentHTML,
+            contentMarkdown: inputData.contentMarkdown,
+            description: inputData.description,
+            hotpotId: inputData.hotpotId,
+          });
+        } else if (inputData.action === "EDIT") {
+          let hotpotMarkdown = await db.Markdown.findOne({
+            where: { hotpotId: inputData.hotpotId },
+            raw: false,
+          });
+          if (hotpotMarkdown) {
+            hotpotMarkdown.contentHTML = inputData.contentHTML;
+            hotpotMarkdown.contentMarkdown = inputData.contentMarkdown;
+            hotpotMarkdown.description = inputData.description;
+            hotpotMarkdown.updateAt = new Date();
+
+            await hotpotMarkdown.save();
+          }
+        }
+
+        resolve({
+          errCode: 0,
+          errMessage: "Save info hotpot succees!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllHotpots: getAllHotpots,
   createNewHotpot: createNewHotpot,
@@ -346,4 +478,8 @@ module.exports = {
   bulkCreateSchedule: bulkCreateSchedule,
   getScheduleByDate: getScheduleByDate,
   getExtraInfoHotpotById: getExtraInfoHotpotById,
+  getAllHotpotNames: getAllHotpotNames,
+  saveDetailInfoHotpot: saveDetailInfoHotpot,
+  getAllTypeNames: getAllTypeNames,
+  getAllRestaurantNames: getAllRestaurantNames,
 };

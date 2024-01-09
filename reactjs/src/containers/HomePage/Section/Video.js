@@ -15,9 +15,9 @@ class Video extends Component {
               height="400px"
               src="https://www.youtube.com/embed/zXAqw0Vzr4w"
               title="Nothing you can’t solve with a traditional Sichuan hot pot这世界上没有什么事情是一顿地道老四川火锅解决不了的|Liziqi channel"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           </div>
           <div className="content-right">

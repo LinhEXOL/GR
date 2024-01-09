@@ -22,6 +22,7 @@
   }
 
   .btn-edit {
+    cursor: pointer !important;
     width: 50px;
     border: none;
     outline: none;
@@ -31,6 +32,7 @@
         background-color: transparent !important;
         color: orange !important;
     }
+    
   }
 
   .btn-delete {
@@ -43,6 +45,7 @@
         background-color: transparent !important;
         color: rgb(235, 15, 15) !important;
     }
+    cursor: pointer;
   }
 
   .modal-hotpot-container{

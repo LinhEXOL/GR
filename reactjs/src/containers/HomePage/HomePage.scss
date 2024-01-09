@@ -30,6 +30,11 @@
     }
 }
 
+.slick-disabled{
+    
+    display: none !important;
+}
+
 
 .section-share{
     &.section-type{
@@ -63,7 +68,7 @@
                     background-image: url('../../assets/type/H2.jpeg');
                 }
                 &.section-hotpot{
-                    background-image: url('../../assets/type/laubuffet.jpg');
+                    // background-image: url('../../assets/type/laubuffet.jpg');
                 }
 
                 &.section-handbook{
@@ -116,22 +121,23 @@
     } 
 }
 
-// .section-hotpot{
-//     .outer-bg{
-//         display: flex;
-//         justify-content: center;
-//         margin-bottom: 10px;
-//     }
+.section-hotpot{
+    .outer-bg{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
 
-//     .section-customize{
-//         padding: 5px;
-//         .customize-border{
-//             border: 1px solid #e2b5b5;
-//         }
-//     }
+    .section-customize{
+        padding: 5px;
+        cursor: pointer;
+        .customize-border{
+            
+        }
+    }
 
     
-// }
+}
 
 .home-footer{
     text-align: center;

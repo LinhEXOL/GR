@@ -133,7 +133,9 @@ class HotpotManage extends Component {
   };
 
   render() {
-    let arrHotpots = this.state.arrHotpots;
+    let arrHotpots = this.state.arrHotpots.hotpots;
+    console.log("check arr", arrHotpots);
+    console.log("Type of arrHotpots:", typeof arrHotpots);
     return (
       <div className="hotpots-container">
         <ModalHotpot
@@ -172,7 +174,6 @@ class HotpotManage extends Component {
                 <th>PriceId</th>
                 <th>Note</th>
                 <th>PaymentId</th>
-                <th>Image</th>
                 <th>Action</th>
               </tr>
 
@@ -188,7 +189,6 @@ class HotpotManage extends Component {
                       <td>{item.priceId}</td>
                       <td>{item.note}</td>
                       <td>{item.paymentId}</td>
-                      <td>{item.image}</td>
                       <td>
                         <button
                           className="btn-edit"

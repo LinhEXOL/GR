@@ -8,10 +8,13 @@ import cors from "cors";
 require("dotenv").config(); // giup chayj dc dong process.env
 
 let app = express();
+// Đặt giới hạn kích thước yêu cầu là 50MB (đơn vị: bytes)
+app.use(bodyParser.json({ limit: "100mb" }));
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(cors({ origin: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 viewEngine(app);
 initWebRoutes(app);

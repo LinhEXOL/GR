@@ -18,6 +18,45 @@ let handleGetAllHotpots = async (req, res) => {
   });
 };
 
+let handleGetAllHotpotNames = async (req, res) => {
+  try {
+    let hotpotNames = await hotpotService.getAllHotpotNames();
+    return res.status(200).json(hotpotNames);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
+let handleGetAllTypeNames = async (req, res) => {
+  try {
+    let typeNames = await hotpotService.getAllTypeNames();
+    return res.status(200).json(typeNames);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
+let handleGetAllRestaurantNames = async (req, res) => {
+  try {
+    let restaurantNames = await hotpotService.getAllRestaurantNames();
+    return res.status(200).json(restaurantNames);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
 let handleCreateNewHotpot = async (req, res) => {
   let message = await hotpotService.createNewHotpot(req.body);
   return res.status(200).json(message);
@@ -126,6 +165,19 @@ let handleGetExtraInfoHotpotById = async (req, res) => {
   }
 };
 
+let handlePostInfoHotpot = async (req, res) => {
+  try {
+    let response = await hotpotService.saveDetailInfoHotpot(req.body);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server...",
+    });
+  }
+};
+
 module.exports = {
   handleGetAllHotpots: handleGetAllHotpots,
   handleCreateNewHotpot: handleCreateNewHotpot,
@@ -137,4 +189,8 @@ module.exports = {
   handleBulkCreateSchedule: handleBulkCreateSchedule,
   handleGetScheduleByDate: handleGetScheduleByDate,
   handleGetExtraInfoHotpotById: handleGetExtraInfoHotpotById,
+  handleGetAllHotpotNames: handleGetAllHotpotNames,
+  handlePostInfoHotpot: handlePostInfoHotpot,
+  handleGetAllTypeNames: handleGetAllTypeNames,
+  handleGetAllRestaurantNames: handleGetAllRestaurantNames,
 };

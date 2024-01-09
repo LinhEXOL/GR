@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Type.hasMany(models.Hotpot, {
+        foreignKey: "typeId",
+      });
     }
   }
   Type.init(

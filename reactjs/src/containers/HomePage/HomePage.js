@@ -14,17 +14,19 @@ import Video from "./Section/Video";
 import HomeFooter from "./HomeFooter";
 
 class HomePage extends Component {
+  //handleAfterChange = (event, slick, currentSlide) => {};
   render() {
     let settings = {
       dots: false,
-      infinite: true,
+      infinite: false,
       speed: 500,
       slidesToShow: 4,
       slidesToScroll: 1,
+      // afterChange: this.handleAfterChange,
     };
     return (
       <div>
-        <HomeHeader />
+        <HomeHeader isShowBanner={true} />
         <HotpotType settings={settings} />
         <Restaurant settings={settings} />
         <Hotpot settings={settings} />

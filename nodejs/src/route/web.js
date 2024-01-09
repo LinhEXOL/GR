@@ -27,7 +27,7 @@ let initWebRoutes = (app) => {
   router.put("/api/edit-hotpot", hotpotController.handleEditHotpot);
   router.delete("/api/delete-hotpot", hotpotController.handleDeleteHotpot);
 
-  router.get("/allcode", hotpotController.getAllCode);
+  router.get("/api/allcode", hotpotController.getAllCode);
 
   router.get("/api/top-hotpot", hotpotController.handleGetTopHotpot);
   router.get(
@@ -73,6 +73,20 @@ let initWebRoutes = (app) => {
     "/api/customer-book-hotpot",
     customerController.handlePostBookHotpot
   );
+
+  router.get(
+    "/api/get-all-hotpot-names",
+    hotpotController.handleGetAllHotpotNames
+  );
+
+  router.get("/api/get-all-type-names", hotpotController.handleGetAllTypeNames);
+
+  router.get(
+    "/api/get-all-restaurant-names",
+    hotpotController.handleGetAllRestaurantNames
+  );
+
+  router.post("/api/save-info-hotpot", hotpotController.handlePostInfoHotpot);
 
   return app.use("/", router);
 };
