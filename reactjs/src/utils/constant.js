@@ -5,6 +5,8 @@ export const path = {
   LOG_OUT: "/logout",
   SYSTEM: "/system",
   DETAIL_HOTPOT: "/detail-hotpot/:id",
+  DETAIL_RESTAURANT: "/detail-restaurant/:id",
+  DETAIL_TYPE: "/detail-type/:id",
 };
 
 export const LANGUAGES = {

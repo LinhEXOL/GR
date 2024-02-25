@@ -13,9 +13,9 @@ let handleCreateRestaurant = async (req, res) => {
   }
 };
 
-let handleGetAllRestaurant = async (req, res) => {
+let handleGetAllRestaurants = async (req, res) => {
   try {
-    let info = await restaurantService.getAllRestaurant();
+    let info = await restaurantService.getAllRestaurants();
 
     return res.status(200).json(info);
   } catch (e) {
@@ -42,6 +42,6 @@ let handleGetDetailRestaurantById = async (req, res) => {
 
 module.exports = {
   handleCreateRestaurant: handleCreateRestaurant,
-  handleGetAllRestaurant: handleGetAllRestaurant,
+  handleGetAllRestaurants: handleGetAllRestaurants,
   handleGetDetailRestaurantById: handleGetDetailRestaurantById,
 };

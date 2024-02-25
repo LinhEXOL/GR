@@ -37,7 +37,6 @@ class ManageHotpot extends Component {
   buildDataInputSelect = (inputData) => {
     let result = [];
     if (inputData && inputData.length > 0) {
-      console.log("Type of inputData:", typeof inputData);
       inputData.map((item, index) => {
         let object = {};
         object.label = `${item.name}`;
@@ -51,11 +50,9 @@ class ManageHotpot extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.allHotpotNames !== this.props.allHotpotNames) {
       let dataSelect = this.buildDataInputSelect(this.props.allHotpotNames);
-      console.log("Type of dataSelect:", typeof dataSelect);
       this.setState({
         listHotpotNames: dataSelect,
       });
-      console.log("Type of listHotpotNames:", typeof listHotpotNames);
     }
   }
 
@@ -75,7 +72,6 @@ class ManageHotpot extends Component {
       hotpotId: this.state.selectedHotpot.value,
       action: hasOldData === true ? CRUD_ACTIONS.EDIT : CRUD_ACTIONS.CREATE,
     });
-    console.log("check state", this.state);
   };
 
   handleChangeSelect = async (selectedHotpot) => {
@@ -97,7 +93,6 @@ class ManageHotpot extends Component {
         hasOldData: false,
       });
     }
-    console.log("Check res", res);
   };
 
   handleOnChangeDesc = (event) => {

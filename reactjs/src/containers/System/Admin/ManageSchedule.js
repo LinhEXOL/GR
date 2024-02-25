@@ -126,8 +126,6 @@ class ManageSchedule extends Component {
     let { rangeTime } = this.state;
     let { language } = this.props;
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
-
-    console.log("check hotpot list:", this.state.listHotpotNames);
     return (
       <div className="manage-schedule-container">
         <div className="manage-schedule-title">

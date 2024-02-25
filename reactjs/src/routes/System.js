@@ -8,6 +8,8 @@ import UserRedux from "../containers/System/Admin/UserRedux";
 import Header from "../containers/Header/Header";
 import ManageHotpot from "../containers/System/Admin/ManageHotpot";
 import ManageSchedule from "../containers/System/Admin/ManageSchedule";
+import ManageType from "../containers/System/Type/ManageType";
+import ManageRestaurant from "../containers/System/Restaurant/ManageRestaurant";
 class System extends Component {
   render() {
     const { systemMenuPath, isLoggedIn } = this.props;
@@ -22,6 +24,11 @@ class System extends Component {
               <Route path="/system/CRUD-user" component={UserManage} />
               <Route path="/system/hotpot-redux" component={HotpotRedux} />
               <Route path="/system/user-redux" component={UserRedux} />
+              <Route path="/system/manage-type" component={ManageType} />
+              <Route
+                path="/system/manage-restaurant"
+                component={ManageRestaurant}
+              />
               <Route
                 path="/system/schedule-manage"
                 component={ManageSchedule}

@@ -1,30 +1,44 @@
 .hotpot-extra-info-container{
-    padding-left: 15px;
+    padding-left: 20px;
     .content-up{
         margin-bottom: 10px;
         .text-address{
             text-transform: uppercase;
             color: #cb161c; 
+            font-weight: 600;
         }
         .name-restaurant{
             padding: 5px 0;
             font-weight: 600;
-            color: #cb161c;
+            // color: #cb161c;
         }
         .address-restaurant{
             font-weight: 600;
-            color: #cb161c;
+            // color: #cb161c;
         }
     }
     .content-down{
+        border-top: 1px solid #fab0b2;
+        padding-top: 10px;
         .short-info{
-            span{
+            .price{
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+            .detail{
                 cursor: pointer;
                 color: #00838f
+            }
+
+            .currency{
+                margin: 0 5px;
             }
         }
         .title-price{
             margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
         .detail-info{
             border: 1px solid #ddd;
@@ -35,6 +49,8 @@
                 .right{
                     float: right
                 }
+                
+
             }
             .note{
 

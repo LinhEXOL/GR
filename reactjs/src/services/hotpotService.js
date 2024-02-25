@@ -10,7 +10,6 @@ const getAllHotpots = (inputId) => {
 };
 
 const createNewHotpotService = (data) => {
-  console.log("check data from service", data);
   return axios.post("/api/create-new-hotpot", data);
 };
 
@@ -63,6 +62,41 @@ const getScheduleHotpotByDate = (hotpotId, date) => {
   );
 };
 
+const getExtraInfoHotpotById = (hotpotId) => {
+  //return axios.get(`/api/get-extra-info-hotpot-by-id?hotpotId=${hotpotId}`);
+  return axios.get(`/api/get-extra-info-hotpot-by-id?id=${hotpotId}`);
+};
+
+const postCustomerBookHotpot = (data) => {
+  return axios.post("/api/customer-book-hotpot", data);
+};
+
+const createNewRestaurant = (data) => {
+  return axios.post("/api/create-new-restaurant", data);
+};
+
+const createNewType = (data) => {
+  return axios.post("/api/create-new-type", data);
+};
+
+const getAllRestaurants = (data) => {
+  return axios.get("/api/get-all-restaurants");
+};
+
+const getAllTypes = (data) => {
+  return axios.get("/api/get-all-types");
+};
+
+const getDetailTypeById = (data) => {
+  return axios.get(
+    `/api/get-detail-type-by-id?id=${data.id}&location=${data.location}`
+  );
+};
+
+const getDetailRestaurantById = (data) => {
+  return axios.get(`/api/get-detail-restaurant-by-id?id=${data.id}`);
+};
+
 export {
   handleLoginApi,
   getAllHotpots,
@@ -78,4 +112,12 @@ export {
   getScheduleHotpotByDate,
   getAllTypeNamesService,
   getAllRestaurantNamesService,
+  getExtraInfoHotpotById,
+  postCustomerBookHotpot,
+  createNewRestaurant,
+  createNewType,
+  getAllRestaurants,
+  getAllTypes,
+  getDetailTypeById,
+  getDetailRestaurantById,
 };

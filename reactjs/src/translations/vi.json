@@ -74,7 +74,9 @@
 },
 "homepage":{
     "outstanding-hotpot":"Lẩu hot tuần qua",
-    "more-info":"Xem thêm"
+    "more-info":"Xem thêm",
+    "type-popular":"Các loại lẩu phổ biến",
+    "outstanding-restaurant": "Các nhà hàng nổi bật"
 },
 "manage-schedule":{
     "title":"Quản lý lịch đặt lẩu",
@@ -88,6 +90,24 @@
         "no-schedule": "Không có lịch trong thời gian này, vui lòng chọn thời gian khác!",
         "choose":"Chọn ",
         "book-free": " và đặt (miễn phí)."
+    },
+    "extra-info-hotpot":{
+        "text-address": "Địa chỉ",
+        "price": "Giá món lẩu:",
+        "detail": "Xem chi tiết",
+        "payment": "Hình thức thanh toán: ",
+        "hide-price": "Ẩn bảng giá"
+    },
+    "booking-modal":{
+        "title": "Thông tin đặt lịch",
+        "fullName":"Họ và tên",
+        "phoneNumber":"Số điện thoại",
+        "email":"Email",
+        "note":"Ghi chú",
+        "btn-confirm": "Xác nhận",
+        "btn-cancel": "Hủy",
+        "free-booking": "Miễn phí đặt lịch",
+        "price": "Giá: "
     }
 }
 

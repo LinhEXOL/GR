@@ -1,8 +1,14 @@
 import db from "../models/index";
 let createType = async (data) => {
   return new Promise(async (resolve, reject) => {
+    console.log("CHECK DATA type", data);
     try {
-      if (!data.name || !data.image || !data.description) {
+      if (
+        !data.name ||
+        !data.imageBase64 ||
+        !data.descriptionHTML ||
+        !data.descriptionMarkdown
+      ) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parameter",
@@ -10,8 +16,9 @@ let createType = async (data) => {
       } else {
         await db.Type.create({
           name: data.name,
-          image: data.image,
-          description: data.description,
+          image: data.imageBase64,
+          descriptionHTML: data.descriptionHTML,
+          descriptionMarkdown: data.descriptionMarkdown,
         });
         resolve({
           errCode: 0,
@@ -24,7 +31,7 @@ let createType = async (data) => {
   });
 };
 
-let getAllType = () => {
+let getAllTypes = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let data = await db.Type.findAll();
@@ -53,7 +60,7 @@ let getDetailTypeById = (inputId, location) => {
       } else {
         let data = await db.Type.findOne({
           where: { id: inputId },
-          attributes: ["description"],
+          attributes: ["descriptionHTML", "descriptionMarkdown"],
         });
         if (data) {
           let hotpotType = [];
@@ -72,7 +79,7 @@ let getDetailTypeById = (inputId, location) => {
 
           data.hotpotType = hotpotType;
         } else {
-          data = {};
+          data = "linh";
         }
         resolve({
           errCode: 0,
@@ -88,6 +95,6 @@ let getDetailTypeById = (inputId, location) => {
 
 module.exports = {
   createType: createType,
-  getAllType: getAllType,
+  getAllTypes: getAllTypes,
   getDetailTypeById: getDetailTypeById,
 };

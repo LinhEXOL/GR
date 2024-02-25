@@ -1,0 +1,10 @@
+.restaurant-child{
+    cursor: pointer;
+    .restaurant-name{
+        text-align: center !important;
+        padding: 10px 0;
+        &:hover{
+            color: #cb161c;
+        }
+    }
+}

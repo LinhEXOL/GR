@@ -49,13 +49,10 @@ class TableManageHotpot extends Component {
   };
 
   handleEditHotpot = (hotpot) => {
-    console.log("hotpot edit:", hotpot);
     this.props.handleEditHotpot(hotpot);
   };
 
   render() {
-    console.log("check all hotpot", this.props.listHotpots);
-    console.log("check state:", this.state.hotpotsRedux);
     let arrHotpots = this.state.hotpotsRedux;
     return (
       <React.Fragment>

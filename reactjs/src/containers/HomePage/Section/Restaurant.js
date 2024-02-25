@@ -1,44 +1,71 @@
 import React, { Component } from "react";
-
+import "./Restaurant.scss";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import Slider from "react-slick";
-
+import { getAllRestaurants } from "../../../services/hotpotService";
+import { withRouter } from "react-router";
 class Restaurant extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataRestaurant: [],
+    };
+  }
+
+  async componentDidMount() {
+    let res = await getAllRestaurants();
+    if (res && res.errCode === 0) {
+      this.setState({
+        dataRestaurant: res.data ? res.data : [],
+      });
+    }
+  }
+
+  handleViewDetailRestaurant = (item) => {
+    this.props.history.push(`/detail-restaurant/${item.id}`);
+  };
+
   render() {
+    let { dataRestaurant } = this.state;
     return (
       <div className="section-share section-restaurant">
         <div className="section-container">
           <div className="section-header">
-            <span className="title-section">Các nhà hàng nổi bật</span>
-            <button className="btn-section">Xem thêm</button>
+            <span className="title-section">
+              <FormattedMessage id="homepage.outstanding-restaurant" />
+            </span>
+            <button className="btn-section">
+              <FormattedMessage id="homepage.more-info" />
+            </button>
           </div>
           <div className="section-body">
             <Slider {...this.props.settings}>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 1</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 2</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 3</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 4</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 5</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-restaurant" />
-                <div>Nhà hàng 6</div>
-              </div>
+              {dataRestaurant &&
+                dataRestaurant.length > 0 &&
+                dataRestaurant.map((item, index) => {
+                  let imageBase64 = "";
+                  if (item.image) {
+                    imageBase64 = new Buffer(item.image, "base64").toString(
+                      "binary"
+                    );
+                  }
+                  return (
+                    <div
+                      className="section-customize restaurant-child"
+                      key={index}
+                      onClick={() => this.handleViewDetailRestaurant(item)}
+                    >
+                      <div
+                        className="bg-image section-type"
+                        style={{
+                          backgroundImage: `url(${imageBase64})`,
+                        }}
+                      />
+                      <div className="restaurant-name">{item.name}</div>
+                    </div>
+                  );
+                })}
             </Slider>
           </div>
         </div>
@@ -61,7 +88,9 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Restaurant);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Restaurant)
+);
 //connect:kết nối react với redux
 //
 

@@ -7,6 +7,7 @@ import localization from "moment/locale/vi";
 import { LANGUAGES } from "../../../utils";
 import { getScheduleHotpotByDate } from "../../../services/hotpotService";
 import { FormattedMessage } from "react-intl";
+import BookingModal from "./Modal/BookingModal";
 
 class HotpotSchedule extends Component {
   constructor(props) {
@@ -14,12 +15,29 @@ class HotpotSchedule extends Component {
     this.state = {
       allDays: [],
       allAvailableTime: [],
+      isOpenModalBooking: false,
+      dataScheduleTimeModal: {},
     };
   }
 
   async componentDidMount() {
     let { language } = this.props;
     let allDays = this.getArrDays(language);
+
+    if (this.props.hotpotIdFromParent) {
+      let res = await getScheduleHotpotByDate(
+        this.props.hotpotIdFromParent,
+        allDays[0].value
+      );
+      console.log(
+        "this.props.hotpotIdFromParent,",
+        this.props.hotpotIdFromParent
+      );
+      this.setState({
+        allAvailableTime: res.data ? res.data : [],
+      });
+    }
+
     this.setState({
       allDays: allDays,
     });
@@ -65,7 +83,6 @@ class HotpotSchedule extends Component {
   async componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.language !== prevProps.language) {
       let allDays = this.getArrDays(this.props.language);
-      console.log("check allday", allDays);
       this.setState({
         allDays: allDays,
       });
@@ -83,87 +100,108 @@ class HotpotSchedule extends Component {
   }
 
   handleOnChangeSelect = async (event) => {
-    console.log("check parent", this.props.hotpotIdFromParent);
     if (this.props.hotpotIdFromParent && this.props.hotpotIdFromParent !== -1) {
       let hotpotId = this.props.hotpotIdFromParent;
       let date = event.target.value;
       let res = await getScheduleHotpotByDate(hotpotId, date);
-      console.log("check res", res);
-
       if (res && res.errCode === 0) {
         this.setState({
           allAvailableTime: res.data ? res.data : [],
         });
       }
-
-      console.log("check res", res);
     }
   };
 
+  handleClickScheduleTime = (time) => {
+    this.setState({
+      isOpenModalBooking: true,
+      dataScheduleTimeModal: time,
+    });
+  };
+
+  closeBookingModal = () => {
+    this.setState({
+      isOpenModalBooking: false,
+    });
+  };
+
   render() {
-    let { allDays, allAvailableTime } = this.state;
+    let {
+      allDays,
+      allAvailableTime,
+      isOpenModalBooking,
+      dataScheduleTimeModal,
+    } = this.state;
     let { language } = this.props;
     return (
-      <div className="hotpot-schedule-container">
-        <div className="all-schedule">
-          <select onChange={(event) => this.handleOnChangeSelect(event)}>
-            {allDays &&
-              allDays.length > 0 &&
-              allDays.map((item, index) => {
-                return (
-                  <option value={item.value} key={index}>
-                    {item.label}
-                  </option>
-                );
-              })}
-          </select>
-        </div>
-        <div className="all-available-time">
-          <div className="text-calender">
-            <i className="fa fa-calendar" aria-hidden="true">
-              <span>
-                <FormattedMessage id="customer.detail-hotpot.schedule" />
-              </span>
-            </i>
+      <>
+        <div className="hotpot-schedule-container">
+          <div className="all-schedule">
+            <select onChange={(event) => this.handleOnChangeSelect(event)}>
+              {allDays &&
+                allDays.length > 0 &&
+                allDays.map((item, index) => {
+                  return (
+                    <option value={item.value} key={index}>
+                      {item.label}
+                    </option>
+                  );
+                })}
+            </select>
           </div>
-          <div className="time-content">
-            {allAvailableTime && allAvailableTime.length > 0 ? (
-              <>
-                <div className="time-content-btns">
-                  {allAvailableTime.map((item, index) => {
-                    let timeDisplay =
-                      language === LANGUAGES.VI
-                        ? item.timeTypeData.valueVi
-                        : item.timeTypeData.valueEn;
-                    return (
-                      <button
-                        key={index}
-                        className={
-                          language === LANGUAGES.VI ? "btn-vi" : "btn-en"
-                        }
-                      >
-                        {timeDisplay}
-                      </button>
-                    );
-                  })}
-                </div>
+          <div className="all-available-time">
+            <div className="text-calender">
+              <i className="fa fa-calendar" aria-hidden="true">
+                <span>
+                  <FormattedMessage id="customer.detail-hotpot.schedule" />
+                </span>
+              </i>
+            </div>
+            <div className="time-content">
+              {allAvailableTime && allAvailableTime.length > 0 ? (
+                <>
+                  <div className="time-content-btns">
+                    {allAvailableTime.map((item, index) => {
+                      let timeDisplay =
+                        language === LANGUAGES.VI
+                          ? item.timeTypeData.valueVi
+                          : item.timeTypeData.valueEn;
+                      return (
+                        <button
+                          key={index}
+                          className={
+                            language === LANGUAGES.VI ? "btn-vi" : "btn-en"
+                          }
+                          onClick={() => this.handleClickScheduleTime(item)}
+                        >
+                          {timeDisplay}
+                        </button>
+                      );
+                    })}
+                  </div>
 
-                <div className="book-free">
-                  <span>
-                    <FormattedMessage id="customer.detail-hotpot.choose" />{" "}
-                    <i class="far fa-hand-point-up"></i>{" "}
-                    <FormattedMessage id="customer.detail-hotpot.book-free" />
-                  </span>
+                  <div className="book-free">
+                    <span>
+                      <FormattedMessage id="customer.detail-hotpot.choose" />{" "}
+                      <i class="far fa-hand-point-up"></i>{" "}
+                      <FormattedMessage id="customer.detail-hotpot.book-free" />
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="no-schedule">
+                  <FormattedMessage id="customer.detail-hotpot.no-schedule" />
                 </div>
-              </>
-            ) : (
-              <div className="no-schedule">
-                <FormattedMessage id="customer.detail-hotpot.no-schedule" />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
+        <BookingModal
+          isOpenModal={isOpenModalBooking}
+          closeBookingModal={this.closeBookingModal}
+          dataTime={dataScheduleTimeModal}
+        />
+      </>
     );
   }
 }

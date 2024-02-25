@@ -30,7 +30,7 @@ class HomePage extends Component {
         <HotpotType settings={settings} />
         <Restaurant settings={settings} />
         <Hotpot settings={settings} />
-        <HandBook settings={settings} />
+        {/* <HandBook settings={settings} /> */}
         <Video />
         <HomeFooter />
       </div>

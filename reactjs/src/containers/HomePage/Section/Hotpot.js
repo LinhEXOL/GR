@@ -28,14 +28,12 @@ class Hotpot extends Component {
   }
 
   handleViewDetailHotpot = (hotpot) => {
-    console.log("view detail hotpot:", hotpot);
     this.props.history.push(`/detail-hotpot/${hotpot.id}`);
   };
   render() {
     let arrHotpots = this.state.arrHotpots;
     let { language } = this.props;
     //arrHotpots = arrHotpots.concat(arrHotpots).concat(arrHotpots); //its đata quá fai tạo thêm
-    console.log("check arrHotpot", arrHotpots);
     return (
       <div className="section-share section-hotpot">
         <div className="section-container">

@@ -133,7 +133,6 @@ class HotpotRedux extends Component {
     let file = data[0];
     if (file) {
       let base64 = await CommonUtils.getBase64(file);
-      console.log("check base64", base64);
       let objectUrl = URL.createObjectURL(file);
       this.setState({
         previewImgURL: objectUrl,
@@ -217,7 +216,6 @@ class HotpotRedux extends Component {
   };
 
   handleEditHotpot = (hotpot) => {
-    console.log("check edit hotpot", hotpot);
     let imageBase64 = "";
     if (hotpot.image) {
       imageBase64 = new Buffer(hotpot.image, "base64").toString("binary");

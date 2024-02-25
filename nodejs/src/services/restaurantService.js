@@ -2,7 +2,13 @@ import db from "../models/index";
 let createRestaurant = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.name || !data.image || !data.description || !data.address) {
+      if (
+        !data.name ||
+        !data.imageBase64 ||
+        !data.descriptionHTML ||
+        !data.address ||
+        !data.descriptionMarkdown
+      ) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parameter",
@@ -10,8 +16,9 @@ let createRestaurant = async (data) => {
       } else {
         await db.Restaurant.create({
           name: data.name,
-          image: data.image,
-          description: data.description,
+          image: data.imageBase64,
+          descriptionHTML: data.descriptionHTML,
+          descriptionMarkdown: data.descriptionMarkdown,
           address: data.address,
         });
         resolve({
@@ -25,7 +32,7 @@ let createRestaurant = async (data) => {
   });
 };
 
-let getAllRestaurant = () => {
+let getAllRestaurants = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let data = await db.Restaurant.findAll();
@@ -54,7 +61,12 @@ let getDetailRestaurantById = (inputId) => {
       } else {
         let data = await db.Restaurant.findOne({
           where: { id: inputId },
-          attributes: ["description"],
+          attributes: [
+            "name",
+            "address",
+            "descriptionHTML",
+            "descriptionMarkdown",
+          ],
         });
         if (data) {
           let hotpotRestaurant = [];
@@ -81,6 +93,6 @@ let getDetailRestaurantById = (inputId) => {
 
 module.exports = {
   createRestaurant: createRestaurant,
-  getAllRestaurant: getAllRestaurant,
+  getAllRestaurants: getAllRestaurants,
   getDetailRestaurantById: getDetailRestaurantById,
 };

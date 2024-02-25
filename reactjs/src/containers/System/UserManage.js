@@ -32,7 +32,6 @@ class UserManage extends Component {
 
   render() {
     let arrUsers = this.state.arrUsers;
-    console.log("user:", arrUsers);
     return (
       <div className="hotpots-container">
         <div className="title text-center">Manage user</div>

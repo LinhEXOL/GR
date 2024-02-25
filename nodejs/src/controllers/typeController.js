@@ -15,7 +15,7 @@ let handleCreateType = async (req, res) => {
 
 let handleGetAllTypes = async (req, res) => {
   try {
-    let info = await typeService.getAllType();
+    let info = await typeService.getAllTypes();
 
     return res.status(200).json(info);
   } catch (e) {

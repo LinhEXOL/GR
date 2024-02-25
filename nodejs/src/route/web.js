@@ -49,6 +49,11 @@ let initWebRoutes = (app) => {
     hotpotController.handleGetExtraInfoHotpotById
   );
 
+  router.get(
+    "/api/get-profile-hotpot-by-id",
+    hotpotController.handleGetProfileHotpotById
+  );
+
   router.post("/api/create-new-type", typeController.handleCreateType);
   router.get("/api/get-all-types", typeController.handleGetAllTypes);
   router.get(
@@ -62,16 +67,11 @@ let initWebRoutes = (app) => {
   );
   router.get(
     "/api/get-all-restaurants",
-    restaurantController.handleGetAllRestaurant
+    restaurantController.handleGetAllRestaurants
   );
   router.get(
     "/api/get-detail-restaurant-by-id",
     restaurantController.handleGetDetailRestaurantById
-  );
-
-  router.post(
-    "/api/customer-book-hotpot",
-    customerController.handlePostBookHotpot
   );
 
   router.get(
@@ -88,6 +88,10 @@ let initWebRoutes = (app) => {
 
   router.post("/api/save-info-hotpot", hotpotController.handlePostInfoHotpot);
 
+  router.post(
+    "/api/customer-book-hotpot",
+    customerController.handlePostBookHotpot
+  );
   return app.use("/", router);
 };
 

@@ -403,6 +403,65 @@ let getExtraInfoHotpotById = (hotpotId) => {
               as: "paymentData",
               attributes: ["valueEn", "valueVi"],
             },
+            { model: db.Restaurant, atrributes: ["name", "address", "id"] },
+            { model: db.Type, atrributes: ["name", "id"] },
+            {
+              model: db.Markdown,
+              attributes: ["description", "contentHTML", "contentMarkdown"],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+
+        if (!data) data = {};
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getProfileHotpotById = (hotpotId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!hotpotId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      } else {
+        let data = await db.Hotpot.findOne({
+          where: { id: hotpotId },
+          attributes: {
+            exclude: ["id", "hotpotId"],
+          },
+          include: [
+            {
+              model: db.Allcode,
+              as: "priceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "provinceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "paymentData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            { model: db.Restaurant, atrributes: ["name", "address", "id"] },
+            { model: db.Type, atrributes: ["name", "id"] },
           ],
           raw: false,
           nest: true,
@@ -482,4 +541,5 @@ module.exports = {
   saveDetailInfoHotpot: saveDetailInfoHotpot,
   getAllTypeNames: getAllTypeNames,
   getAllRestaurantNames: getAllRestaurantNames,
+  getProfileHotpotById: getProfileHotpotById,
 };

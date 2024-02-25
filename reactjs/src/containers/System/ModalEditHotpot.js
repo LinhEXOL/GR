@@ -37,7 +37,6 @@ class ModalEditHotpot extends Component {
         note: hotpot.note,
       });
     }
-    console.log("didmount edit modal", this.props.currentHotpot);
   }
 
   toggle = () => {

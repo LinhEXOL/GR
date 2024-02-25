@@ -71,8 +71,10 @@
         "paymentId": "Payment method"
     },
 "homepage":{
-    "outstanding-hotpot":"Last week's featured hotpot",
-    "more-info":"More info"
+    "outstanding-hotpot":"Last week's hot hotpot",
+    "more-info":"More info",
+    "type-popular":"Popular hotpot type",
+    "outstanding-restaurant": "Featured Restaurant"
 },
 "manage-schedule":{
     "title":"Manage hotpot ordering schedule ",
@@ -86,6 +88,24 @@
         "no-schedule": "There are no schedules available during this time, please choose another time!",
         "choose":"Choose ",
         "book-free": " and book (free)."
+    },
+    "extra-info-hotpot":{
+        "text-address": "Address",
+        "price": "Price:",
+        "detail": "See details",
+        "payment": "Payment method: ",
+        "hide-price": "Hide price list"
+    },
+    "booking-modal":{
+        "title": "Booking information",
+        "fullName":"Full name",
+        "phoneNumber":"Phone number",
+        "email":"Email",
+        "note":"Note",
+        "btn-confirm": "Confirm",
+        "btn-cancel": "Cancel",
+        "free-booking": "Free booking",
+        "price": "Price: "
     }
 }
     

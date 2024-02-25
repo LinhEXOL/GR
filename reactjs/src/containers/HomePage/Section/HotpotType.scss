@@ -1,0 +1,10 @@
+.type-child{
+    cursor: pointer;
+    .type-name{
+        padding: 10px 0;
+        text-align: center !important;
+        &:hover{
+            color: #cb161c;
+        }
+    }
+}

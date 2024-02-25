@@ -1,44 +1,72 @@
 import React, { Component } from "react";
-
+import "./HotpotType.scss";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import Slider from "react-slick";
-
+import { getAllTypes } from "../../../services/hotpotService";
+import { withRouter } from "react-router";
 class HotpotType extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataType: [],
+    };
+  }
+
+  async componentDidMount() {
+    let res = await getAllTypes();
+    if (res && res.errCode === 0) {
+      this.setState({
+        dataType: res.data,
+      });
+    }
+  }
+
+  handleViewDetailType = (item) => {
+    if (this.props.history) {
+      this.props.history.push(`/detail-type/${item.id}`);
+    }
+  };
   render() {
+    let { dataType } = this.state;
     return (
       <div className="section-share section-type">
         <div className="section-container">
           <div className="section-header">
-            <span className="title-section">Các loại lẩu</span>
-            <button className="btn-section">Xem thêm</button>
+            <span className="title-section">
+              <FormattedMessage id="homepage.type-popular" />
+            </span>
+            <button className="btn-section">
+              <FormattedMessage id="homepage.more-info" />
+            </button>
           </div>
           <div className="section-body">
             <Slider {...this.props.settings}>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 1</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 2</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 3</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 4</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 5</div>
-              </div>
-              <div className="section-customize">
-                <div className="bg-image section-type" />
-                <div>Lẩu buffet 6</div>
-              </div>
+              {dataType &&
+                dataType.length > 0 &&
+                dataType.map((item, index) => {
+                  let imageBase64 = "";
+                  if (item.image) {
+                    imageBase64 = new Buffer(item.image, "base64").toString(
+                      "binary"
+                    );
+                  }
+                  return (
+                    <div
+                      className="section-customize type-child"
+                      key={index}
+                      onClick={() => this.handleViewDetailType(item)}
+                    >
+                      <div
+                        className="bg-image section-type"
+                        style={{
+                          backgroundImage: `url(${imageBase64})`,
+                        }}
+                      />
+                      <div className="type-name">{item.name}</div>
+                    </div>
+                  );
+                })}
             </Slider>
           </div>
         </div>
@@ -61,7 +89,9 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HotpotType);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(HotpotType)
+);
 //connect:kết nối react với redux
 //
 

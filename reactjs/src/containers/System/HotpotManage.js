@@ -89,12 +89,9 @@ class HotpotManage extends Component {
     } catch (e) {
       console.log(e);
     }
-
-    console.log("check data from", data);
   };
 
   handleDeleteHotpot = async (hotpot) => {
-    console.log("click delete", hotpot);
     try {
       let res = await deleteHotpotService(hotpot.id);
       if (res && res.errCode === 0) {
@@ -109,7 +106,6 @@ class HotpotManage extends Component {
   };
 
   handleEditHotpot = (hotpot) => {
-    console.log("check edit hotpot", hotpot);
     this.setState({
       isOpenModalEditHotpot: true,
       hotpotEdit: hotpot,
@@ -134,8 +130,6 @@ class HotpotManage extends Component {
 
   render() {
     let arrHotpots = this.state.arrHotpots.hotpots;
-    console.log("check arr", arrHotpots);
-    console.log("Type of arrHotpots:", typeof arrHotpots);
     return (
       <div className="hotpots-container">
         <ModalHotpot

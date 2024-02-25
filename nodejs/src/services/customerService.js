@@ -1,8 +1,16 @@
+import { some } from "lodash";
 import db from "../models/index";
 let postBookHotpot = (data) => {
   return new Promise(async (resolve, reject) => {
+    console.log("DATA", data);
     try {
-      if (!data.email || !data.hotpotId || !data.timeType || !data.date) {
+      if (
+        !data.email ||
+        !data.hotpotId ||
+        !data.timeType ||
+        !data.date ||
+        !data.phoneNumber
+      ) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parameter",
@@ -11,9 +19,11 @@ let postBookHotpot = (data) => {
         //upsert customer
         let user = await db.User.findOrCreate({
           where: { email: data.email },
-          default: {
-            email: data.email,
+          defaults: {
             roleId: "R3",
+            email: data.email,
+
+            phonenumber: data.phoneNumber,
           },
         });
 
@@ -31,6 +41,7 @@ let postBookHotpot = (data) => {
           });
         }
         resolve({
+          data: user,
           errCode: 0,
           errMessage: "Save info customer succeed!",
         });

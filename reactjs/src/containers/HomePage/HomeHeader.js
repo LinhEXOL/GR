@@ -2,15 +2,44 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import "./HomeHeader.scss";
+import * as actions from "../../store/actions";
 import { FormattedMessage } from "react-intl";
 import { LANGUAGES } from "../../utils/constant";
 import { changeLanguageApp } from "../../store/actions/appActions";
 import { withRouter } from "react-router";
+import { getAllTypes } from "../../services/hotpotService";
 class HomeHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataType: [],
+      restaurantId: "",
+    };
+  }
   changeLanguage = (language) => {
     this.props.changeLanguageAppRedux(language);
     //fire redux event(actions)
     //bootstrap (v): áp khởi động thành công
+  };
+
+  async componentDidMount() {
+    this.props.fetchAllRestaurantNames();
+    let res = await getAllTypes();
+    if (res && res.errCode === 0) {
+      this.setState({
+        dataType: res.data,
+      });
+    }
+  }
+
+  handleViewDetailType = (item) => {
+    if (this.props.history) {
+      this.props.history.push(`/detail-type/${item.id}`);
+    }
+  };
+
+  handleViewDetailRestaurant = (id) => {
+    this.props.history.push(`/detail-restaurant/${id}`);
   };
 
   returnHomePage = () => {
@@ -19,8 +48,40 @@ class HomeHeader extends Component {
     }
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.allRestaurantNames !== this.props.allRestaurantNames) {
+      let arrRestaurantNames = this.props.allRestaurantNames;
+      this.setState({
+        listRestaurantNames: arrRestaurantNames,
+        restaurantId:
+          arrRestaurantNames && arrRestaurantNames.length > 0
+            ? arrRestaurantNames[0].id
+            : "",
+      });
+    }
+    if (prevProps.allTypeNames !== this.props.allTypeNames) {
+      let arrTypeNames = this.props.allTypeNames;
+      this.setState({
+        listTypeNames: arrTypeNames,
+        typeId:
+          arrTypeNames && arrTypeNames.length > 0 ? arrTypeNames[0].id : "",
+      });
+    }
+  }
+
+  onChangeInput = (event, id) => {
+    let copyState = { ...this.state };
+    copyState[id] = event.target.value;
+    this.setState({
+      ...copyState,
+    });
+    this.handleViewDetailRestaurant(event.target.value);
+  };
+
   render() {
     let language = this.props.language;
+    let { dataType, restaurantId } = this.state;
+    let restaurantNames = this.state.listRestaurantNames;
     return (
       <React.Fragment>
         <div className="home-header-container">
@@ -110,6 +171,15 @@ class HomeHeader extends Component {
 
         {this.props.isShowBanner === true && (
           <div className="home-header-banner">
+            {/* <div class="l-section-video" data-video-disable-width="0">
+              <video muted="" loop="" autoplay="" playsinline="" preload="auto">
+                <source
+                  src="https://qiaolinhotpot.com/wp-content/uploads/2022/06/侨林火锅.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div> */}
+
             <div className="content-up">
               <div className="title1">
                 <FormattedMessage id="banner.title1" />
@@ -119,44 +189,44 @@ class HomeHeader extends Component {
               </div>
               <div className="search">
                 <i className="fas fa-search"></i>
-                <input type="text" placeholder="tìm lẩu" />
+                {/* <input type="text" placeholder="tìm lẩu" /> */}
+                <select
+                  className="form-control"
+                  onChange={(event) => {
+                    this.onChangeInput(event, "restaurantId");
+                  }}
+                  value={restaurantId}
+                >
+                  {restaurantNames &&
+                    restaurantNames.length > 0 &&
+                    restaurantNames.map((item, index) => {
+                      return (
+                        <option key={index} value={item.id}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
+                </select>
               </div>
             </div>
             <div className="content-down">
               <div className="options">
-                <div className="option-child">
-                  <div className="icon-child">
-                    <i className="fa fa-heartbeat"></i>
-                  </div>
-                  <div className="text-child">
-                    <FormattedMessage id="banner.child1" />
-                  </div>
-                </div>
-                <div className="option-child">
-                  <div className="icon-child">
-                    <i className="fa fa-heartbeat"></i>
-                  </div>
-                  <div className="text-child">
-                    <FormattedMessage id="banner.child2" />
-                  </div>
-                </div>
-                <div className="option-child">
-                  <div className="icon-child">
-                    <i className="fa fa-heartbeat"></i>
-                  </div>
-                  <div className="text-child">
-                    <FormattedMessage id="banner.child3" />
-                  </div>
-                </div>
-                <div className="option-child">
-                  <div className="icon-child">
-                    <i className="fa fa-tree"></i>
-                  </div>
-
-                  <div className="text-child">
-                    <FormattedMessage id="banner.child4" />
-                  </div>
-                </div>
+                {dataType &&
+                  dataType.length > 0 &&
+                  dataType.slice(0, 5).map((item, index) => {
+                    return (
+                      <div
+                        className="option-child"
+                        key={index}
+                        onClick={() => this.handleViewDetailType(item)}
+                      >
+                        <div className="icon-child">
+                          <i className="fa fa-heartbeat"></i>
+                        </div>
+                        <div className="text-child">{item.name}</div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -172,6 +242,7 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
+    allRestaurantNames: state.admin.allRestaurantNames,
   };
 };
 
@@ -179,6 +250,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
+    fetchAllRestaurantNames: () => dispatch(actions.fetchAllRestaurantNames()),
   };
 };
 
