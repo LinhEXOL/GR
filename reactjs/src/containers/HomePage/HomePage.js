@@ -27,8 +27,8 @@ class HomePage extends Component {
     return (
       <div>
         <HomeHeader isShowBanner={true} />
-        <HotpotType settings={settings} />
-        <Restaurant settings={settings} />
+        {/* <HotpotType settings={settings} /> */}
+        {/* <Restaurant settings={settings} /> */}
         <Hotpot settings={settings} />
         {/* <HandBook settings={settings} /> */}
         <Video />

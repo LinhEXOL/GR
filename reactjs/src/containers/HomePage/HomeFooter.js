@@ -6,7 +6,13 @@ import { FormattedMessage } from "react-intl";
 class HomeFooter extends Component {
   render() {
     return (
-      <div className="home-footer">
+      <div id="about-us" className="home-footer">
+        <div>
+          Contact Details
+          <p>Phone: 0123456789</p>
+          <p>Email: info@hotpot.com</p>
+          <p>Address: 1st Dai Co Viet, Hai Ba Trung, Ha Noi</p>
+        </div>
         <p>
           &copy; 2023 EXOL. More information, please visit my facebook.
           <a target="_blank" href="https://www.facebook.com/weareoneEXO">

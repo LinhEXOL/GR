@@ -46,7 +46,9 @@
             "crud-hotpot-redux": "CRUD hotpot redux",
             "crud-user-redux": "CRUD user redux",
             "restaurant": "Restaurant",
+            "hp":"Hp",
             "manage-restaurant": "Manage restaurant",
+            "manage-hp": "Manage hp",
             "type": "Hotpot Type",
             "manage-type": "Manage hotpot type",
             "handbook": "Handbook",
@@ -91,7 +93,7 @@
     },
     "extra-info-hotpot":{
         "text-address": "Address",
-        "price": "Price:",
+        "price": "Price range: ",
         "detail": "See details",
         "payment": "Payment method: ",
         "hide-price": "Hide price list"

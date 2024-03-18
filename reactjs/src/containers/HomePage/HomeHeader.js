@@ -8,12 +8,14 @@ import { LANGUAGES } from "../../utils/constant";
 import { changeLanguageApp } from "../../store/actions/appActions";
 import { withRouter } from "react-router";
 import { getAllTypes } from "../../services/hotpotService";
+import { Link } from "react-router-dom";
 class HomeHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataType: [],
       restaurantId: "",
+      isClicked: false,
     };
   }
   changeLanguage = (language) => {
@@ -30,11 +32,33 @@ class HomeHeader extends Component {
         dataType: res.data,
       });
     }
+    if (window.location.hash === "#video-section") {
+      // Lấy phần tử Video bằng id
+      const videoElement = document.getElementById("video-section");
+      // Nếu phần tử tồn tại, cuộn đến nó sau một khoảng thời gian trễ
+      if (videoElement) {
+        setTimeout(() => {
+          videoElement.scrollIntoView({ behavior: "smooth" });
+        }, 1000);
+      }
+    }
   }
 
-  handleViewDetailType = (item) => {
+  handleClick = (sectionId) => {
+    // Khi nút được click, cập nhật trạng thái để màu sắc của văn bản được thay đổi
+    this.setState({ isClicked: true });
+
+    // Sau đó, cuộn đến phần tử có id là "video-section"
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  handleViewMap = () => {
     if (this.props.history) {
-      this.props.history.push(`/detail-type/${item.id}`);
+      //this.props.history.push(`/detail-type`);
+      this.props.history.push("/view-map");
     }
   };
 
@@ -80,14 +104,14 @@ class HomeHeader extends Component {
 
   render() {
     let language = this.props.language;
-    let { dataType, restaurantId } = this.state;
+    let { dataType, restaurantId, isClicked } = this.state;
     let restaurantNames = this.state.listRestaurantNames;
     return (
       <React.Fragment>
         <div className="home-header-container">
           <div className="home-header-content">
             <div className="left-content">
-              <i class="fas fa-bars"></i>
+              {/* <i class="fas fa-bars"></i> */}
               <div
                 className="header-logo"
                 onClick={() => this.returnHomePage()}
@@ -97,52 +121,96 @@ class HomeHeader extends Component {
               <div className="child-content">
                 <div>
                   <b>
-                    <FormattedMessage id="homeheader.type" />
+                    {/* <FormattedMessage id="homeheader.type" /> */}
+                    <Link
+                      to="/home#home-section"
+                      onClick={() => this.handleClick("home-section")}
+                    >
+                      Home
+                    </Link>
                   </b>
                 </div>
-                <div className="subtitle">
+                {/* <div className="subtitle">
                   <FormattedMessage id="homeheader.searchhotpotbytype" />
-                </div>
+                </div> */}
               </div>
               <div className="child-content">
                 <div>
                   <b>
-                    <FormattedMessage id="homeheader.restaurant" />
+                    {/* <FormattedMessage id="homeheader.restaurant" /> */}
+                    <Link
+                      to="/home#restaurant-section"
+                      onClick={() => this.handleClick("restaurant-section")}
+                    >
+                      Restaurant
+                    </Link>
                   </b>
                 </div>
-                <div className="subtitle">
+                {/* <div className="subtitle">
                   <FormattedMessage id="homeheader.nearbyrestaurant" />
-                </div>
+                </div> */}
               </div>
               <div className="child-content">
                 <div>
                   <b>
-                    <FormattedMessage id="homeheader.hotpot" />
+                    {/* Sử dụng một phần tử khác thay vì <a>, chẳng hạn <button> */}
+                    <Link
+                      to="/home#about-us"
+                      onClick={() => this.handleClick("about-us")}
+                    >
+                      About Us
+                    </Link>
                   </b>
                 </div>
-                <div className="subtitle">
+                {/* <div className="subtitle">
                   <FormattedMessage id="homeheader.favoritehotpot" />
-                </div>
+                </div> */}
               </div>
               <div className="child-content">
                 <div>
                   <b>
-                    <FormattedMessage id="homeheader.explore" />
+                    {/* <FormattedMessage id="homeheader.explore" /> */}
+
+                    <Link
+                      to="/home#video-section"
+                      onClick={() => this.handleClick("video-section")}
+                    >
+                      Tin tức & Blog
+                    </Link>
                   </b>
                 </div>
-                <div className="subtitle">
+                {/* <div className="subtitle">
                   <FormattedMessage id="homeheader.history" />
+                </div> */}
+              </div>
+              <div
+                className="child-content"
+                onClick={() => this.handleViewMap()}
+              >
+                <div>
+                  <b>
+                    {/* <FormattedMessage id="homeheader.explore" /> */}
+                    Gần bạn
+                  </b>
                 </div>
+                {/* <div className="subtitle">
+                  <FormattedMessage id="homeheader.history" />
+                </div> */}
               </div>
             </div>
             <div className="right-content">
               <div className="placehotpot">
-                <span>Đặt lẩu</span>
+                <Link
+                  to="/home#restaurant-section"
+                  onClick={() => this.handleClick("restaurant-section")}
+                >
+                  Đặt ngay!
+                </Link>
               </div>
-              <div className="support">
+              {/* <div className="support">
                 <i class="fas fa-question-circle"></i>
                 <FormattedMessage id="homeheader.support" />
-              </div>
+              </div> */}
               <div
                 className={
                   language === LANGUAGES.VI
@@ -170,8 +238,8 @@ class HomeHeader extends Component {
         </div>
 
         {this.props.isShowBanner === true && (
-          <div className="home-header-banner">
-            {/* <div class="l-section-video" data-video-disable-width="0">
+          <div id="home-section" className="home-header-banner">
+            {/* <div class="section-video" data-video-disable-width="0">
               <video muted="" loop="" autoplay="" playsinline="" preload="auto">
                 <source
                   src="https://qiaolinhotpot.com/wp-content/uploads/2022/06/侨林火锅.mp4"
@@ -179,17 +247,44 @@ class HomeHeader extends Component {
                 />
               </video>
             </div> */}
+            {/* <video autoplay muted loop id="video-bg">
+              <source src="../../assets/images/V1.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video> */}
 
             <div className="content-up">
-              <div className="title1">
+              {/* <div className="title1">
                 <FormattedMessage id="banner.title1" />
               </div>
               <div className="title2">
                 <FormattedMessage id="banner.title2" />
+              </div> */}
+
+              <div className="page-wrapper">
+                <div className="content-wrapper">
+                  <div className="heading-wrapper">
+                    <div className="left">
+                      <div className="heading-text">Taste the magic of</div>
+                      <div className="title-wrapper">Flavorful Hotpot</div>
+                    </div>
+
+                    <div className="image-wrapper">
+                      <img
+                        src="https://qiaolinhotpot.com/wp-content/uploads/2022/06/Vector-1.png"
+                        alt=""
+                        className="banner-image"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="description-wrapper">
+                    <p>Delight in hotpot's exquisite perfection</p>
+                  </div>
+                </div>
               </div>
-              <div className="search">
+
+              {/* <div className="search">
                 <i className="fas fa-search"></i>
-                {/* <input type="text" placeholder="tìm lẩu" /> */}
                 <select
                   className="form-control"
                   onChange={(event) => {
@@ -207,11 +302,11 @@ class HomeHeader extends Component {
                       );
                     })}
                 </select>
-              </div>
+              </div> */}
             </div>
             <div className="content-down">
               <div className="options">
-                {dataType &&
+                {/* {dataType &&
                   dataType.length > 0 &&
                   dataType.slice(0, 5).map((item, index) => {
                     return (
@@ -226,7 +321,7 @@ class HomeHeader extends Component {
                         <div className="text-child">{item.name}</div>
                       </div>
                     );
-                  })}
+                  })} */}
               </div>
             </div>
           </div>

@@ -191,6 +191,20 @@ let handlePostInfoHotpot = async (req, res) => {
   }
 };
 
+let handleGetHotpotByLocation = async (req, res) => {
+  try {
+    let info = await hotpotService.getHotpotByLocation(req.query.location);
+
+    return res.status(200).json(info);
+  } catch (e) {
+    console.log("Get all code error:", e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
 module.exports = {
   handleGetAllHotpots: handleGetAllHotpots,
   handleCreateNewHotpot: handleCreateNewHotpot,
@@ -207,4 +221,5 @@ module.exports = {
   handleGetAllTypeNames: handleGetAllTypeNames,
   handleGetAllRestaurantNames: handleGetAllRestaurantNames,
   handleGetProfileHotpotById: handleGetProfileHotpotById,
+  handleGetHotpotByLocation: handleGetHotpotByLocation,
 };

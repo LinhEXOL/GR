@@ -1,6 +1,6 @@
 .slick-prev{
     left: -10px !important;
-    z-index: 1000 !important;
+    z-index: 100 !important;
     height: 48px !important;
     width: 48px !important;
     background: #fff !important;
@@ -42,6 +42,9 @@
     }
     &.section-hotpot{
         background: #f5f5f5;
+        height: 100% !important;
+        padding: 10px 80px 10px 80px;
+
     }
 
     &.section-video{
@@ -50,94 +53,94 @@
         border-bottom: 1px solid #f5f5f5;
     }
     
-    .section-body{
-        .section-customize{
+    // .section-body{
+    //     .section-customize{
             
-            .bg-image{
-                height: 200px;
-                width: 320px;
-                background-position: center center;
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-color: #eee;
+    //         .bg-image{
+    //             height: 200px;
+    //             width: 320px;
+    //             background-position: center center;
+    //             background-repeat: no-repeat;
+    //             background-size: cover;
+    //             background-color: #eee;
 
-                &.section-type{
-                    //background-image: url('../../assets/type/buffet.webp');
-                }
-                &.section-restaurant{
-                    //background-image: url('../../assets/type/H2.jpeg');
-                }
-                &.section-hotpot{
-                    // background-image: url('../../assets/type/laubuffet.jpg');
-                }
+    //             &.section-type{
+    //                 //background-image: url('../../assets/type/buffet.webp');
+    //             }
+    //             &.section-restaurant{
+    //                 //background-image: url('../../assets/type/H2.jpeg');
+    //             }
+    //             &.section-hotpot{
+    //                 // background-image: url('../../assets/type/laubuffet.jpg');
+    //             }
 
-                &.section-handbook{
-                    background-image: url('../../assets/type/handbook3.jpg');
-                }
-            }
-        }
-    }
+    //             &.section-handbook{
+    //                 background-image: url('../../assets/type/handbook3.jpg');
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 
 
-.section-share{
-    height: 350px;
+// .section-share{
+//     height: 350px;
 
-    .section-container{
-        margin: 0 100px;
-        display: flex;
-        flex-direction: column;
-        .section-header{
-            height: 60px;
-            margin-top: 20px;
-            padding-top: 10px;
+//     .section-container{
+//         margin: 0 100px;
+//         display: flex;
+//         flex-direction: column;
+//         .section-header{
+//             height: 60px;
+//             margin-top: 20px;
+//             padding-top: 10px;
 
-            .title-section{
-                font-size: 22px;
-                font-weight: 600;
-            }
+//             .title-section{
+//                 font-size: 22px;
+//                 font-weight: 600;
+//             }
 
-            .btn-section{
-                float: right;
-                padding: 10px 15px;
-                border: none;
-                outline: none;
-                display: block;
-                background: #ebebeb;
-                color: black;
-                cursor: pointer;
-                text-transform: uppercase;
+//             .btn-section{
+//                 float: right;
+//                 padding: 10px 15px;
+//                 border: none;
+//                 outline: none;
+//                 display: block;
+//                 background: #ebebeb;
+//                 color: black;
+//                 cursor: pointer;
+//                 text-transform: uppercase;
 
-                &:hover{
-                    color: #fff;
-                    background: #cb161c;
-                }
-            }
-        }
+//                 &:hover{
+//                     color: #fff;
+//                     background: #ae0001;
+//                 }
+//             }
+//         }
 
         
 
-    } 
-}
+//     } 
+// }
 
-.section-hotpot{
-    .outer-bg{
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
+// .section-hotpot{
+//     .outer-bg{
+//         display: flex;
+//         justify-content: center;
+//         margin-bottom: 10px;
+//     }
 
-    .section-customize{
-        padding: 5px;
-        cursor: pointer;
-        .customize-border{
+//     .section-customize{
+//         padding: 5px;
+//         cursor: pointer;
+//         .customize-border{
             
-        }
-    }
+//         }
+//     }
 
     
-}
+// }
 
 .home-footer{
     text-align: center;

@@ -64,6 +64,7 @@ class ManageRestaurant extends Component {
   };
 
   handleSaveNewRestaurant = async () => {
+    console.log("hp-res", this.state);
     let res = await createNewRestaurant(this.state);
     if (res && res.errCode === 0) {
       toast.success("Create new restaurant successfully!");

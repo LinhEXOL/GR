@@ -1,0 +1,178 @@
+.body{
+
+.section-share{
+    height: 350px;
+
+    .section-container{
+        margin: 0 100px;
+        display: flex;
+        flex-direction: column;
+        .section-header{
+          margin-bottom: 10px;
+            h1{
+                font-size: 2em;
+            }            
+        }
+
+        
+
+    } 
+}
+
+    .hotpot-search {
+        background-color: #f9f9f9; // Màu nền cho phần tìm kiếm
+        padding: 20px 0; // Padding cho phần tìm kiếm
+           
+        .container {
+            width: 1000px;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 25px;
+            background: #ffff;
+            border: 1px solid #ae0001;
+          .search-location,
+        .search-name {
+          flex: 1; // Chia đều không gian cho cả hai phần tử
+          padding: 0 10px; // Padding cho dropdown select và trường input
+        }
+      
+        .search-location {
+            width: 30%;
+          border-right: 1px solid #ae0001; // Đường gạch ngăn cách ở bên phải
+          margin-right: 10px; // Margin phải để tạo khoảng cách giữa phần tử và đường gạch
+        }
+      
+        .search-name {
+            width: 70%;
+          margin-left: 10px; // Margin trái để tạo khoảng cách giữa phần tử và đường gạch
+          
+        }
+      
+        select,
+        input[type="text"] {
+          width: 100%; // Độ rộng của dropdown select và trường input
+          padding: 10px; // Padding cho dropdown select và trường input
+          border: none; // Loại bỏ viền của dropdown select và trường input
+          background-color: transparent; // Nền trong suốt cho dropdown select và trường input
+          outline: none; // Loại bỏ đường viền khi focu
+        }
+    
+        }
+      
+          }
+          .section-body {
+            .hotpot-list {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr); // Sắp xếp thành 3 cột
+                gap: 10px; // Khoảng cách giữa các hotpot
+              
+                .section-customize {
+
+                  // Thiết lập kích thước và các thuộc tính khác cho mỗi hotpot
+                  //width: calc(100% / 4 - 20px); // Chiều rộng của mỗi hotpot, trừ đi khoảng cách giữa các hotpot
+                  width: 280px;
+                  height: 300px; // Chiều cao của mỗi hotpot
+                  //border: 1px solid #cc1111;
+                  //padding: 2px;
+                  //box-sizing: border-box; // Đảm bảo kích thước tính cả padding và border
+                  border-radius: 10px;
+
+              
+                  .customize-border {
+                    
+                    .bg-image{
+                        height: 180px;
+                        background-size: cover;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-color: #eee;
+                        width: 100%;
+                        //border-radius: 10px 10px 0 0;
+                        border-radius: 10px;
+                    }
+                    .position{
+                      .name{
+                        margin-top: 10px;
+                        font-weight: 700;
+                        font-size: 18px;
+                      }
+                      .address{}
+                    }
+                        
+                  }
+              
+                  // Hiệu ứng hover
+                  &:hover {
+                    transform: translateY(-5px); // Di chuyển lên trên một chút khi hover
+                    transition: transform 0.3s ease; // Hiệu ứng di chuyển mượt mà
+                  }
+                }
+              }
+              
+              .pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+              
+                button {
+                    width: 50px;
+                    height: 50px;
+                  background-color: #fff;
+                  border: 1px solid #ccc;
+                  padding: 5px 10px;
+                  margin: 0 5px;
+                  cursor: pointer;
+                  border-radius: 50%;
+              
+                  &:hover {
+                    background-color: #f0f0f0;
+                  }
+              
+                  &.active {
+                    background-color: #ae0001;
+                    color: #fff;
+              
+                    &:hover {
+                      background-color: #ae0001;
+                    }
+                  }
+                }
+              }
+              
+          }
+          
+      
+}
+
+// .body{
+//     .hotpot-search{
+//         position: relative;
+//     display: block;
+//     min-height: 70px;
+//     background: #f7f6f4;
+//     float: left;
+//     width: 100%;
+//         .container{
+//             margin-right: auto;
+//             margin-left: auto;
+//             padding-left: 6px;
+//             padding-right: 6px;
+//             .search-location{
+//                 width: 30%;
+//                 position: relative;
+//                 display: table;
+//                 border-collapse: separate;
+//             }
+//             .search-hotpot{
+//                 width: 70%;
+//                 position: relative;
+//     display: table;
+//     border-collapse: separate;
+//             }
+//         }
+//     }
+
+

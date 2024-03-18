@@ -48,7 +48,9 @@
             "crud-hotpot-redux": "CRUD món lẩu redux",
             "crud-user-redux": "CRUD người dùng redux",
             "restaurant": "Nhà hàng",
+            "hp":"Hp",
             "manage-restaurant": "Quản lí nhà hàng",
+            "manage-hp":"Quản lí hp",
             "type": "Loại lẩu",
             "manage-type": "Quản lí loại lẩu",
             "handbook": "Cẩm nang",
@@ -93,7 +95,7 @@
     },
     "extra-info-hotpot":{
         "text-address": "Địa chỉ",
-        "price": "Giá món lẩu:",
+        "price": "Khoảng giá:",
         "detail": "Xem chi tiết",
         "payment": "Hình thức thanh toán: ",
         "hide-price": "Ẩn bảng giá"

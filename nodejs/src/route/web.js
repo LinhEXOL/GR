@@ -5,6 +5,7 @@ import hotpotController from "../controllers/hotpotController";
 import customerController from "../controllers/customerController";
 import typeController from "../controllers/typeController";
 import restaurantController from "../controllers/restaurantController";
+import hpController from "../controllers/hpController";
 
 let router = express.Router();
 
@@ -44,6 +45,15 @@ let initWebRoutes = (app) => {
     hotpotController.handleGetScheduleByDate
   );
 
+  router.post(
+    "/api/bulk-create-res-schedule",
+    restaurantController.handleBulkCreateResSchedule
+  );
+  router.get(
+    "/api/get-schedule-restaurant-by-date",
+    restaurantController.handleGetResScheduleByDate
+  );
+
   router.get(
     "/api/get-extra-info-hotpot-by-id",
     hotpotController.handleGetExtraInfoHotpotById
@@ -52,6 +62,11 @@ let initWebRoutes = (app) => {
   router.get(
     "/api/get-profile-hotpot-by-id",
     hotpotController.handleGetProfileHotpotById
+  );
+
+  router.get(
+    "/api/get-hotpot-by-location",
+    hotpotController.handleGetHotpotByLocation
   );
 
   router.post("/api/create-new-type", typeController.handleCreateType);
@@ -92,6 +107,21 @@ let initWebRoutes = (app) => {
     "/api/customer-book-hotpot",
     customerController.handlePostBookHotpot
   );
+
+  router.post(
+    "/api/customer-book-restaurant",
+    customerController.handlePostBookRestaurant
+  );
+
+  router.get("/api/get-all-hps", hpController.handleGetAllHps);
+  router.post("/api/create-new-hp", hpController.handleCreateNewHp);
+  router.get("/api/get-detail-hp-by-id", hpController.handleGetDetailHpById);
+  router.get("/api/get-all-hp-names", hpController.handleGetAllHpNames);
+  router.get(
+    "/api/get-all-hpHotpot-names",
+    hpController.handleGetAllHpHotpotNames
+  );
+
   return app.use("/", router);
 };
 

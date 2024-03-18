@@ -1,5 +1,5 @@
 .hotpot-schedule-container{
-    border-right: 1px solid #fab0b2;
+    //border-right: 1px solid #fab0b2;
     height: 100%;
     .all-schedule{
         select{
@@ -10,7 +10,7 @@
             outline: none;
             cursor: pointer;
             padding: 10px 0;
-            color: #cb161c;
+            color: #ae0001;
             font-weight: 600;
             
         }
@@ -24,7 +24,7 @@
     .all-available-time{
         .text-calender{
             margin: 10px 0;
-            color: #cb161c;
+            color: #ae0001;
             
             span{
                 margin-left: 5px;
@@ -47,7 +47,7 @@
                 font-weight: 600;
                 color: #333;
                 &:hover{
-                    background-color: #cb161c;
+                    background-color: #ae0001;
                     color: white;
                 }
             }

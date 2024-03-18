@@ -218,6 +218,87 @@ let getTopHotpot = (limitInput) => {
   });
 };
 
+// let getDetailHotpotById = (inputId) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       if (!inputId) {
+//         resolve({
+//           errCode: 1,
+//           errMessage: "Missing required parameter!",
+//         });
+//       } else {
+//         console.log("HELOO");
+//         let data = await db.Hotpot.findOne({
+//           where: { id: inputId },
+//           attributes: {
+//             exclude: ["hotpotId"],
+//           },
+//           include: [
+//             {
+//               model: db.Allcode,
+//               as: "priceData",
+//               attributes: ["valueEn", "valueVi"],
+//             },
+//             {
+//               model: db.Allcode,
+//               as: "provinceData",
+//               attributes: ["valueEn", "valueVi"],
+//             },
+//             {
+//               model: db.Allcode,
+//               as: "paymentData",
+//               attributes: ["valueEn", "valueVi"],
+//             },
+//             {
+//               model: db.Markdown,
+//               attributes: ["description", "contentHTML", "contentMarkdown"],
+//             },
+//             {
+//               model: db.Restaurant,
+//               attributes: ["name", "address"],
+//             },
+//             {
+//               model: db.Type,
+//               attributes: ["name"],
+//             },
+//           ],
+//           raw: false,
+//           nest: true,
+//         });
+//         if (data && data.image) {
+//           //data.image = new Buffer(data.image, "base64").toString("binary");
+//           data.image = "linh";
+//           let hpHotpot1 = "linh";
+//           data.hpHotpot1 = hpHotpot1;
+//         }
+
+//         console.log("data", data);
+//         let hpHotpot = [];
+//         if (data) {
+//           hpHotpot = await db.Hp.findAll({
+//             where: { hotpotId: inputId },
+//             attributes: ["id", "provinceId"],
+//           });
+
+//           data.hpHotpot = hpHotpot;
+//         } else {
+//           data.hpHotpot = "linh";
+//         }
+
+//         //if (!data) data = {};
+
+//         resolve({
+//           errCode: 0,
+//           data,
+//           hpHotpot,
+//         });
+//       }
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
 let getDetailHotpotById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -227,45 +308,56 @@ let getDetailHotpotById = (inputId) => {
           errMessage: "Missing required parameter!",
         });
       } else {
+        console.log("HELOO");
         let data = await db.Hotpot.findOne({
           where: { id: inputId },
           attributes: {
             exclude: ["hotpotId"],
           },
           include: [
-            {
-              model: db.Allcode,
-              as: "priceData",
-              attributes: ["valueEn", "valueVi"],
-            },
-            {
-              model: db.Allcode,
-              as: "provinceData",
-              attributes: ["valueEn", "valueVi"],
-            },
-            {
-              model: db.Allcode,
-              as: "paymentData",
-              attributes: ["valueEn", "valueVi"],
-            },
+            // {
+            //   model: db.Allcode,
+            //   as: "priceData",
+            //   attributes: ["valueEn", "valueVi"],
+            // },
+            // {
+            //   model: db.Allcode,
+            //   as: "provinceData",
+            //   attributes: ["valueEn", "valueVi"],
+            // },
+            // {
+            //   model: db.Allcode,
+            //   as: "paymentData",
+            //   attributes: ["valueEn", "valueVi"],
+            // },
             {
               model: db.Markdown,
               attributes: ["description", "contentHTML", "contentMarkdown"],
             },
-            {
-              model: db.Restaurant,
-              attributes: ["name", "address"],
-            },
-            {
-              model: db.Type,
-              attributes: ["name"],
-            },
+            // {
+            //   model: db.Restaurant,
+            //   attributes: ["name", "address"],
+            // },
+            // {
+            //   model: db.Type,
+            //   attributes: ["name"],
+            // },
           ],
           raw: false,
           nest: true,
         });
         if (data && data.image) {
           data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+
+        if (data) {
+          let hpHotpot = [];
+          hpHotpot = await db.Hp.findAll({
+            where: { hotpotId: inputId },
+          });
+
+          //data.hpHotpot = hpHotpot;
+          data.setDataValue("hpHotpot", hpHotpot);
         }
 
         if (!data) data = {};
@@ -526,6 +618,37 @@ let saveDetailInfoHotpot = (inputData) => {
   });
 };
 
+let getHotpotByLocation = (location) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!location) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter",
+        });
+      } else {
+        let hotpots = [];
+        if (location === "ALL") {
+          hotpots = await db.Hotpot.findAll({});
+        } else {
+          //find by location
+          hotpots = await db.Hotpot.findAll({
+            where: { provinceId: location },
+          });
+        }
+
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+          data: hotpots,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllHotpots: getAllHotpots,
   createNewHotpot: createNewHotpot,
@@ -542,4 +665,5 @@ module.exports = {
   getAllTypeNames: getAllTypeNames,
   getAllRestaurantNames: getAllRestaurantNames,
   getProfileHotpotById: getProfileHotpotById,
+  getHotpotByLocation: getHotpotByLocation,
 };

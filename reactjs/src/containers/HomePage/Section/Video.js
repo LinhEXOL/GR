@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 class Video extends Component {
   render() {
     return (
-      <div className="section-share section-video">
+      <div id="video-section" className="section-share section-video ">
         <div className="section-video-header">Khám phá</div>
         <div className="section-video-content">
           <div className="content-left">

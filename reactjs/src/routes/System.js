@@ -10,6 +10,7 @@ import ManageHotpot from "../containers/System/Admin/ManageHotpot";
 import ManageSchedule from "../containers/System/Admin/ManageSchedule";
 import ManageType from "../containers/System/Type/ManageType";
 import ManageRestaurant from "../containers/System/Restaurant/ManageRestaurant";
+import ManageHp from "../containers/System/Hp/ManageHp";
 class System extends Component {
   render() {
     const { systemMenuPath, isLoggedIn } = this.props;
@@ -33,6 +34,7 @@ class System extends Component {
                 path="/system/schedule-manage"
                 component={ManageSchedule}
               />
+              <Route path="/system/manage-hp" component={ManageHp} />
               component=
               {() => {
                 return <Redirect to={systemMenuPath} />;

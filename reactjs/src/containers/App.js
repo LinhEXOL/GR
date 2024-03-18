@@ -25,8 +25,10 @@ import HomePage from "./HomePage/HomePage.js";
 import CustomScrollbars from "../components/CustomScrollbars.js";
 
 import DetailHotpot from "./Customer/Hotpot/DetailHotpot.js";
+import DetailHpHotpot from "./Customer/Hotpot/DetailHpHotpot.js";
 import DetailRestaurant from "./Customer/Restaurant/DetailRestaurant.js";
 import DetailType from "./Customer/Type/DetailType.js";
+import ViewMap from "./Customer/Map/ViewMap.js";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -68,10 +70,15 @@ class App extends Component {
                   <Route path={path.HOMEPAGE} component={HomePage} />
                   <Route path={path.DETAIL_HOTPOT} component={DetailHotpot} />
                   <Route
+                    path={path.DETAIL_HPHOTPOT}
+                    component={DetailHpHotpot}
+                  />
+                  <Route
                     path={path.DETAIL_RESTAURANT}
                     component={DetailRestaurant}
                   />
                   <Route path={path.DETAIL_TYPE} component={DetailType} />
+                  <Route path={path.VIEW_MAP} component={ViewMap} />
                 </Switch>
               </CustomScrollbars>
             </div>

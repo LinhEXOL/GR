@@ -87,13 +87,13 @@ class BookingModal extends Component {
             </span>
           </div>
           <div className="booking-modal-body">
-            <div className="hopot-info">
+            <div className="hotpot-info">
               <HotpotProfile
                 hotpotId={hotpotId}
                 isShowDescriptionHotpot={false}
                 dataTime={dataTime}
                 isShowLinkDetail={false}
-                isShowPrice={true}
+                //isShowPrice={true}
               />
             </div>
             <div className="row">
@@ -131,9 +131,11 @@ class BookingModal extends Component {
                   onChange={(event) => this.handleOnChangeInput(event, "email")}
                 ></input>
               </div>
+
               <div className="col-12 form-group">
                 <label>
-                  <FormattedMessage id="customer.booking-modal.note" />
+                  {/* <FormattedMessage id="customer.booking-modal.note" /> */}
+                  Số lượng người
                 </label>
                 <input
                   className="form-control"

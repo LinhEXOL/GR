@@ -67,6 +67,10 @@ const getExtraInfoHotpotById = (hotpotId) => {
   return axios.get(`/api/get-extra-info-hotpot-by-id?id=${hotpotId}`);
 };
 
+const getHotpotByLocation = (location) => {
+  return axios.get(`/api/get-hotpot-by-location?location=${location}`);
+};
+
 const postCustomerBookHotpot = (data) => {
   return axios.post("/api/customer-book-hotpot", data);
 };
@@ -97,6 +101,20 @@ const getDetailRestaurantById = (data) => {
   return axios.get(`/api/get-detail-restaurant-by-id?id=${data.id}`);
 };
 
+const getDetailHpById = (data) => {
+  return axios.get(`/api/get-detail-hp-by-id?id=${data.id}`);
+};
+const getAllHpHotpotNames = (data) => {
+  return axios.get("/api/get-all-hpHotpot-names");
+};
+const getAllHpNameServices = (inputId) => {
+  //template string
+  return axios.get("/api/get-all-hp-names");
+};
+
+const createNewHp = (data) => {
+  return axios.post("/api/create-new-hp", data);
+};
 export {
   handleLoginApi,
   getAllHotpots,
@@ -120,4 +138,9 @@ export {
   getAllTypes,
   getDetailTypeById,
   getDetailRestaurantById,
+  getHotpotByLocation,
+  getDetailHpById,
+  getAllHpHotpotNames,
+  getAllHpNameServices,
+  createNewHp,
 };

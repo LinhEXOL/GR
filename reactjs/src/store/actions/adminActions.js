@@ -272,7 +272,7 @@ export const editHotpotSuccess = (data) => ({
 export const fetchTopHotpot = () => {
   return async (dispatch, getState) => {
     try {
-      let res = await getTopHotpotService("10");
+      let res = await getTopHotpotService("1000");
       if (res && res.errCode === 0) {
         dispatch({
           type: actionTypes.FETCH_TOP_HOTPOT_SUCCESS,

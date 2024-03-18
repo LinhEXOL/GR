@@ -56,6 +56,16 @@ export const adminMenu = [
     ],
   },
   {
+    //quản lý hp
+    name: "menu.admin.hp",
+    menus: [
+      {
+        name: "menu.admin.manage-hp",
+        link: "/system/manage-hp",
+      },
+    ],
+  },
+  {
     //quản lý loại lẩu
     name: "menu.admin.type",
     menus: [

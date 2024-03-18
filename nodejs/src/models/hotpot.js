@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "typeId",
         targetKey: "id",
       });
+      Hotpot.hasMany(models.Hp, {
+        foreignKey: "hotpotId",
+      });
     }
   }
   Hotpot.init(

@@ -18,8 +18,16 @@
         }
 
         .booking-modal-body{
+            .hotpot-info{
+                .content-right{
+                    margin-top:10px
+                }
+            }
             height: 100%;
             padding: 15px;
+            .row{
+                margin-top: 10px;
+            }
         }
 
         .booking-modal-footer{
