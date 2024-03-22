@@ -1,25 +1,85 @@
-.leaflet-container {
-    height: 600px;
+
+
+    .leaflet-container{
+    height: 900px ;
+    width: 1500px ;
+    .leaflet-control-container{
+        .leaflet-left {
+            right: 0 !important;
+            
+        }
+        .leaflet-top {
+            bottom: 0 !important;
+        }
+        .leaflet-control {
+            float:right;
+            clear:both;
+            margin-top: 550px;
+            margin-right: 10px;
+        }
+    
+    }
+    
+
+}
+
+.map-container{
+    position: relative;
     width: 100%;
-  }
-  .chip {
-    display: inline-block;
-    padding: 0 25px;
-    height: 50px;
-    font-size: 16px;
-    line-height: 50px;
-    border-radius: 25px;
-    background-color: #f1f1f1;
-  }
-  
-  .chip img {
-    float: left;
-    margin: 0 10px 0 -25px;
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-  }
-  .static-map {
-    width: 250px;
-    height: 250px;
-  }
+    height: 100vh; // Điều chỉnh chiều cao của container tùy ý
+    .search-box{
+        position: absolute;
+        top: 20px; // Điều chỉnh khoảng cách từ trên xuống tùy ý
+        left: 20px; // Điều chỉnh khoảng cách từ trái sang phải tùy ý
+        z-index: 999; // Đảm bảo Search Box hiển thị trên cùng
+        
+
+    }
+    .map-body{
+    .map{
+        .tool-tip{
+            
+            border-radius: 10px 10px 10px 10px;
+            .customize-border {
+
+            height: 250px;
+            width: 300px;
+            display: flex;
+                    
+            .image{
+                flex: 1;
+                width: 30%; 
+                .bg-image{
+                    height: 100%;
+                    background-size: cover;
+                    background-position: center center;
+                    width: 100%;
+                    background-repeat: no-repeat;
+                    border-radius: 10px 10px 10px 10px;
+                }  
+            }
+            .info{
+                flex: 2;
+                width: 70%;
+                margin-left: 10px;
+              .name{
+                margin-top: 10px;
+                font-weight: 700;
+                font-size: 18px;
+              }
+              .address{
+                color: #777;
+              }
+              .more{
+                width: 50px !important;
+              }
+            }
+                
+          }
+        }
+
+    }
+}
+}
+
+

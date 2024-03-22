@@ -1,0 +1,36 @@
+.search-box-container{
+    .up{
+        display: flex;
+        justify-content: space-between; 
+    
+        align-items: center;
+        .search-info{
+            flex: 1;
+            
+            .MuiInputBase-root{
+                background-color: white;
+                height: 40px;
+
+            }
+           
+        }
+        .search-btn{
+            padding-left: 20px;
+        }
+    }
+    .search-list{
+        .img{
+            width: 30px;
+            height: 30px;
+        }
+        .MuiList-root{
+            .MuiButtonBase-root{
+                background-color: #fefefe;
+                width: 290px;
+                border-bottom: 1px solid rgb(223, 221, 221);
+            }
+        }
+    }
+    
+    
+}

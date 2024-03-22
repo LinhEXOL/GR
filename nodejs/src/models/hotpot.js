@@ -64,8 +64,14 @@ module.exports = (sequelize, DataTypes) => {
       restaurantId: {
         type: DataTypes.INTEGER,
       },
-      note: {
+      address: {
         type: DataTypes.TEXT,
+      },
+      longitude: {
+        type: DataTypes.DOUBLE,
+      },
+      latitude: {
+        type: DataTypes.DOUBLE,
       },
     },
     {

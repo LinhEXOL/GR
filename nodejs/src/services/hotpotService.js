@@ -31,9 +31,7 @@ let getAllHotpotNames = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let hotpotNames = await db.Hotpot.findAll({
-        attributes: {
-          exclude: ["image"],
-        },
+        attributes: {},
       });
 
       resolve({
