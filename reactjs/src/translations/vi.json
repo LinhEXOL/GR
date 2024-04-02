@@ -39,7 +39,8 @@
             }
         },
         "admin":{
-            "manage-hotpot":"Các món lẩu",
+            "manage-hotpot":"Quản lí món lẩu",
+            "extra-info-hotpot":"Thêm thông tin chi tiết",
             "manage-user": "Quản lý người dùng",
             "manage-admin": "Quản lý admin",
             "manage-customer": "Quản lý khách hàng",
@@ -57,7 +58,29 @@
             "manage-handbook": "Quản lí cẩm nang",
             "schedule":"Lịch đặt lẩu",
             "manage-schedule":"Quản lí lịch đặt lẩu"
+        },
+        "staff":{
+            "manage-hotpot":"Quản lí món lẩu",
+            "extra-info-hotpot":"Thêm thông tin chi tiết",
+            "manage-user": "Quản lý người dùng",
+            "manage-staff": "Quản lý staff",
+            "manage-customer": "Quản lý khách hàng",
+            "crud-user": "CRUD người dùng",
+            "crud-hotpot": "CRUD món lẩu",
+            "crud-hotpot-redux": "CRUD món lẩu redux",
+            "crud-user-redux": "CRUD người dùng redux",
+            "restaurant": "Nhà hàng",
+            "hp":"Hp",
+            "manage-restaurant": "Quản lí nhà hàng",
+            "manage-hp":"Quản lí hp",
+            "type": "Loại lẩu",
+            "manage-type": "Quản lí loại lẩu",
+            "handbook": "Cẩm nang",
+            "manage-handbook": "Quản lí cẩm nang",
+            "schedule":"Lịch đặt lẩu",
+            "manage-schedule":"Quản lí lịch đặt lẩu"
         }
+
 },
 
 "manage-hotpot":{

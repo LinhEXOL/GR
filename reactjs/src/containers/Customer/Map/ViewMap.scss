@@ -1,8 +1,10 @@
 
 
+
     .leaflet-container{
-    height: 900px ;
-    width: 1500px ;
+        height: 685px ;
+        width: 100% ;
+    
     .leaflet-control-container{
         .leaflet-left {
             right: 0 !important;
@@ -23,28 +25,30 @@
 
 }
 
-.map-container{
-    position: relative;
-    width: 100%;
-    height: 100vh; // Điều chỉnh chiều cao của container tùy ý
-    .search-box{
-        position: absolute;
-        top: 20px; // Điều chỉnh khoảng cách từ trên xuống tùy ý
-        left: 20px; // Điều chỉnh khoảng cách từ trái sang phải tùy ý
-        z-index: 999; // Đảm bảo Search Box hiển thị trên cùng
-        
-
-    }
-    .map-body{
-    .map{
-        .tool-tip{
-            
-            border-radius: 10px 10px 10px 10px;
-            .customize-border {
-
+.body-container{
+    display: flex;
+    .list-res{
+        flex: 16%;
+        overflow-y: auto; /* Thêm thuộc tính này để kích hoạt cuộn dọc */
+        max-height: calc(100vh - 60px); /* Điều chỉnh chiều cao tối đa theo cần thiết */
+        //padding-right: 2px; /* Thêm một số lề để tránh nội dung chạm vào thanh cuộn */
+        padding-left: 20px;
+        .name-des{
+            font-weight: 600;
+            font-size: 20px;
+            margin: 10px 0px 10px 0px;
+            color: #ae0001;
+        }
+        .res {
+            //border: 1px solid green;
+            border-radius: 10px;
+            border: 1px solid rgb(226, 223, 223);
+    
             height: 250px;
             width: 300px;
             display: flex;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     
             .image{
                 flex: 1;
@@ -55,13 +59,14 @@
                     background-position: center center;
                     width: 100%;
                     background-repeat: no-repeat;
-                    border-radius: 10px 10px 10px 10px;
+                    border-radius: 10px 0px 0px 10px;
+                    padding-right: 10px;
                 }  
             }
             .info{
                 flex: 2;
                 width: 70%;
-                margin-left: 10px;
+                margin-left: 20px;
               .name{
                 margin-top: 10px;
                 font-weight: 700;
@@ -71,15 +76,75 @@
                 color: #777;
               }
               .more{
-                width: 50px !important;
+                //width: 50px !important;
+                margin-right: 10px !important;
               }
             }
                 
           }
-        }
 
     }
+    .map-container{
+        flex: 70%;
+        position: relative;
+        width: 100%;
+        //height: 100vh; // Điều chỉnh chiều cao của container tùy ý
+        .search-box{
+            position: absolute;
+            top: 20px; // Điều chỉnh khoảng cách từ trên xuống tùy ý
+            left: 20px; // Điều chỉnh khoảng cách từ trái sang phải tùy ý
+            z-index: 100000; // Đảm bảo Search Box hiển thị trên cùng
+            //margin-top: 10px;
+    
+        }
+        .map-body{
+        .map{
+            .tool-tip{
+                
+                border-radius: 10px 10px 10px 10px;
+                .customize-border {
+    
+                height: 250px;
+                width: 300px;
+                display: flex;
+                        
+                .image{
+                    flex: 1;
+                    width: 30%; 
+                    .bg-image{
+                        height: 100%;
+                        background-size: cover;
+                        background-position: center center;
+                        width: 100%;
+                        background-repeat: no-repeat;
+                        border-radius: 10px 10px 10px 10px;
+                    }  
+                }
+                .info{
+                    flex: 2;
+                    width: 70%;
+                    margin-left: 10px;
+                  .name{
+                    margin-top: 10px;
+                    font-weight: 700;
+                    font-size: 18px;
+                  }
+                  .address{
+                    color: #777;
+                  }
+                  .more{
+                    width: 50px !important;
+                  }
+                }
+                    
+              }
+            }
+    
+        }
+    }
+    }
 }
-}
+
+
 
 

@@ -197,6 +197,15 @@ class HomeHeader extends Component {
                   <FormattedMessage id="homeheader.history" />
                 </div> */}
               </div>
+
+              {/* <div
+                className="child-content"
+                onClick={this.props.onViewNearSearch}
+              >
+                <div>
+                  <b>NearYou</b>
+                </div>
+              </div> */}
             </div>
             <div className="right-content">
               <div className="placehotpot">

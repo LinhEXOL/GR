@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "typeId",
         targetKey: "id",
       });
+      Hotpot.belongsTo(models.User, {
+        foreignKey: "staffId",
+        targetKey: "id",
+      });
       Hotpot.hasMany(models.Hp, {
         foreignKey: "hotpotId",
       });
@@ -72,6 +76,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       latitude: {
         type: DataTypes.DOUBLE,
+      },
+      staffId: {
+        type: DataTypes.INTEGER,
       },
     },
     {

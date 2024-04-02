@@ -9,6 +9,7 @@ export const path = {
   DETAIL_RESTAURANT: "/detail-restaurant/:id",
   DETAIL_TYPE: "/detail-type/:id",
   VIEW_MAP: "/view-map",
+  STAFF: "/staff",
 };
 
 export const LANGUAGES = {
@@ -30,4 +31,10 @@ export const dateFormat = {
 export const YesNoObj = {
   YES: "Y",
   NO: "N",
+};
+
+export const USER_ROLE = {
+  ADMIN: "R1",
+  STAFF: "R2",
+  CUSTOMER: "R3",
 };

@@ -98,6 +98,7 @@ let createNewHotpot = (data) => {
         restaurantId: data.restaurantId,
         note: data.note,
         image: data.image,
+        staffId: data.staffId,
       });
       resolve({
         errCode: 0,

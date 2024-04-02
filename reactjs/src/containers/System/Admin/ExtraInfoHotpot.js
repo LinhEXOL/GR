@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import "./ManageHotpot.scss";
+import "./ExtraInfoHotpot.scss";
 import * as actions from "../../../store/actions";
 
 import MarkdownIt from "markdown-it";
@@ -13,7 +13,7 @@ import { CRUD_ACTIONS, LANGUAGES } from "../../../utils";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
-class ManageHotpot extends Component {
+class ExtraInfoHotpot extends Component {
   state = {};
   //constructor:
   //khi component được render thì nó sẽ check hàm constructor đầu tiên
@@ -169,4 +169,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageHotpot);
+export default connect(mapStateToProps, mapDispatchToProps)(ExtraInfoHotpot);

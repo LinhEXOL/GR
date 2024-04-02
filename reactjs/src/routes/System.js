@@ -6,7 +6,7 @@ import HotpotManage from "../containers/System/HotpotManage";
 import HotpotRedux from "../containers/System/Admin/HotpotRedux";
 import UserRedux from "../containers/System/Admin/UserRedux";
 import Header from "../containers/Header/Header";
-import ManageHotpot from "../containers/System/Admin/ManageHotpot";
+import ExtraInfoHotpot from "../containers/System/Admin/ExtraInfoHotpot";
 import ManageSchedule from "../containers/System/Admin/ManageSchedule";
 import ManageType from "../containers/System/Type/ManageType";
 import ManageRestaurant from "../containers/System/Restaurant/ManageRestaurant";
@@ -20,7 +20,10 @@ class System extends Component {
         <div className="system-container">
           <div className="system-list">
             <Switch>
-              <Route path="/system/manage-hotpot" component={ManageHotpot} />
+              <Route
+                path="/system/extra-info-hotpot"
+                component={ExtraInfoHotpot}
+              />
               <Route path="/system/CRUD-hotpot" component={HotpotManage} />
               <Route path="/system/CRUD-user" component={UserManage} />
               <Route path="/system/hotpot-redux" component={HotpotRedux} />

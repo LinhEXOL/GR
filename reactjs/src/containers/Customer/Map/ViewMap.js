@@ -6,7 +6,6 @@ import osm from "./osm-provider";
 import "leaflet/dist/leaflet.css";
 import markerImage1 from "../../../assets/images/marker.png";
 import markerImage2 from "../../../assets/images/marker_icon.png";
-import cities from "./cities.json";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
 import { getAllHotpots } from "../../../services/hotpotService";
@@ -59,6 +58,12 @@ class ViewMap extends Component {
     if (res && res.errCode === 0) {
       this.setState({
         arrHotpots: res.data,
+      });
+    }
+    const arr = this.nearestHotpots;
+    if (!arr) {
+      this.setState({
+        nearestHotpots: res.data,
       });
     }
   }
@@ -129,19 +134,7 @@ class ViewMap extends Component {
     return dis;
   };
 
-  handelSelectPosition = (position) => {
-    this.setState({
-      selectPosition: position,
-      currentPosition: null,
-      // center: { lat: position.lat, lng: position.lon },
-    });
-    // Lấy tham chiếu tới bản đồ
-    const map = this.mapRef.current.leafletElement;
-    // Di chuyển bản đồ đến vị trí mới với hiệu ứng mượt mà
-    map.flyTo([position.lat, position.lon], this.state.ZOOM_LEVEL, {
-      animate: true,
-    });
-
+  getNearestHotpots = (position) => {
     const { arrHotpots } = this.state;
     const { lat, lon } = position;
 
@@ -166,6 +159,22 @@ class ViewMap extends Component {
     this.setState({ nearestHotpots: nearestHotpots });
   };
 
+  handelSelectPosition = (position) => {
+    this.setState({
+      selectPosition: position,
+      currentPosition: null,
+      // center: { lat: position.lat, lng: position.lon },
+    });
+    // Lấy tham chiếu tới bản đồ
+    const map = this.mapRef.current.leafletElement;
+    // Di chuyển bản đồ đến vị trí mới với hiệu ứng mượt mà
+    map.flyTo([position.lat, position.lon], this.state.ZOOM_LEVEL, {
+      animate: true,
+    });
+
+    this.getNearestHotpots(position);
+  };
+
   handleClearPlace = () => {
     // Gọi hàm showMyLocation để thực hiện chức năng "Locate Me"
     this.showMyLocation();
@@ -182,102 +191,152 @@ class ViewMap extends Component {
       nearestHotpots,
     } = this.state;
     console.log("nearestHotpots", nearestHotpots);
+    console.log("arrHotpots", arrHotpots);
+
     return (
-      <div className="map-container">
-        {/* <HomeHeader isShowBanner={false} /> */}
-        <div className="search-box">
-          <SearchBox
-            selectPosition={selectPosition}
-            handelSelectPosition={this.handelSelectPosition}
-            handleClearPlace={this.handleClearPlace}
-          />
-        </div>
-        <div className="map-body">
-          {/* <div className="btn-locate justify-content-center">
+      <div>
+        <HomeHeader isShowBanner={false} />
+        <div className="body-container">
+          <div className="list-res">
+            <div className="name-des">Nhà hàng gần bạn</div>
+
+            {nearestHotpots.map((item, idex) => {
+              let imageBase64 = "";
+              if (item.hotpot) {
+                item = item.hotpot;
+              } else {
+                item = item;
+              }
+              let name = `${item.name}`;
+              if (item.image) {
+                imageBase64 = new Buffer(item.image, "base64").toString(
+                  "binary"
+                );
+              }
+              return (
+                <div className="res">
+                  <div className="image">
+                    <div
+                      className="bg-image"
+                      style={{
+                        backgroundImage: `url(${imageBase64})`,
+                      }}
+                    />
+                  </div>
+                  <div className="info">
+                    <div className="name">{name}</div>
+                    <div className="address">{item.note}</div>
+                    <div className="more">
+                      <div>Đánh giá: Tốt</div>
+                      <div>PHÙ HỢP:Đặt tiệc, tiếp khách, gia đình,</div>
+                      <div>bạn bè, sinh nhật, liên hoan…</div>
+                      <div>KHÔNG GIAN:</div>
+                      <div>- Hiện đại. Trẻ trung</div>
+                      <div>- Sức chứa: 120 khách (02 tầng)</div>{" "}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="map-container">
+            <div className="search-box">
+              <SearchBox
+                selectPosition={selectPosition}
+                handelSelectPosition={this.handelSelectPosition}
+                handleClearPlace={this.handleClearPlace}
+              />
+            </div>
+            <div className="map-body">
+              {/* <div className="btn-locate justify-content-center">
             <button className="btn btn-primary" onClick={this.showMyLocation}>
               Locate Me <i className="fas fa-globe"></i>
             </button>
           </div> */}
 
-          <div className="map text-center">
-            <Map center={center} zoom={ZOOM_LEVEL} ref={this.mapRef}>
-              <TileLayer
-                url={osm.maptiler.url}
-                attribution={osm.maptiler.attribution}
-              />
-              {selectPosition && !currentPosition ? (
-                <Marker
-                  icon={markerIcon1}
-                  position={[selectPosition.lat, selectPosition.lon]}
-                ></Marker>
-              ) : (
-                location.loaded &&
-                !location.error && (
-                  <Marker
-                    icon={markerIcon1}
-                    position={[
-                      location.coordinates.lat,
-                      location.coordinates.lng,
-                    ]}
-                  ></Marker>
-                )
-              )}
-              {arrHotpots.map((item, idex) => {
-                let imageBase64 = "";
-                let name = `${item.name}`;
-                if (item.image) {
-                  imageBase64 = new Buffer(item.image, "base64").toString(
-                    "binary"
-                  );
-                }
-                return (
-                  <Marker
-                    //position={[10.7285492637418, 106.616285747586]}
-                    position={[item.latitude, item.longitude]}
-                    icon={markerIcon2}
-                    key={idex}
-                    riseOnHover={true}
-                    riseOffset={200}
-                    //onClick={() => this.handleViewDetailHotpot(item)}
-                  >
-                    <Tooltip
-                      className="tool-tip"
-                      direction="bottom"
-                      offset={[0, -10]}
-                      opacity={1}
-                    >
-                      <div className="customize-border">
-                        <div className="image">
-                          <div
-                            className="bg-image section-hotpot"
-                            style={{
-                              backgroundImage: `url(${imageBase64})`,
-                            }}
-                          />
-                        </div>
-                        <div className="info">
-                          <div className="name">{name}</div>
-                          <div className="address">{item.note}</div>
-                          <div className="more">
-                            <div>Đánh giá: Tốt</div>
-                            <div>PHÙ HỢP:Đặt tiệc, tiếp khách, gia đình,</div>
-                            <div>bạn bè, sinh nhật, liên hoan…</div>
-                            <div>KHÔNG GIAN:</div>
-                            <div>- Hiện đại. Trẻ trung</div>
-                            <div>- Sức chứa: 120 khách (02 tầng)</div>{" "}
+              <div className="map text-center">
+                <Map center={center} zoom={ZOOM_LEVEL} ref={this.mapRef}>
+                  <TileLayer
+                    url={osm.maptiler.url}
+                    attribution={osm.maptiler.attribution}
+                  />
+                  {selectPosition && !currentPosition ? (
+                    <Marker
+                      icon={markerIcon1}
+                      position={[selectPosition.lat, selectPosition.lon]}
+                    ></Marker>
+                  ) : (
+                    location.loaded &&
+                    !location.error && (
+                      <Marker
+                        icon={markerIcon1}
+                        position={[
+                          location.coordinates.lat,
+                          location.coordinates.lng,
+                        ]}
+                      ></Marker>
+                    )
+                  )}
+                  {arrHotpots.map((item, idex) => {
+                    let imageBase64 = "";
+                    let name = `${item.name}`;
+                    if (item.image) {
+                      imageBase64 = new Buffer(item.image, "base64").toString(
+                        "binary"
+                      );
+                    }
+                    return (
+                      <Marker
+                        //position={[10.7285492637418, 106.616285747586]}
+                        position={[item.latitude, item.longitude]}
+                        icon={markerIcon2}
+                        key={idex}
+                        riseOnHover={true}
+                        riseOffset={200}
+                        //onClick={() => this.handleViewDetailHotpot(item)}
+                      >
+                        <Tooltip
+                          className="tool-tip"
+                          direction="bottom"
+                          offset={[0, -10]}
+                          opacity={1}
+                        >
+                          <div className="customize-border">
+                            <div className="image">
+                              <div
+                                className="bg-image section-hotpot"
+                                style={{
+                                  backgroundImage: `url(${imageBase64})`,
+                                }}
+                              />
+                            </div>
+                            <div className="info">
+                              <div className="name">{name}</div>
+                              <div className="address">{item.note}</div>
+                              <div className="more">
+                                <div>Đánh giá: Tốt</div>
+                                <div>
+                                  PHÙ HỢP:Đặt tiệc, tiếp khách, gia đình,
+                                </div>
+                                <div>bạn bè, sinh nhật, liên hoan…</div>
+                                <div>KHÔNG GIAN:</div>
+                                <div>- Hiện đại. Trẻ trung</div>
+                                <div>- Sức chứa: 120 khách (02 tầng)</div>{" "}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </Tooltip>
-                    {/* <Popup open={true}>
+                        </Tooltip>
+                        {/* <Popup open={true}>
                     <b className="detail-hotpot">
                       {item.name}, {item.address}
                     </b>
                   </Popup> */}
-                  </Marker>
-                );
-              })}
-            </Map>
+                      </Marker>
+                    );
+                  })}
+                </Map>
+              </div>
+            </div>
           </div>
         </div>
       </div>

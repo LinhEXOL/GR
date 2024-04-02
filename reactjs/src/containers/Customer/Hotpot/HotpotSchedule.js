@@ -29,10 +29,6 @@ class HotpotSchedule extends Component {
         this.props.hotpotIdFromParent,
         allDays[0].value
       );
-      console.log(
-        "this.props.hotpotIdFromParent,",
-        this.props.hotpotIdFromParent
-      );
       this.setState({
         allAvailableTime: res.data ? res.data : [],
       });

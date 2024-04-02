@@ -1,7 +1,8 @@
 .login-background{
     height: 100vh;
-    background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
-    
+    //background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+    background: linear-gradient(135deg, rgb(206, 235, 213) 5%, rgb(245, 191, 215) 50%, rgb(183, 199, 229) 100%);
+
 
 
     .login-container{
@@ -81,8 +82,7 @@
         padding: 8px 0px;
         border-radius: 25px;
         cursor: pointer;
-        background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
-
+        background: linear-gradient(135deg, rgb(206, 235, 213) 5%, rgb(245, 191, 215) 50%, rgb(183, 199, 229) 100%);
     }
     .forgot-password{
         float: right;

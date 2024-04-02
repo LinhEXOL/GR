@@ -29,6 +29,7 @@ import DetailHpHotpot from "./Customer/Hotpot/DetailHpHotpot.js";
 import DetailRestaurant from "./Customer/Restaurant/DetailRestaurant.js";
 import DetailType from "./Customer/Type/DetailType.js";
 import ViewMap from "./Customer/Map/ViewMap.js";
+import Staff from "../routes/Staff.js";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -66,6 +67,10 @@ class App extends Component {
                   <Route
                     path={path.SYSTEM}
                     component={userIsAuthenticated(System)}
+                  />
+                  <Route
+                    path={path.STAFF}
+                    component={userIsAuthenticated(Staff)}
                   />
                   <Route path={path.HOMEPAGE} component={HomePage} />
                   <Route path={path.DETAIL_HOTPOT} component={DetailHotpot} />

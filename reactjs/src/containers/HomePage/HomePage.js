@@ -12,9 +12,24 @@ import Hotpot from "./Section/Hotpot";
 import HandBook from "./Section/HandBook";
 import Video from "./Section/Video";
 import HomeFooter from "./HomeFooter";
+import NearSearch from "../Customer/Map/NearSearch";
 
 class HomePage extends Component {
   //handleAfterChange = (event, slick, currentSlide) => {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      showNearSearch: false,
+    };
+  }
+
+  handleViewNearSearch = () => {
+    this.setState({ showNearSearch: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showNearSearch: false });
+  };
   render() {
     let settings = {
       dots: false,
@@ -24,9 +39,15 @@ class HomePage extends Component {
       slidesToScroll: 1,
       // afterChange: this.handleAfterChange,
     };
+    const { showNearSearch } = this.state;
     return (
       <div>
-        <HomeHeader isShowBanner={true} />
+        <HomeHeader
+          isShowBanner={true}
+          onViewNearSearch={this.handleViewNearSearch}
+        />
+
+        {showNearSearch && <NearSearch handleClose={this.handleCloseModal} />}
         {/* <HotpotType settings={settings} /> */}
         {/* <Restaurant settings={settings} /> */}
         <Hotpot settings={settings} />
