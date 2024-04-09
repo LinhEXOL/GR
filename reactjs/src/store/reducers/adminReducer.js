@@ -5,11 +5,10 @@ const initialState = {
   provinces: [],
   payments: [],
   prices: [],
-  hotpots: [],
-  topHotpots: [],
-  allHotpotNames: [],
-  allScheduleTime: [],
+  restaurants: [],
+  topRestaurants: [],
   allRestaurantNames: [],
+  allScheduleTime: [],
   allTypeNames: [],
 };
 
@@ -56,37 +55,25 @@ const adminReducer = (state = initialState, action) => {
         ...state,
       };
 
-    case actionTypes.FETCH_ALL_HOTPOTS_SUCCESS:
-      state.hotpots = action.hotpots;
+    case actionTypes.FETCH_ALL_RESTAURANTS_SUCCESS:
+      state.restaurants = action.restaurants;
       return {
         ...state,
       };
-    case actionTypes.FETCH_ALL_HOTPOTS_FAILED:
-      state.hotpots = [];
-      return {
-        ...state,
-      };
-
-    case actionTypes.FETCH_TOP_HOTPOT_SUCCESS:
-      state.topHotpots = action.dataHotpots;
+    case actionTypes.FETCH_ALL_RESTAURANTS_FAILED:
+      state.restaurants = [];
       return {
         ...state,
       };
 
-    case actionTypes.FETCH_TOP_HOTPOT_FAILED:
-      state.topHotpots = [];
+    case actionTypes.FETCH_TOP_RESTAURANT_SUCCESS:
+      state.topRestaurants = action.dataRestaurants;
       return {
         ...state,
       };
 
-    case actionTypes.FETCH_ALL_HOTPOT_NAMES_SUCCESS:
-      state.allHotpotNames = action.dataHotpotNames;
-      return {
-        ...state,
-      };
-
-    case actionTypes.FETCH_ALL_HOTPOT_NAMES_FAILED:
-      state.allHotpotNames = [];
+    case actionTypes.FETCH_TOP_RESTAURANT_FAILED:
+      state.topRestaurants = [];
       return {
         ...state,
       };

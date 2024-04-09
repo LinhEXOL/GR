@@ -63,21 +63,21 @@ let getDetailTypeById = (inputId, location) => {
           attributes: ["descriptionHTML", "descriptionMarkdown"],
         });
         if (data) {
-          let hotpotType = [];
+          let restaurantType = [];
           if (location === "ALL") {
-            hotpotType = await db.Hotpot.findAll({
+            restaurantType = await db.Restaurant.findAll({
               where: { typeId: inputId },
               attributes: ["id", "provinceId"],
             });
           } else {
             //find by location
-            hotpotType = await db.Hotpot.findAll({
+            restaurantType = await db.Restaurant.findAll({
               where: { typeId: inputId, provinceId: location },
               attributes: ["id", "provinceId"],
             });
           }
 
-          data.hotpotType = hotpotType;
+          data.restaurantType = restaurantType;
         } else {
           data = "linh";
         }

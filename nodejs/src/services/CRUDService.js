@@ -3,50 +3,50 @@ import db from "../models/index";
 
 const salt = bcrypt.genSaltSync(10);
 
-let createNewHotpot = async (data) => {
+let createNewRestaurant = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await db.Hotpot.create({
+      await db.Restaurant.create({
         name: data.name,
         address: data.address,
         phonenumber: data.phonenumber,
         priceId: data.priceId,
         provinceId: data.provinceId,
-        paymentId: data.paymentId,
         typeId: data.typeId,
         restaurantId: data.restaurantId,
         note: data.note,
+        staffId: data.staffId,
       });
-      resolve("create new hotpot succeed");
+      resolve("create new Restaurant succeed");
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let getAllHotpot = () => {
+let getAllRestaurant = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpots = await db.Hotpot.findAll({
+      let restaurants = await db.Restaurant.findAll({
         raw: true,
       });
-      resolve(hotpots);
+      resolve(restaurants);
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let getHotpotInfoById = (hotpotId) => {
+let getRestaurantInfoById = (restaurantId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpot = await db.Hotpot.findOne({
-        where: { id: hotpotId },
+      let restaurant = await db.Restaurant.findOne({
+        where: { id: restaurantId },
         raw: true,
       });
 
-      if (hotpot) {
-        resolve(hotpot);
+      if (restaurant) {
+        resolve(restaurant);
       } else {
         resolve({});
       }
@@ -56,27 +56,26 @@ let getHotpotInfoById = (hotpotId) => {
   });
 };
 
-let updateHotpotData = (data) => {
+let updateRestaurantData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpot = await db.Hotpot.findOne({
+      let restaurant = await db.Restaurant.findOne({
         where: { id: data.id },
         raw: false,
       });
-      if (hotpot) {
-        hotpot.name = data.name;
-        hotpot.phonenumber = data.phonenumber;
-        hotpot.provinceId = data.provinceId;
-        hotpot.restaurantId = data.restaurantId;
-        hotpot.typeId = data.typeId;
-        hotpot.note = data.note;
-        hotpot.priceId = data.priceId;
-        hotpot.paymentId = data.paymentId;
+      if (restaurant) {
+        restaurant.name = data.name;
+        restaurant.phonenumber = data.phonenumber;
+        restaurant.provinceId = data.provinceId;
+        restaurant.restaurantId = data.restaurantId;
+        restaurant.typeId = data.typeId;
+        restaurant.note = data.note;
+        restaurant.priceId = data.priceId;
 
-        await hotpot.save();
+        await restaurant.save();
 
-        let allHotpots = await db.Hotpot.findAll();
-        resolve(allHotpots);
+        let allRestaurants = await db.Restaurant.findAll();
+        resolve(allRestaurants);
       } else {
         resolve();
       }
@@ -86,64 +85,11 @@ let updateHotpotData = (data) => {
   });
 };
 
-// let updateHotpotData = (data) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       let hotpot = await db.Hotpot.findOne({
-//         where: { id: data.id },
-//       });
-
-//       const hotpotData = {
-//         name: data?.name,
-//         phonenumber: data?.phonenumber,
-//         provinceId: data?.provinceId,
-//         addressRestaurant: data?.addressRestaurant,
-//         restaurantId: data?.restaurantId,
-//         nameRestaurant: data?.nameRestaurant,
-//         typeId: data?.typeId,
-//         note: data?.note,
-//         count: data?.count,
-//         priceId: data?.priceId,
-//         paymentId: data?.paymentId,
-//       };
-
-//       let hotpotDataReq = db.Hotpot.update(
-//         { ...hotpotData },
-//         { where: { id: data.id } }
-//       );
-//       await Promise.all([hotpotDataReq]);
-
-//       let allHotpots = await db.Hotpot.findAll();
-//       resolve(allHotpots);
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   });
-// };
-
-// let deleteHotpotById = (hotpotId) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       let hotpot = await db.Hotpot.findOne({
-//         where: { id: hotpotId },
-//       });
-
-//       if (hotpot) {
-//         await hotpot.destroy();
-//       }
-
-//       resolve();
-//     } catch (e) {
-//       reject(e);
-//     }
-//   });
-// };
-
-let deleteHotpotById = (hotpotId) => {
+let deleteRestaurantById = (restaurantId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedRows = await db.Hotpot.destroy({
-        where: { id: hotpotId },
+      const deletedRows = await db.Restaurant.destroy({
+        where: { id: restaurantId },
       });
 
       if (deletedRows > 0) {
@@ -151,7 +97,7 @@ let deleteHotpotById = (hotpotId) => {
         resolve();
       } else {
         // Không tìm thấy bản ghi để xóa
-        reject(new Error("Hotpot not found or already deleted"));
+        reject(new Error("restaurant not found or already deleted"));
       }
     } catch (error) {
       reject(error);
@@ -160,9 +106,9 @@ let deleteHotpotById = (hotpotId) => {
 };
 
 module.exports = {
-  createNewHotpot: createNewHotpot,
-  getAllHotpot: getAllHotpot,
-  getHotpotInfoById: getHotpotInfoById,
-  updateHotpotData: updateHotpotData,
-  deleteHotpotById: deleteHotpotById,
+  createNewRestaurant: createNewRestaurant,
+  getAllRestaurant: getAllRestaurant,
+  getRestaurantInfoById: getRestaurantInfoById,
+  updateRestaurantData: updateRestaurantData,
+  deleteRestaurantById: deleteRestaurantById,
 };

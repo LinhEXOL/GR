@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import "./HotpotManage.scss";
+import "./RestaurantManage.scss";
 import { emitter } from "../../utils/emitter";
 import { getAllUsers } from "../../services/userService";
 
@@ -9,7 +9,7 @@ class UserManage extends Component {
   state = {};
   //constructor:
   //khi component được render thì nó sẽ check hàm constructor đầu tiên
-  // khởi tạo những state (những biến mà ta muốn dùng class HotpotManage này)
+  // khởi tạo những state (những biến mà ta muốn dùng class RestaurantManage này)
   constructor(props) {
     super(props);
     this.state = {
@@ -33,9 +33,9 @@ class UserManage extends Component {
   render() {
     let arrUsers = this.state.arrUsers;
     return (
-      <div className="hotpots-container">
+      <div className="restaurants-container">
         <div className="title text-center">Manage user</div>
-        <div className="hotpots-table mt-3 mx-1">
+        <div className="restaurants-table mt-3 mx-1">
           <table id="customers">
             <tbody>
               <tr>

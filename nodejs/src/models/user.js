@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "keyMap",
         as: "roleData",
       });
+      User.hasMany(models.Booking, {
+        foreignKey: "customerId",
+        as: "customerData",
+      });
     }
   }
   User.init(
@@ -23,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       address: DataTypes.STRING,
-      phonenumber: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
       gender: DataTypes.BOOLEAN,
       image: DataTypes.STRING,
       roleId: DataTypes.STRING,

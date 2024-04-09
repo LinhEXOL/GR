@@ -14,17 +14,21 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "timeType",
         as: "timeTypeData",
       });
-      Allcode.hasMany(models.Hotpot, {
+      Allcode.hasMany(models.Restaurant, {
         foreignKey: "priceId",
         as: "priceData",
       });
-      Allcode.hasMany(models.Hotpot, {
-        foreignKey: "paymentId",
-        as: "paymentData",
-      });
-      Allcode.hasMany(models.Hotpot, {
+      Allcode.hasMany(models.Restaurant, {
         foreignKey: "provinceId",
         as: "provinceData",
+      });
+      Allcode.hasMany(models.Booking, {
+        foreignKey: "timeType",
+        as: "timeTypeDataBooking",
+      });
+      Allcode.hasMany(models.Hotpot, {
+        foreignKey: "priceId",
+        as: "priceDataHotpot",
       });
     }
   }

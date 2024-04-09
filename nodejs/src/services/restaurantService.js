@@ -1,30 +1,147 @@
 import db from "../models/index";
 const _ = require("lodash");
-let createRestaurant = async (data) => {
+require("dotenv").config();
+
+const MAX_NUMBER_SCHEDULE = 10;
+//const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
+
+console.log("MAX_NUMBER_SCHEDULE:", MAX_NUMBER_SCHEDULE);
+
+let getAllRestaurants = (restaurantId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        !data.name ||
-        !data.imageBase64 ||
-        !data.descriptionHTML ||
-        !data.address ||
-        !data.descriptionMarkdown
-      ) {
-        resolve({
+      let restaurants = "";
+      if (restaurantId === "ALL") {
+        restaurants = await db.Restaurant.findAll({});
+      }
+      if (restaurantId && restaurantId !== "ALL") {
+        restaurants = await db.Restaurant.findOne({
+          where: { id: restaurantId },
+        });
+      }
+      resolve({ restaurants, data: restaurants });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllRestaurantNames = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let restaurantNames = await db.Restaurant.findAll({
+        attributes: {},
+      });
+
+      resolve({
+        errCode: 0,
+        data: restaurantNames,
+      });
+      console.log("Type of restaurantnames:", typeof restaurantNames);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllTypeNames = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let typeNames = await db.Type.findAll({
+        attributes: {
+          exclude: ["image"],
+        },
+      });
+
+      resolve({
+        errCode: 0,
+        data: typeNames,
+      });
+      console.log("Type of typenames:", typeof typeNames);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let createNewRestaurant = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.Restaurant.create({
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+        priceId: data.priceId,
+        provinceId: data.provinceId,
+        typeId: data.typeId,
+        image: data.image,
+        staffId: data.staffId,
+        address: data.address,
+        longitude: data.longitude,
+        latitude: data.latitude,
+      });
+      resolve({
+        errCode: 0,
+        message: "OK",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let deleteRestaurant = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const restaurant = await db.Restaurant.findOne({
+        where: { id: restaurantId },
+      });
+      if (!restaurant) {
+        return resolve({
           errCode: 1,
+          message: "restaurant is not exist!",
+        });
+      }
+      await db.Restaurant.destroy({ where: { id: restaurantId } });
+      resolve({
+        errCode: 0,
+        message: "restaurant is deleted",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let updateRestaurantData = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
           errMessage: "Missing required parameter",
         });
-      } else {
-        await db.Restaurant.create({
-          name: data.name,
-          image: data.imageBase64,
-          descriptionHTML: data.descriptionHTML,
-          descriptionMarkdown: data.descriptionMarkdown,
-          address: data.address,
-        });
+      }
+      let restaurant = await db.Restaurant.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (restaurant) {
+        restaurant.name = data.name;
+        restaurant.phoneNumber = data.phoneNumber;
+        restaurant.provinceId = data.provinceId;
+        restaurant.typeId = data.typeId;
+        restaurant.latitude = data.latitude;
+        restaurant.priceId = data.priceId;
+        restaurant.longitude = data.longitude;
+        restaurant.staffId = data.staffId;
+        restaurant.address = data.address;
+        if (data.image) {
+          restaurant.image = data.image;
+        }
+        await restaurant.save();
         resolve({
           errCode: 0,
-          errMessage: "Create new restaurant succeed!",
+          message: "Update the hopot succeeds!",
         });
       }
     } catch (e) {
@@ -33,17 +150,39 @@ let createRestaurant = async (data) => {
   });
 };
 
-let getAllRestaurants = () => {
+let getAllCodeService = (typeInput) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let data = await db.Restaurant.findAll();
-      if (data && data.length > 0) {
-        console.log("data:", data);
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter",
+        });
+      } else {
+        let res = {};
+        let allcode = await db.Allcode.findAll({
+          where: { type: typeInput },
+        });
+        res.errCode = 0;
+        res.data = allcode;
+        resolve(res);
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getTopRestaurant = (limitInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let restaurants = await db.Restaurant.findAll({
+        limit: limitInput,
+        order: [["createdAt", "DESC"]],
+      });
       resolve({
         errCode: 0,
-        errMessage: "OK",
-        data,
+        data: restaurants,
       });
     } catch (e) {
       reject(e);
@@ -57,32 +196,55 @@ let getDetailRestaurantById = (inputId) => {
       if (!inputId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          errMessage: "Missing required parameter!",
         });
       } else {
+        console.log("HELOO");
         let data = await db.Restaurant.findOne({
           where: { id: inputId },
-          attributes: [
-            "name",
-            "address",
-            "descriptionHTML",
-            "descriptionMarkdown",
+          attributes: {
+            exclude: ["restaurantId"],
+          },
+          include: [
+            // {
+            //   model: db.Allcode,
+            //   as: "priceData",
+            //   attributes: ["valueEn", "valueVi"],
+            // },
+            // {
+            //   model: db.Allcode,
+            //   as: "provinceData",
+            //   attributes: ["valueEn", "valueVi"],
+            // }
+            {
+              model: db.Markdown,
+              attributes: ["description", "contentHTML", "contentMarkdown"],
+            },
+            // {
+            //   model: db.Type,
+            //   attributes: ["name"],
+            // },
           ],
+          raw: false,
+          nest: true,
         });
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+
         if (data) {
           let hotpotRestaurant = [];
           hotpotRestaurant = await db.Hotpot.findAll({
             where: { restaurantId: inputId },
-            attributes: ["id", "provinceId"],
           });
 
-          data.hotpotRestaurant = hotpotRestaurant;
-        } else {
-          data = {};
+          data.setDataValue("hotpotRestaurant", hotpotRestaurant);
         }
+
+        if (!data) data = {};
+
         resolve({
           errCode: 0,
-          errMessage: "OK",
           data,
         });
       }
@@ -92,7 +254,7 @@ let getDetailRestaurantById = (inputId) => {
   });
 };
 
-let bulkCreateResSchedule = (data) => {
+let bulkCreateSchedule = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("Check data 1", data);
@@ -114,7 +276,7 @@ let bulkCreateResSchedule = (data) => {
         console.log("Data:", schedule);
 
         //convert date
-        let existing = await db.ResSchedule.findAll({
+        let existing = await db.Schedule.findAll({
           where: { restaurantId: data.restaurantId, date: data.formatedDate },
           attributes: ["restaurantId", "date", "timeType"],
           raw: true,
@@ -134,7 +296,7 @@ let bulkCreateResSchedule = (data) => {
         console.log("check different: ", toCreate);
 
         if (toCreate && toCreate.length > 0) {
-          await db.ResSchedule.bulkCreate(toCreate);
+          await db.Schedule.bulkCreate(toCreate);
         }
         resolve({
           errCode: 0,
@@ -147,7 +309,7 @@ let bulkCreateResSchedule = (data) => {
   });
 };
 
-let getResScheduleByDate = (restaurantId, date) => {
+let getScheduleByDate = (restaurantId, date) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!restaurantId || !date) {
@@ -156,7 +318,7 @@ let getResScheduleByDate = (restaurantId, date) => {
           errMessage: "Missing required parameter!",
         });
       } else {
-        let dataSchedule = await db.ResSchedule.findAll({
+        let dataSchedule = await db.Schedule.findAll({
           where: {
             restaurantId: restaurantId,
             date: date,
@@ -165,7 +327,7 @@ let getResScheduleByDate = (restaurantId, date) => {
             {
               model: db.Allcode,
               as: "timeTypeData",
-              atrributes: ["valueEn", "valueVi"],
+              attributes: ["valueEn", "valueVi"],
             },
           ],
           raw: false,
@@ -184,10 +346,192 @@ let getResScheduleByDate = (restaurantId, date) => {
   });
 };
 
+let getExtraInfoRestaurantById = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!restaurantId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      } else {
+        let data = await db.Restaurant.findOne({
+          where: { id: restaurantId },
+          attributes: {
+            exclude: ["id", "restaurantId"],
+          },
+          include: [
+            {
+              model: db.Allcode,
+              as: "priceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "provinceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            { model: db.Type, attributes: ["name", "id"] },
+            {
+              model: db.Markdown,
+              attributes: ["description", "contentHTML", "contentMarkdown"],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+
+        if (!data) data = {};
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getProfileRestaurantById = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!restaurantId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      } else {
+        let data = await db.Restaurant.findOne({
+          where: { id: restaurantId },
+          attributes: {
+            exclude: ["id", "restaurantId"],
+          },
+          include: [
+            {
+              model: db.Allcode,
+              as: "priceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            {
+              model: db.Allcode,
+              as: "provinceData",
+              attributes: ["valueEn", "valueVi"],
+            },
+            { model: db.Type, attributes: ["name", "id"] },
+          ],
+          raw: false,
+          nest: true,
+        });
+
+        if (!data) data = {};
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let saveDetailInfoRestaurant = (inputData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !inputData.restaurantId ||
+        !inputData.contentHTML ||
+        !inputData.contentMarkdown ||
+        !inputData.action
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing parameter",
+        });
+      } else {
+        if (inputData.action === "CREATE") {
+          await db.Markdown.create({
+            contentHTML: inputData.contentHTML,
+            contentMarkdown: inputData.contentMarkdown,
+            description: inputData.description,
+            restaurantId: inputData.restaurantId,
+          });
+        } else if (inputData.action === "EDIT") {
+          let restaurantMarkdown = await db.Markdown.findOne({
+            where: { restaurantId: inputData.restaurantId },
+            raw: false,
+          });
+          if (restaurantMarkdown) {
+            restaurantMarkdown.contentHTML = inputData.contentHTML;
+            restaurantMarkdown.contentMarkdown = inputData.contentMarkdown;
+            restaurantMarkdown.description = inputData.description;
+            restaurantMarkdown.updateAt = new Date();
+
+            await restaurantMarkdown.save();
+          }
+        }
+
+        resolve({
+          errCode: 0,
+          errMessage: "Save info restaurant succees!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getRestaurantByLocation = (location) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!location) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter",
+        });
+      } else {
+        let restaurants = [];
+        if (location === "ALL") {
+          restaurants = await db.Restaurant.findAll({});
+        } else {
+          //find by location
+          restaurants = await db.Restaurant.findAll({
+            where: { provinceId: location },
+          });
+        }
+
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+          data: restaurants,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
-  createRestaurant: createRestaurant,
   getAllRestaurants: getAllRestaurants,
+  createNewRestaurant: createNewRestaurant,
+  deleteRestaurant: deleteRestaurant,
+  updateRestaurantData: updateRestaurantData,
+  getAllCodeService: getAllCodeService,
+  getTopRestaurant: getTopRestaurant,
   getDetailRestaurantById: getDetailRestaurantById,
-  bulkCreateResSchedule: bulkCreateResSchedule,
-  getResScheduleByDate: getResScheduleByDate,
+  bulkCreateSchedule: bulkCreateSchedule,
+  getScheduleByDate: getScheduleByDate,
+  getExtraInfoRestaurantById: getExtraInfoRestaurantById,
+  getAllRestaurantNames: getAllRestaurantNames,
+  saveDetailInfoRestaurant: saveDetailInfoRestaurant,
+  getAllTypeNames: getAllTypeNames,
+  getProfileRestaurantById: getProfileRestaurantById,
+  getRestaurantByLocation: getRestaurantByLocation,
 };

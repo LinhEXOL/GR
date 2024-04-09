@@ -1,23 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FormattedMessage } from "react-intl";
-import "./DetailRestaurant.scss";
 import HomeHeader from "../../HomePage/HomeHeader";
-import HotpotSchedule from "../Hotpot/HotpotSchedule";
-import HotpotExtraInfo from "../Hotpot/HotpotExtraInfo";
-import HotpotProfile from "../Hotpot/HotpotProfile";
-import {
-  getDetailRestaurantById,
-  getAllCodeService,
-} from "../../../services/hotpotService";
-import _ from "lodash";
-import { LANGUAGES } from "../../../utils";
+import "./DetailRestaurant.scss";
+import { getDetailInfoRestaurant } from "../../../services/restaurantService";
+import RestaurantSchedule from "./RestaurantSchedule";
+import RestaurantExtraInfo from "./RestaurantExtraInfo";
+import Slider from "react-slick";
 class DetailRestaurant extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrHotpotId: [],
-      dataDetailRestaurant: {},
+      detailRestaurant: {},
+      currentRestaurantId: -1,
     };
   }
 
@@ -28,82 +22,101 @@ class DetailRestaurant extends Component {
       this.props.match.params.id
     ) {
       let id = this.props.match.params.id;
-
-      let res = await getDetailRestaurantById({
-        id: id,
+      this.setState({
+        currentRestaurantId: id,
       });
+      let res = await getDetailInfoRestaurant(id);
       if (res && res.errCode === 0) {
-        let data = res.data;
-        let arrHotpotId = [];
-        if (data && !_.isEmpty(data)) {
-          let arr = data.hotpotRestaurant;
-          if (arr && arr.length > 0) {
-            arr.map((item) => {
-              arrHotpotId.push(item.id);
-            });
-          }
-        }
-
         this.setState({
-          dataDetailRestaurant: res.data,
-          arrHotpotId: arrHotpotId,
+          detailRestaurant: res.data,
         });
       }
     }
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {}
+  componentDidUpdate(prevProps, prevState, snapshot) {}
 
   render() {
-    let { arrHotpotId, dataDetailRestaurant } = this.state;
-    console.log("Check dataDetailType arrHotpotId", arrHotpotId);
     let { language } = this.props;
+    let { detailRestaurant } = this.state;
+    let name = "";
+    let hotpotRestaurant = detailRestaurant.hotpotRestaurant;
+    name = `${detailRestaurant.name}`;
     return (
-      <div className="detail-type-container">
-        <HomeHeader />
-        <div className="detail-type-body">
-          <div className="description-type">
-            {dataDetailRestaurant && !_.isEmpty(dataDetailRestaurant) && (
-              <>
-                <div className="name">{dataDetailRestaurant.name}</div>
-
+      <>
+        <HomeHeader isShowBanner={false} />
+        <div className="restaurant-detail-container">
+          <Slider {...this.props.settings}>
+            {hotpotRestaurant &&
+              hotpotRestaurant.length > 0 &&
+              hotpotRestaurant.map((item, index) => {
+                let imageBase64 = "";
+                if (item.image) {
+                  imageBase64 = new Buffer(item.image, "base64").toString(
+                    "binary"
+                  );
+                }
+                return (
+                  <div
+                    className="section-customize restaurant-child"
+                    key={index}
+                    onClick={() => this.handleViewDetailRestaurant(item)}
+                  >
+                    <div
+                      className="bg-image section-type"
+                      style={{
+                        backgroundImage: `url(${imageBase64})`,
+                      }}
+                    />
+                    <div className="restaurant-name">{item.name}</div>
+                  </div>
+                );
+              })}
+          </Slider>
+          {/* <div className="intro-restaurant">
+            <div
+              className="content-left"
+              style={{
+                backgroundImage: `url(${
+                  detailRestaurant && detailRestaurant.image ? detailRestaurant.image : ""
+                })`,
+              }}
+            ></div>
+            <div className="content-right">
+              <div className="up">{name}</div>
+              <div className="down">
+                {detailRestaurant &&
+                  detailRestaurant.Markdown &&
+                  detailRestaurant.Markdown.description && (
+                    <span>{detailRestaurant.Markdown.description}</span>
+                  )}
+              </div>
+            </div>
+          </div>
+          <div className="schedule-Restaurant">
+            <div className="content-left">
+              <RestaurantSchedule restaurantIdFromParent={this.state.currentRestaurantId} />
+            </div>
+            <div className="content-right">
+              <RestaurantExtraInfo
+                restaurantIdFromParent={this.state.currentRestaurantId}
+              />
+            </div>
+          </div>
+          <div className="detail-info-restaurant">
+            {detailRestaurant &&
+              detailRestaurant.Markdown &&
+              detailRestaurant.Markdown.contentHTML && (
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: dataDetailRestaurant.descriptionHTML,
+                    __html: detailRestaurant.Markdown.contentHTML,
                   }}
                 ></div>
-              </>
-            )}
+              )}
           </div>
-
-          {arrHotpotId &&
-            arrHotpotId.length > 0 &&
-            arrHotpotId.map((item, index) => {
-              return (
-                <div className="each-hotpot" key={index}>
-                  <div className="dt-content-left">
-                    <div className="profile-hotpot">
-                      <HotpotProfile
-                        hotpotId={item}
-                        isShowDescriptionHotpot={true}
-                        isShowLinkDetail={true}
-                        isShowPrice={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="dt-content-right">
-                    <div className="hotpot-schedule">
-                      <HotpotSchedule hotpotIdFromParent={item} />
-                    </div>
-                    <div className="hotpot-extra-info">
-                      <HotpotExtraInfo hotpotIdFromParent={item} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="comment-restaurant"></div> */}
         </div>
-      </div>
+      </>
     );
   }
 }

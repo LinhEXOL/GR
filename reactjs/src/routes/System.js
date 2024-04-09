@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import UserManage from "../containers/System/UserManage";
-import HotpotManage from "../containers/System/HotpotManage";
-import HotpotRedux from "../containers/System/Admin/HotpotRedux";
+import RestaurantManage from "../containers/System/RestaurantManage";
+import RestaurantRedux from "../containers/System/Admin/RestaurantRedux";
 import UserRedux from "../containers/System/Admin/UserRedux";
 import Header from "../containers/Header/Header";
-import ExtraInfoHotpot from "../containers/System/Admin/ExtraInfoHotpot";
+import ExtraInfoRestaurant from "../containers/System/Admin/ExtraInfoRestaurant";
 import ManageSchedule from "../containers/System/Admin/ManageSchedule";
 import ManageType from "../containers/System/Type/ManageType";
-import ManageRestaurant from "../containers/System/Restaurant/ManageRestaurant";
-import ManageHp from "../containers/System/Hp/ManageHp";
+import ManageHotpot from "../containers/System/Hotpot/ManageHotpot";
 class System extends Component {
   render() {
     const { systemMenuPath, isLoggedIn } = this.props;
@@ -21,23 +20,25 @@ class System extends Component {
           <div className="system-list">
             <Switch>
               <Route
-                path="/system/extra-info-hotpot"
-                component={ExtraInfoHotpot}
+                path="/system/extra-info-restaurant"
+                component={ExtraInfoRestaurant}
               />
-              <Route path="/system/CRUD-hotpot" component={HotpotManage} />
+              <Route
+                path="/system/CRUD-restaurant"
+                component={RestaurantManage}
+              />
               <Route path="/system/CRUD-user" component={UserManage} />
-              <Route path="/system/hotpot-redux" component={HotpotRedux} />
+              <Route
+                path="/system/restaurant-redux"
+                component={RestaurantRedux}
+              />
               <Route path="/system/user-redux" component={UserRedux} />
               <Route path="/system/manage-type" component={ManageType} />
-              <Route
-                path="/system/manage-restaurant"
-                component={ManageRestaurant}
-              />
               <Route
                 path="/system/schedule-manage"
                 component={ManageSchedule}
               />
-              <Route path="/system/manage-hp" component={ManageHp} />
+              <Route path="/system/manage-hotpot" component={ManageHotpot} />
               component=
               {() => {
                 return <Redirect to={systemMenuPath} />;

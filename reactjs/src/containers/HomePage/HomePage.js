@@ -6,9 +6,8 @@ import "./HomePage.scss";
 // Import css files
 import "slick-carousel/slick/slick.scss";
 import "slick-carousel/slick/slick-theme.scss";
-import HotpotType from "./Section/HotpotType";
+import RestaurantType from "./Section/RestaurantType";
 import Restaurant from "./Section/Restaurant";
-import Hotpot from "./Section/Hotpot";
 import HandBook from "./Section/HandBook";
 import Video from "./Section/Video";
 import HomeFooter from "./HomeFooter";
@@ -48,9 +47,8 @@ class HomePage extends Component {
         />
 
         {showNearSearch && <NearSearch handleClose={this.handleCloseModal} />}
-        {/* <HotpotType settings={settings} /> */}
-        {/* <Restaurant settings={settings} /> */}
-        <Hotpot settings={settings} />
+        {/* <RestaurantType settings={settings} /> */}
+        <Restaurant settings={settings} />
         {/* <HandBook settings={settings} /> */}
         <Video />
         <HomeFooter />

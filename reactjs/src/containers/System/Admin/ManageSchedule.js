@@ -10,28 +10,28 @@ import DatePicker from "../../../components/Input/DatePicker";
 import moment from "moment";
 import { toast } from "react-toastify";
 import _, { result } from "lodash";
-import { saveBulkScheduleHotpot } from "../../../services/hotpotService";
+import { saveBulkScheduleRestaurant } from "../../../services/restaurantService";
 class ManageSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listHotpotNames: [],
-      selectedHotpot: {},
+      listRestaurantNames: [],
+      selectedRestaurant: {},
       currentDate: "",
       rangeTime: [],
     };
   }
 
   componentDidMount() {
-    this.props.fetchAllHotpotNames();
+    this.props.fetchAllRestaurantNames();
     this.props.fetchAllScheduleTime();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.allHotpotNames !== this.props.allHotpotNames) {
-      let dataSelect = this.buildDataInputSelect(this.props.allHotpotNames);
+    if (prevProps.allRestaurantNames !== this.props.allRestaurantNames) {
+      let dataSelect = this.buildDataInputSelect(this.props.allRestaurantNames);
       this.setState({
-        listHotpotNames: dataSelect,
+        listRestaurantNames: dataSelect,
       });
     }
     if (prevProps.allScheduleTime !== this.props.allScheduleTime) {
@@ -58,8 +58,8 @@ class ManageSchedule extends Component {
     return result;
   };
 
-  handleChangeSelect = async (selectedHotpot) => {
-    this.setState({ selectedHotpot });
+  handleChangeSelect = async (selectedRestaurant) => {
+    this.setState({ selectedRestaurant });
   };
 
   handleOnChangeDatePicker = (date) => {
@@ -82,17 +82,17 @@ class ManageSchedule extends Component {
     }
   };
 
-  //_.isEmpty(selectedHotpot) tra ve true khi object rỗng
+  //_.isEmpty(selectedRestaurant) tra ve true khi object rỗng
 
   handleSaveSchedule = async () => {
-    let { rangeTime, selectedHotpot, currentDate } = this.state;
+    let { rangeTime, selectedRestaurant, currentDate } = this.state;
     let result = [];
     if (!currentDate) {
       toast.error("Invalid date!");
       return;
     }
-    if (selectedHotpot && _.isEmpty(selectedHotpot)) {
-      toast.error("Invalid selected hotpot!");
+    if (selectedRestaurant && _.isEmpty(selectedRestaurant)) {
+      toast.error("Invalid selected restaurant!");
       return;
     }
     let formatedDate = new Date(currentDate).getTime();
@@ -100,7 +100,7 @@ class ManageSchedule extends Component {
       let selectedTime = rangeTime.filter((item) => item.isSelected === true);
       selectedTime.map((schedule) => {
         let object = {};
-        object.hotpotId = selectedHotpot.value;
+        object.restaurantId = selectedRestaurant.value;
         object.date = formatedDate;
         object.timeType = schedule.keyMap;
         result.push(object);
@@ -109,16 +109,16 @@ class ManageSchedule extends Component {
       toast.error("Invalid selected time!");
       return;
     }
-    let res = await saveBulkScheduleHotpot({
+    let res = await saveBulkScheduleRestaurant({
       arrSchedule: result,
-      hotpotId: selectedHotpot.value,
+      restaurantId: selectedRestaurant.value,
       formatedDate: formatedDate,
     });
     if (res && res.errCode === 0) {
       toast.success("Save info successfully!");
     } else {
-      toast.error("error saveBulkScheduleHotpot");
-      console.log("error saveBulkScheduleHotpot >>> res:", res);
+      toast.error("error saveBulkScheduleRestaurant");
+      console.log("error saveBulkScheduleRestaurant >>> res:", res);
     }
   };
 
@@ -135,12 +135,13 @@ class ManageSchedule extends Component {
           <div className="row">
             <div className="col-6 form-group">
               <label>
-                <FormattedMessage id="manage-schedule.choose-hotpot" />
+                {/* <FormattedMessage id="manage-schedule.choose-Restaurant" /> */}
+                Chọn nhà hàng
               </label>
               <Select
-                value={this.state.selectedHotpot}
+                value={this.state.selectedRestaurant}
                 onChange={this.handleChangeSelect}
-                options={this.state.listHotpotNames}
+                options={this.state.listRestaurantNames}
               />
             </div>
             <div className="col-6 form-group">
@@ -192,7 +193,7 @@ class ManageSchedule extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
-    allHotpotNames: state.admin.allHotpotNames,
+    allRestaurantNames: state.admin.allRestaurantNames,
     language: state.app.language,
     allScheduleTime: state.admin.allScheduleTime,
   };
@@ -200,7 +201,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllHotpotNames: () => dispatch(actions.fetchAllHotpotNames()),
+    fetchAllRestaurantNames: () => dispatch(actions.fetchAllRestaurantNames()),
     fetchAllScheduleTime: () => dispatch(actions.fetchAllScheduleTime()),
   };
 };

@@ -2,11 +2,11 @@
 
 "homeheader":{
     "type": "Loại lẩu",
-    "searchhotpotbytype": "Tìm lẩu theo loại",
+    "searchrestaurantbytype": "Tìm lẩu theo loại",
     "restaurant": "Nhà hàng gần bạn",
     "nearbyrestaurant":"Chọn nhà hàng gần bạn",
-    "hotpot": "Món lẩu",
-    "favoritehotpot": "Chọn món lẩu yêu thích",
+    "restaurant": "Món lẩu",
+    "favoriterestaurant": "Chọn món lẩu yêu thích",
     "explore": "Khám phá",
     "history":"Nguồn gốc của lẩu",
     "support": "Hỗ trợ",
@@ -20,7 +20,7 @@
     "child2":"Lẩu băng chuyền",
     "child3":"Lẩu cay",
     "child4":"Lẩu chay",
-    "findhotpot":"Tìm lẩu"
+    "findrestaurant":"Tìm lẩu"
 
 },
 
@@ -29,9 +29,9 @@
             "header": "Hệ thống",
             "system-administrator": {
                 "header": "Quản trị hệ thống",
-                "hotpot-manage":"Quản lý món lẩu",
+                "restaurant-manage":"Quản lý món lẩu",
                 "user-manage": "Quản lý người sử dụng",
-                "hotpot-redux": "Quản lý hotpot redux",
+                "restaurant-redux": "Quản lý restaurant redux",
                 "register-package-group-or-account": "Đăng ký gói dịch vụ cho nhóm/tài khoản"
             },
             "system-parameter": {
@@ -39,51 +39,52 @@
             }
         },
         "admin":{
-            "manage-hotpot":"Quản lí món lẩu",
-            "extra-info-hotpot":"Thêm thông tin chi tiết",
+            "manage-restaurant":"Quản lí nhà hàng",
+            "extra-info-restaurant":"Thêm thông tin nhà hàng",
             "manage-user": "Quản lý người dùng",
             "manage-admin": "Quản lý admin",
             "manage-customer": "Quản lý khách hàng",
             "crud-user": "CRUD người dùng",
-            "crud-hotpot": "CRUD món lẩu",
-            "crud-hotpot-redux": "CRUD món lẩu redux",
+            "crud-restaurant": "CRUD món lẩu",
+            "crud-restaurant-redux": "CRUD nhà hàng redux",
             "crud-user-redux": "CRUD người dùng redux",
             "restaurant": "Nhà hàng",
-            "hp":"Hp",
+            "hotpot":"Quản lí restaurant",
             "manage-restaurant": "Quản lí nhà hàng",
-            "manage-hp":"Quản lí hp",
+            "manage-hotpot":"Quản lí restaurant",
             "type": "Loại lẩu",
             "manage-type": "Quản lí loại lẩu",
             "handbook": "Cẩm nang",
             "manage-handbook": "Quản lí cẩm nang",
-            "schedule":"Lịch đặt lẩu",
-            "manage-schedule":"Quản lí lịch đặt lẩu"
+            "schedule":"Lịch đặt nhà hàng",
+            "manage-schedule":"Quản lí lịch đặt nhà hàng"
         },
         "staff":{
-            "manage-hotpot":"Quản lí món lẩu",
-            "extra-info-hotpot":"Thêm thông tin chi tiết",
+            "manage-restaurant":"Quản lí nhà hàng",
+            "extra-info-restaurant":"Thêm thông tin nhà hàng",
             "manage-user": "Quản lý người dùng",
             "manage-staff": "Quản lý staff",
             "manage-customer": "Quản lý khách hàng",
             "crud-user": "CRUD người dùng",
-            "crud-hotpot": "CRUD món lẩu",
-            "crud-hotpot-redux": "CRUD món lẩu redux",
+            "crud-restaurant": "CRUD món lẩu",
+            "crud-restaurant-redux": "Xem và sửa thông tin nhà hàng",
             "crud-user-redux": "CRUD người dùng redux",
             "restaurant": "Nhà hàng",
-            "hp":"Hp",
+            "hotpot":"Quản lí restaurant",
             "manage-restaurant": "Quản lí nhà hàng",
-            "manage-hp":"Quản lí hp",
+            "manage-hotpot":"Quản lí restaurant",
             "type": "Loại lẩu",
             "manage-type": "Quản lí loại lẩu",
             "handbook": "Cẩm nang",
             "manage-handbook": "Quản lí cẩm nang",
-            "schedule":"Lịch đặt lẩu",
-            "manage-schedule":"Quản lí lịch đặt lẩu"
+            "schedule":"Lịch đặt nhà hàng",
+            "manage-schedule":"Quản lí lịch đặt lẩu",
+            "customer":"Quản lí khách hàng"
         }
 
 },
 
-"manage-hotpot":{
+"manage-restaurant":{
     "add": "Thêm mới món lẩu",
     "name": "Tên",
     "phone-number": "Số điện thoại",
@@ -98,25 +99,25 @@
     "paymentId": "Phương thức thanh toán"
 },
 "homepage":{
-    "outstanding-hotpot":"Lẩu hot tuần qua",
+    "outstanding-restaurant":"Lẩu hot tuần qua",
     "more-info":"Xem thêm",
     "type-popular":"Các loại lẩu phổ biến",
     "outstanding-restaurant": "Các nhà hàng nổi bật"
 },
 "manage-schedule":{
     "title":"Quản lý lịch đặt lẩu",
-    "choose-hotpot": "Chọn món lẩu",
+    "choose-restaurant": "Chọn món lẩu",
     "choose-date": "Chọn ngày",
     "save": "Lưu thông tin"
 },
 "customer":{
-    "detail-hotpot":{
+    "detail-restaurant":{
         "schedule":"Lịch đặt lẩu",
         "no-schedule": "Không có lịch trong thời gian này, vui lòng chọn thời gian khác!",
         "choose":"Chọn ",
         "book-free": " và đặt (miễn phí)."
     },
-    "extra-info-hotpot":{
+    "extra-info-restaurant":{
         "text-address": "Địa chỉ",
         "price": "Khoảng giá:",
         "detail": "Xem chi tiết",

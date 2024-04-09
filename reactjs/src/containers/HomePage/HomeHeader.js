@@ -7,14 +7,13 @@ import { FormattedMessage } from "react-intl";
 import { LANGUAGES } from "../../utils/constant";
 import { changeLanguageApp } from "../../store/actions/appActions";
 import { withRouter } from "react-router";
-import { getAllTypes } from "../../services/hotpotService";
+import { getAllTypes } from "../../services/restaurantService";
 import { Link } from "react-router-dom";
 class HomeHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataType: [],
-      restaurantId: "",
       isClicked: false,
     };
   }
@@ -25,7 +24,6 @@ class HomeHeader extends Component {
   };
 
   async componentDidMount() {
-    this.props.fetchAllRestaurantNames();
     let res = await getAllTypes();
     if (res && res.errCode === 0) {
       this.setState({
@@ -62,10 +60,6 @@ class HomeHeader extends Component {
     }
   };
 
-  handleViewDetailRestaurant = (id) => {
-    this.props.history.push(`/detail-restaurant/${id}`);
-  };
-
   returnHomePage = () => {
     if (this.props.history) {
       this.props.history.push("/home");
@@ -73,16 +67,6 @@ class HomeHeader extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.allRestaurantNames !== this.props.allRestaurantNames) {
-      let arrRestaurantNames = this.props.allRestaurantNames;
-      this.setState({
-        listRestaurantNames: arrRestaurantNames,
-        restaurantId:
-          arrRestaurantNames && arrRestaurantNames.length > 0
-            ? arrRestaurantNames[0].id
-            : "",
-      });
-    }
     if (prevProps.allTypeNames !== this.props.allTypeNames) {
       let arrTypeNames = this.props.allTypeNames;
       this.setState({
@@ -99,13 +83,11 @@ class HomeHeader extends Component {
     this.setState({
       ...copyState,
     });
-    this.handleViewDetailRestaurant(event.target.value);
   };
 
   render() {
     let language = this.props.language;
-    let { dataType, restaurantId, isClicked } = this.state;
-    let restaurantNames = this.state.listRestaurantNames;
+    let { dataType, isClicked } = this.state;
     return (
       <React.Fragment>
         <div className="home-header-container">
@@ -131,7 +113,7 @@ class HomeHeader extends Component {
                   </b>
                 </div>
                 {/* <div className="subtitle">
-                  <FormattedMessage id="homeheader.searchhotpotbytype" />
+                  <FormattedMessage id="homeheader.searchrestaurantbytype" />
                 </div> */}
               </div>
               <div className="child-content">
@@ -163,7 +145,7 @@ class HomeHeader extends Component {
                   </b>
                 </div>
                 {/* <div className="subtitle">
-                  <FormattedMessage id="homeheader.favoritehotpot" />
+                  <FormattedMessage id="homeheader.favoriterestaurant" />
                 </div> */}
               </div>
               <div className="child-content">
@@ -208,7 +190,7 @@ class HomeHeader extends Component {
               </div> */}
             </div>
             <div className="right-content">
-              <div className="placehotpot">
+              <div className="placerestaurant">
                 <Link
                   to="/home#restaurant-section"
                   onClick={() => this.handleClick("restaurant-section")}
@@ -291,27 +273,6 @@ class HomeHeader extends Component {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="search">
-                <i className="fas fa-search"></i>
-                <select
-                  className="form-control"
-                  onChange={(event) => {
-                    this.onChangeInput(event, "restaurantId");
-                  }}
-                  value={restaurantId}
-                >
-                  {restaurantNames &&
-                    restaurantNames.length > 0 &&
-                    restaurantNames.map((item, index) => {
-                      return (
-                        <option key={index} value={item.id}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                </select>
-              </div> */}
             </div>
             <div className="content-down">
               <div className="options">
@@ -346,7 +307,6 @@ const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
     language: state.app.language,
-    allRestaurantNames: state.admin.allRestaurantNames,
   };
 };
 
@@ -354,7 +314,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
-    fetchAllRestaurantNames: () => dispatch(actions.fetchAllRestaurantNames()),
   };
 };
 

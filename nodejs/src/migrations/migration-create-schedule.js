@@ -14,8 +14,14 @@ module.exports = {
       timeType: {
         type: Sequelize.STRING,
       },
-      hotpotId: {
+      restaurantId: {
         type: Sequelize.INTEGER,
+      },
+      start: {
+        type: Sequelize.STRING,
+      },
+      end: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

@@ -11,29 +11,17 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
-      phonenumber: {
-        type: Sequelize.STRING,
-      },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.BLOB("long"),
       },
       priceId: {
         type: Sequelize.STRING,
       },
-      provinceId: {
-        type: Sequelize.STRING,
-      },
-      paymentId: {
-        type: Sequelize.STRING,
-      },
       typeId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       restaurantId: {
         type: Sequelize.INTEGER,
-      },
-      note: {
-        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,

@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "23082002",
-    "database": "hotpot",
+    "database": "restaurant",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "logging": false,

@@ -22,13 +22,13 @@ let getCRUD = (req, res) => {
 };
 
 let postCRUD = async (req, res) => {
-  let message = await CRUDService.createNewHotpot(req.body);
+  let message = await CRUDService.createNewRestaurant(req.body);
   console.log(message);
   return res.send("post crud from server");
 };
 
 let displayGetCRUD = async (req, res) => {
-  let data = await CRUDService.getAllHotpot();
+  let data = await CRUDService.getAllRestaurant();
   console.log("-------------------------------------");
   console.log(data);
   console.log("-------------------------------------");
@@ -39,34 +39,34 @@ let displayGetCRUD = async (req, res) => {
 };
 
 let getEditCRUD = async (req, res) => {
-  let hotpotId = req.query.id;
-  if (hotpotId) {
-    let hotpotData = await CRUDService.getHotpotInfoById(hotpotId);
+  let restaurantId = req.query.id;
+  if (restaurantId) {
+    let restaurantData = await CRUDService.getRestaurantInfoById(restaurantId);
 
     return res.render("editCRUD.ejs", {
-      hotpot: hotpotData,
+      restaurant: restaurantData,
     });
   } else {
-    return res.send("Hotpot not found");
+    return res.send("restaurant not found");
   }
 };
 
 let putCRUD = async (req, res) => {
   let data = req.body;
-  let allHotpots = await CRUDService.updateHotpotData(data);
+  let allRestaurants = await CRUDService.updateRestaurantData(data);
 
   return res.render("displayCRUD.ejs", {
-    dataTable: allHotpots,
+    dataTable: allRestaurants,
   });
 };
 
 let deleteCRUD = async (req, res) => {
   let id = req.query.id;
   if (id) {
-    await CRUDService.deleteHotpotById(id);
-    return res.send("delete hotpot succeed");
+    await CRUDService.deleteRestaurantById(id);
+    return res.send("delete restaurant succeed");
   } else {
-    return res.send("hotpot not found");
+    return res.send("restaurant not found");
   }
 };
 

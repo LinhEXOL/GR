@@ -1,0 +1,54 @@
+.booking-modal-container{
+    .booking-modal-content{
+        display: flex;
+        flex-direction: column;
+
+        .booking-modal-header{
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+
+            .left{
+                font-size: 15px;
+                font-weight: 600;
+            }
+
+            .right{
+                float: right;
+            }
+        }
+
+        .booking-modal-body{
+            .restaurant-info{
+                .content-right{
+                    margin-top:10px
+                }
+            }
+            height: 100%;
+            padding: 15px;
+            .row{
+                margin-top: 10px;
+            }
+        }
+
+        .booking-modal-footer{
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+
+            button{
+                border: none;
+                outline: none;
+                padding: 5px 8px;
+                border-radius: 3px;
+            }
+            .btn-booking-confirm{
+                background-color: #fab0b2;
+            }
+            .btn-booking-cancel{
+                background-color: gray;
+            }
+        }
+    }
+}

@@ -6,7 +6,7 @@ import MarkdownIt from "markdown-it";
 import MdEditor from "react-markdown-editor-lite";
 import { LANGUAGES, CommonUtils } from "../../../utils";
 import Lightbox from "react-image-lightbox";
-import { createNewType } from "../../../services/hotpotService";
+import { createNewType } from "../../../services/restaurantService";
 import { toast } from "react-toastify";
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);

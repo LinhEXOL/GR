@@ -62,7 +62,6 @@
             <th>Type Id</th>
             <th>PriceId</th>
             <th>Note</th>
-            <th>PaymentId</th>
             <th>Actions</th>
         </tr>
         <tr>
@@ -92,9 +91,7 @@
             <td>
                 <%= dataTable[i].note %>
             </td>
-            <td>
-                <%= dataTable[i].paymentId %>
-            </td>
+
             
             <td>
                 <a href="/edit-crud/?id=<%= dataTable[i].id %>" class="btn-edit" type="button">Edit</a>

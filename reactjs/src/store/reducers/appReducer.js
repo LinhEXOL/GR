@@ -11,7 +11,7 @@ const initialState = {
   started: true,
   language: "vi",
   //systemMenuPath: '/system/user-manage',
-  systemMenuPath: "/system/hotpot-manage",
+  systemMenuPath: "/system/restaurant-manage",
   contentOfConfirmModal: {
     ...initContentOfConfirmModal,
   },

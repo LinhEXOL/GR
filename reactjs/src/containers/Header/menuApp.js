@@ -1,19 +1,19 @@
 export const adminMenu = [
   {
     //quản lý các món lẩu
-    name: "menu.admin.manage-hotpot",
+    name: "menu.admin.manage-restaurant",
     menus: [
+      // {
+      //   name: "menu.admin.crud-restaurant",
+      //   link: "/system/CRUD-restaurant",
+      // },
       {
-        name: "menu.admin.crud-hotpot",
-        link: "/system/CRUD-hotpot",
+        name: "menu.admin.crud-restaurant-redux",
+        link: "/system/restaurant-redux",
       },
       {
-        name: "menu.admin.crud-hotpot-redux",
-        link: "/system/hotpot-redux",
-      },
-      {
-        name: "menu.admin.extra-info-hotpot",
-        link: "/system/extra-info-hotpot",
+        name: "menu.admin.extra-info-restaurant",
+        link: "/system/extra-info-restaurant",
       },
       {
         //quản lý lịch đặt lẩu
@@ -35,74 +35,65 @@ export const adminMenu = [
         name: "menu.admin.crud-user-redux",
         link: "/system/user-redux",
       },
-      {
-        name: "menu.admin.manage-admin",
-        link: "/system/admin-manage",
-      },
-      {
-        name: "menu.admin.manage-customer",
-        link: "/system/customer-manage",
-      },
+      // {
+      //   name: "menu.admin.manage-admin",
+      //   link: "/system/admin-manage",
+      // },
+      // {
+      //   name: "menu.admin.manage-customer",
+      //   link: "/system/customer-manage",
+      // },
     ],
   },
+
   {
-    //quản lý nhà hàng
-    name: "menu.admin.restaurant",
+    //quản lý hotpot
+    name: "menu.admin.hotpot",
     menus: [
       {
-        name: "menu.admin.manage-restaurant",
-        link: "/system/manage-restaurant",
+        name: "menu.admin.manage-hotpot",
+        link: "/system/manage-hotpot",
       },
     ],
   },
-  {
-    //quản lý hp
-    name: "menu.admin.hp",
-    menus: [
-      {
-        name: "menu.admin.manage-hp",
-        link: "/system/manage-hp",
-      },
-    ],
-  },
-  {
-    //quản lý loại lẩu
-    name: "menu.admin.type",
-    menus: [
-      {
-        name: "menu.admin.manage-type",
-        link: "/system/manage-type",
-      },
-    ],
-  },
-  {
-    //quản lý cẩm nang
-    name: "menu.admin.handbook",
-    menus: [
-      {
-        name: "menu.admin.manage-handbook",
-        link: "/system/handbook-manage",
-      },
-    ],
-  },
+  // {
+  //   //quản lý loại lẩu
+  //   name: "menu.admin.type",
+  //   menus: [
+  //     {
+  //       name: "menu.admin.manage-type",
+  //       link: "/system/manage-type",
+  //     },
+  //   ],
+  // },
+  // {
+  //   //quản lý cẩm nang
+  //   name: "menu.admin.handbook",
+  //   menus: [
+  //     {
+  //       name: "menu.admin.manage-handbook",
+  //       link: "/system/handbook-manage",
+  //     },
+  //   ],
+  // },
 ];
 
 export const staffMenu = [
   {
     //quản lý các món lẩu
-    name: "menu.staff.manage-hotpot",
+    name: "menu.staff.manage-restaurant",
     menus: [
       // {
-      //   name: "menu.staff.crud-hotpot",
-      //   link: "/staff/CRUD-hotpot",
+      //   name: "menu.staff.crud-restaurant",
+      //   link: "/staff/CRUD-restaurant",
       // },
       {
-        name: "menu.staff.crud-hotpot-redux",
-        link: "/staff/hotpot-redux",
+        name: "menu.staff.crud-restaurant-redux",
+        link: "/staff/restaurant-redux",
       },
       {
-        name: "menu.staff.extra-info-hotpot",
-        link: "/staff/extra-info-hotpot",
+        name: "menu.staff.extra-info-restaurant",
+        link: "/staff/extra-info-restaurant",
       },
       {
         //quản lý lịch đặt lẩu
@@ -134,43 +125,45 @@ export const staffMenu = [
   //     },
   //   ],
   // },
+  // {
+
   {
-    //quản lý nhà hàng
-    name: "menu.staff.restaurant",
+    //quản lý hotpot
+    name: "menu.staff.hotpot",
     menus: [
       {
-        name: "menu.staff.manage-restaurant",
-        link: "/system/manage-restaurant",
+        name: "menu.staff.manage-hotpot",
+        link: "/staff/manage-hotpot",
       },
     ],
   },
+  // {
+  //   //quản lý loại lẩu
+  //   name: "menu.staff.type",
+  //   menus: [
+  //     {
+  //       name: "menu.staff.manage-type",
+  //       link: "/system/manage-type",
+  //     },
+  //   ],
+  // },
+  // {
+  //   //quản lý cẩm nang
+  //   name: "menu.staff.handbook",
+  //   menus: [
+  //     {
+  //       name: "menu.staff.manage-handbook",
+  //       link: "/system/handbook-manage",
+  //     },
+  //   ],
+  // },
   {
-    //quản lý hp
-    name: "menu.staff.hp",
+    //quản lý customer
+    name: "menu.staff.customer",
     menus: [
       {
-        name: "menu.staff.manage-hp",
-        link: "/system/manage-hp",
-      },
-    ],
-  },
-  {
-    //quản lý loại lẩu
-    name: "menu.staff.type",
-    menus: [
-      {
-        name: "menu.staff.manage-type",
-        link: "/system/manage-type",
-      },
-    ],
-  },
-  {
-    //quản lý cẩm nang
-    name: "menu.staff.handbook",
-    menus: [
-      {
-        name: "menu.staff.manage-handbook",
-        link: "/system/handbook-manage",
+        name: "menu.staff.manage-customer",
+        link: "/staff/manage-customer",
       },
     ],
   },

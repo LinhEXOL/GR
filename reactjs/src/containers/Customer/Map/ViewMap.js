@@ -8,8 +8,8 @@ import markerImage1 from "../../../assets/images/marker.png";
 import markerImage2 from "../../../assets/images/marker_icon.png";
 import { connect } from "react-redux";
 import * as actions from "../../../store/actions";
-import { getAllHotpots } from "../../../services/hotpotService";
-import { getAllHotpotNameServices } from "../../../services/hotpotService";
+import { getAllRestaurants } from "../../../services/restaurantService";
+import { getAllRestaurantNameServices } from "../../../services/restaurantService";
 import HomeHeader from "../../HomePage/HomeHeader";
 import SearchBox from "./SearchBox";
 import { point, distance } from "@turf/turf";
@@ -32,7 +32,7 @@ class ViewMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrHotpots: [],
+      arrRestaurants: [],
       center: { lat: 21.0277644, lng: 105.8341598 },
       ZOOM_LEVEL: 12,
       location: {
@@ -42,7 +42,7 @@ class ViewMap extends Component {
       },
       selectPosition: "",
       currentPosition: null,
-      nearestHotpots: [],
+      nearestRestaurants: [],
     };
     this.mapRef = React.createRef();
   }
@@ -53,17 +53,17 @@ class ViewMap extends Component {
     } else {
       this.onError({ code: 0, message: "Geolocation not supported" });
     }
-    let res = await getAllHotpotNameServices();
+    let res = await getAllRestaurantNameServices();
     console.log("RES", res);
     if (res && res.errCode === 0) {
       this.setState({
-        arrHotpots: res.data,
+        arrRestaurants: res.data,
       });
     }
-    const arr = this.nearestHotpots;
+    const arr = this.nearestRestaurants;
     if (!arr) {
       this.setState({
-        nearestHotpots: res.data,
+        nearestRestaurants: res.data,
       });
     }
   }
@@ -119,8 +119,8 @@ class ViewMap extends Component {
     }
   };
 
-  handleViewDetailHotpot = (hotpot) => {
-    this.props.history.push(`/detail-hpHotpot/${hotpot.id}`);
+  handleViewDetailRestaurant = (restaurant) => {
+    this.props.history.push(`/detail-hotpotRestaurant/${restaurant.id}`);
   };
 
   calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -134,19 +134,19 @@ class ViewMap extends Component {
     return dis;
   };
 
-  getNearestHotpots = (position) => {
-    const { arrHotpots } = this.state;
+  getNearestRestaurants = (position) => {
+    const { arrRestaurants } = this.state;
     const { lat, lon } = position;
 
     // Tính toán khoảng cách giữa điểm đã chọn và tất cả các điểm nhà hàng
-    const distances = arrHotpots.map((hotpot) => {
+    const distances = arrRestaurants.map((restaurant) => {
       return {
-        hotpot,
+        restaurant,
         distance: this.calculateDistance(
           lat,
           lon,
-          hotpot.latitude,
-          hotpot.longitude
+          restaurant.latitude,
+          restaurant.longitude
         ),
       };
     });
@@ -155,8 +155,8 @@ class ViewMap extends Component {
     distances.sort((a, b) => a.distance - b.distance);
 
     // Chọn 5 nhà hàng gần nhất
-    const nearestHotpots = distances.slice(0, 5);
-    this.setState({ nearestHotpots: nearestHotpots });
+    const nearestRestaurants = distances.slice(0, 5);
+    this.setState({ nearestRestaurants: nearestRestaurants });
   };
 
   handelSelectPosition = (position) => {
@@ -172,7 +172,7 @@ class ViewMap extends Component {
       animate: true,
     });
 
-    this.getNearestHotpots(position);
+    this.getNearestRestaurants(position);
   };
 
   handleClearPlace = () => {
@@ -185,13 +185,13 @@ class ViewMap extends Component {
       center,
       ZOOM_LEVEL,
       location,
-      arrHotpots,
+      arrRestaurants,
       selectPosition,
       currentPosition,
-      nearestHotpots,
+      nearestRestaurants,
     } = this.state;
-    console.log("nearestHotpots", nearestHotpots);
-    console.log("arrHotpots", arrHotpots);
+    console.log("nearestRestaurants", nearestRestaurants);
+    console.log("arrRestaurants", arrRestaurants);
 
     return (
       <div>
@@ -200,10 +200,10 @@ class ViewMap extends Component {
           <div className="list-res">
             <div className="name-des">Nhà hàng gần bạn</div>
 
-            {nearestHotpots.map((item, idex) => {
+            {nearestRestaurants.map((item, idex) => {
               let imageBase64 = "";
-              if (item.hotpot) {
-                item = item.hotpot;
+              if (item.Restaurant) {
+                item = item.Restaurant;
               } else {
                 item = item;
               }
@@ -277,7 +277,7 @@ class ViewMap extends Component {
                       ></Marker>
                     )
                   )}
-                  {arrHotpots.map((item, idex) => {
+                  {arrRestaurants.map((item, idex) => {
                     let imageBase64 = "";
                     let name = `${item.name}`;
                     if (item.image) {
@@ -293,7 +293,7 @@ class ViewMap extends Component {
                         key={idex}
                         riseOnHover={true}
                         riseOffset={200}
-                        //onClick={() => this.handleViewDetailHotpot(item)}
+                        //onClick={() => this.handleViewDetailRestaurant(item)}
                       >
                         <Tooltip
                           className="tool-tip"
@@ -304,7 +304,7 @@ class ViewMap extends Component {
                           <div className="customize-border">
                             <div className="image">
                               <div
-                                className="bg-image section-hotpot"
+                                className="bg-image section-restaurant"
                                 style={{
                                   backgroundImage: `url(${imageBase64})`,
                                 }}
@@ -327,7 +327,7 @@ class ViewMap extends Component {
                           </div>
                         </Tooltip>
                         {/* <Popup open={true}>
-                    <b className="detail-hotpot">
+                    <b className="detail-restaurant">
                       {item.name}, {item.address}
                     </b>
                   </Popup> */}

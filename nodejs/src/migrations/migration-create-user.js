@@ -29,11 +29,11 @@ module.exports = {
       roleId: {
         type: Sequelize.STRING,
       },
-      phonenumber: {
+      phoneNumber: {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.BLOB("long"),
       },
 
       createdAt: {

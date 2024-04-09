@@ -3,20 +3,20 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import "./DetailType.scss";
 import HomeHeader from "../../HomePage/HomeHeader";
-import HotpotSchedule from "../Hotpot/HotpotSchedule";
-import HotpotExtraInfo from "../Hotpot/HotpotExtraInfo";
-import HotpotProfile from "../Hotpot/HotpotProfile";
+import RestaurantSchedule from "../Restaurant/RestaurantSchedule";
+import RestaurantExtraInfo from "../Restaurant/RestaurantExtraInfo";
+import RestaurantProfile from "../Restaurant/RestaurantProfile";
 import {
   getDetailTypeById,
   getAllCodeService,
-} from "../../../services/hotpotService";
+} from "../../../services/restaurantService";
 import _ from "lodash";
 import { LANGUAGES } from "../../../utils";
 class DetailType extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      arrHotpotId: [],
+      arrRestaurantId: [],
       dataDetailType: {},
       listProvince: [],
     };
@@ -43,12 +43,12 @@ class DetailType extends Component {
         resProvince.errCode === 0
       ) {
         let data = res.data;
-        let arrHotpotId = [];
+        let arrRestaurantId = [];
         if (data && !_.isEmpty(data)) {
-          let arr = data.hotpotType;
+          let arr = data.restaurantType;
           if (arr && arr.length > 0) {
             arr.map((item) => {
-              arrHotpotId.push(item.id);
+              arrRestaurantId.push(item.id);
             });
           }
         }
@@ -67,7 +67,7 @@ class DetailType extends Component {
 
         this.setState({
           dataDetailType: res.data,
-          arrHotpotId: arrHotpotId,
+          arrRestaurantId: arrRestaurantId,
           listProvince: dataProvince ? dataProvince : [],
         });
       }
@@ -94,27 +94,27 @@ class DetailType extends Component {
 
       if (res && res.errCode === 0) {
         let data = res.data;
-        let arrHotpotId = [];
+        let arrRestaurantId = [];
         if (data && !_.isEmpty(data)) {
-          let arr = data.hotpotType;
+          let arr = data.restaurantType;
           if (arr && arr.length > 0) {
             arr.map((item) => {
-              arrHotpotId.push(item.id);
+              arrRestaurantId.push(item.id);
             });
           }
         }
 
         this.setState({
           dataDetailType: res.data,
-          arrHotpotId: arrHotpotId,
+          arrRestaurantId: arrRestaurantId,
         });
       }
     }
   };
 
   render() {
-    let { arrHotpotId, dataDetailType, listProvince } = this.state;
-    console.log("Check dataDetailType arrHotpotId", arrHotpotId);
+    let { arrRestaurantId, dataDetailType, listProvince } = this.state;
+    console.log("Check dataDetailType arrRestaurantId", arrRestaurantId);
     let { language } = this.props;
     return (
       <div className="detail-type-container">
@@ -129,7 +129,7 @@ class DetailType extends Component {
               ></div>
             )}
           </div>
-          <div className="search-type-hotpot">
+          <div className="search-type-restaurant">
             <select onChange={(event) => this.handleOnChangeSelect(event)}>
               {listProvince &&
                 listProvince.length > 0 &&
@@ -143,27 +143,27 @@ class DetailType extends Component {
             </select>
           </div>
 
-          {arrHotpotId &&
-            arrHotpotId.length > 0 &&
-            arrHotpotId.map((item, index) => {
+          {arrRestaurantId &&
+            arrRestaurantId.length > 0 &&
+            arrRestaurantId.map((item, index) => {
               return (
-                <div className="each-hotpot" key={index}>
+                <div className="each-restaurant" key={index}>
                   <div className="dt-content-left">
-                    <div className="profile-hotpot">
-                      <HotpotProfile
-                        hotpotId={item}
-                        isShowDescriptionHotpot={true}
+                    <div className="profile-restaurant">
+                      <RestaurantProfile
+                        restaurantId={item}
+                        isShowDescriptionRestaurant={true}
                         isShowLinkDetail={true}
                         isShowPrice={false}
                       />
                     </div>
                   </div>
                   <div className="dt-content-right">
-                    <div className="hotpot-schedule">
-                      <HotpotSchedule hotpotIdFromParent={item} />
+                    <div className="restaurant-schedule">
+                      <RestaurantSchedule restaurantIdFromParent={item} />
                     </div>
-                    <div className="hotpot-extra-info">
-                      <HotpotExtraInfo hotpotIdFromParent={item} />
+                    <div className="restaurant-extra-info">
+                      <RestaurantExtraInfo restaurantIdFromParent={item} />
                     </div>
                   </div>
                 </div>

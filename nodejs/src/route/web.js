@@ -1,11 +1,11 @@
 import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
-import hotpotController from "../controllers/hotpotController";
+import restaurantController from "../controllers/restaurantController";
 import customerController from "../controllers/customerController";
 import typeController from "../controllers/typeController";
-import restaurantController from "../controllers/restaurantController";
-import hpController from "../controllers/hpController";
+import hotpotController from "../controllers/hotpotController";
+import staffController from "../controllers/staffController";
 
 let router = express.Router();
 
@@ -22,51 +22,54 @@ let initWebRoutes = (app) => {
   router.get("/delete-crud", homeController.deleteCRUD);
 
   router.post("/api/login", userController.handleLogin);
-  router.get("/api/get-all-hotpots", hotpotController.handleGetAllHotpots);
-  router.get("/api/get-all-users", userController.handleGetAllUsers);
-  router.post("/api/create-new-hotpot", hotpotController.handleCreateNewHotpot);
-  router.put("/api/edit-hotpot", hotpotController.handleEditHotpot);
-  router.delete("/api/delete-hotpot", hotpotController.handleDeleteHotpot);
-
-  router.get("/api/allcode", hotpotController.getAllCode);
-
-  router.get("/api/top-hotpot", hotpotController.handleGetTopHotpot);
   router.get(
-    "/api/get-detail-hotpot-by-id",
-    hotpotController.handleGetDetailHotpotById
+    "/api/get-all-restaurants",
+    restaurantController.handleGetAllRestaurants
+  );
+  router.get("/api/get-all-users", userController.handleGetAllUsers);
+  router.post(
+    "/api/create-new-restaurant",
+    restaurantController.handleCreateNewRestaurant
+  );
+  router.put("/api/edit-restaurant", restaurantController.handleEditRestaurant);
+  router.delete(
+    "/api/delete-restaurant",
+    restaurantController.handleDeleteRestaurant
+  );
+
+  router.get("/api/allcode", restaurantController.getAllCode);
+
+  router.get(
+    "/api/top-restaurant",
+    restaurantController.handleGetTopRestaurant
+  );
+  router.get(
+    "/api/get-detail-restaurant-by-id",
+    restaurantController.handleGetDetailRestaurantById
   );
 
   router.post(
     "/api/bulk-create-schedule",
-    hotpotController.handleBulkCreateSchedule
-  );
-  router.get(
-    "/api/get-schedule-hotpot-by-date",
-    hotpotController.handleGetScheduleByDate
-  );
-
-  router.post(
-    "/api/bulk-create-res-schedule",
-    restaurantController.handleBulkCreateResSchedule
+    restaurantController.handleBulkCreateSchedule
   );
   router.get(
     "/api/get-schedule-restaurant-by-date",
-    restaurantController.handleGetResScheduleByDate
+    restaurantController.handleGetScheduleByDate
   );
 
   router.get(
-    "/api/get-extra-info-hotpot-by-id",
-    hotpotController.handleGetExtraInfoHotpotById
+    "/api/get-extra-info-restaurant-by-id",
+    restaurantController.handleGetExtraInfoRestaurantById
   );
 
   router.get(
-    "/api/get-profile-hotpot-by-id",
-    hotpotController.handleGetProfileHotpotById
+    "/api/get-profile-restaurant-by-id",
+    restaurantController.handleGetProfileRestaurantById
   );
 
   router.get(
-    "/api/get-hotpot-by-location",
-    hotpotController.handleGetHotpotByLocation
+    "/api/get-restaurant-by-location",
+    restaurantController.handleGetRestaurantByLocation
   );
 
   router.post("/api/create-new-type", typeController.handleCreateType);
@@ -76,36 +79,19 @@ let initWebRoutes = (app) => {
     typeController.handleGetDetailTypeById
   );
 
-  router.post(
-    "/api/create-new-restaurant",
-    restaurantController.handleCreateRestaurant
-  );
-  router.get(
-    "/api/get-all-restaurants",
-    restaurantController.handleGetAllRestaurants
-  );
-  router.get(
-    "/api/get-detail-restaurant-by-id",
-    restaurantController.handleGetDetailRestaurantById
-  );
-
-  router.get(
-    "/api/get-all-hotpot-names",
-    hotpotController.handleGetAllHotpotNames
-  );
-
-  router.get("/api/get-all-type-names", hotpotController.handleGetAllTypeNames);
-
   router.get(
     "/api/get-all-restaurant-names",
-    hotpotController.handleGetAllRestaurantNames
+    restaurantController.handleGetAllRestaurantNames
   );
 
-  router.post("/api/save-info-hotpot", hotpotController.handlePostInfoHotpot);
+  router.get(
+    "/api/get-all-type-names",
+    restaurantController.handleGetAllTypeNames
+  );
 
   router.post(
-    "/api/customer-book-hotpot",
-    customerController.handlePostBookHotpot
+    "/api/save-info-restaurant",
+    restaurantController.handlePostInfoRestaurant
   );
 
   router.post(
@@ -113,13 +99,29 @@ let initWebRoutes = (app) => {
     customerController.handlePostBookRestaurant
   );
 
-  router.get("/api/get-all-hps", hpController.handleGetAllHps);
-  router.post("/api/create-new-hp", hpController.handleCreateNewHp);
-  router.get("/api/get-detail-hp-by-id", hpController.handleGetDetailHpById);
-  router.get("/api/get-all-hp-names", hpController.handleGetAllHpNames);
+  router.get("/api/get-all-hotpots", hotpotController.handleGetAllHotpots);
+  router.post("/api/create-new-hotpot", hotpotController.handleCreateNewHotpot);
   router.get(
-    "/api/get-all-hpHotpot-names",
-    hpController.handleGetAllHpHotpotNames
+    "/api/get-detail-hotpot-by-id",
+    hotpotController.handleGetDetailHotpotById
+  );
+  router.get(
+    "/api/get-all-hotpot-names",
+    hotpotController.handleGetAllHotpotNames
+  );
+  router.get(
+    "/api/get-all-hotpotRestaurant-names",
+    hotpotController.handleGetAllHotpotRestaurantNames
+  );
+
+  router.get(
+    "/api/get-list-customer-for-staff",
+    staffController.handleGetListCustomerForStaff
+  );
+
+  router.get(
+    "/api/get-restaurant-by-staffId",
+    staffController.handleGetRestaurantByStaffId
   );
 
   return app.use("/", router);

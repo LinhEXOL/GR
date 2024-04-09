@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Type.hasMany(models.Hotpot, {
         foreignKey: "typeId",
+        as: "typeDataHotpot",
+      });
+      Type.hasMany(models.Restaurant, {
+        foreignKey: "typeId",
+        as: "typeDataRestaurant",
       });
     }
   }
@@ -19,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       descriptionHTML: DataTypes.TEXT,
       descriptionMarkdown: DataTypes.TEXT,
-      image: DataTypes.STRING,
     },
     {
       sequelize,

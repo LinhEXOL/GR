@@ -8,8 +8,8 @@ class Home extends Component {
     //let linkToRedirect = isLoggedIn ? "/login" : "/login";
     //let linkToRedirect = isLoggedIn ? "/system/user-manage" : "/login";
     //let linkToRedirect = isLoggedIn ? "/dd" : "/login";
-    let linkToRedirect = isLoggedIn ? "/system/hotpot-manage" : "/login";
-    //let linkToRedirect = isLoggedIn ? "/system/hotpot-manage" : "/home";
+    let linkToRedirect = isLoggedIn ? "/system/restaurant-manage" : "/login";
+    //let linkToRedirect = isLoggedIn ? "/system/restaurant-manage" : "/home";
     return <Redirect to={linkToRedirect} />;
   }
 }

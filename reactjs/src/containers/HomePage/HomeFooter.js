@@ -10,7 +10,7 @@ class HomeFooter extends Component {
         <div>
           Contact Details
           <p>Phone: 0123456789</p>
-          <p>Email: info@hotpot.com</p>
+          <p>Email: info@restaurant.com</p>
           <p>Address: 1st Dai Co Viet, Hai Ba Trung, Ha Noi</p>
         </div>
         <p>
