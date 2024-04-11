@@ -9,21 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Type.hasMany(models.Hotpot, {
-        foreignKey: "typeId",
-        as: "typeDataHotpot",
-      });
       Type.hasMany(models.Restaurant, {
         foreignKey: "typeId",
-        as: "typeDataRestaurant",
       });
     }
   }
   Type.init(
     {
       name: DataTypes.STRING,
-      descriptionHTML: DataTypes.TEXT,
-      descriptionMarkdown: DataTypes.TEXT,
+      description: DataTypes.TEXT,
     },
     {
       sequelize,

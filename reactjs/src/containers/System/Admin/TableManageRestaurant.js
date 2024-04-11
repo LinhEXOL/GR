@@ -60,14 +60,19 @@ class TableManageRestaurant extends Component {
           <tbody>
             <tr>
               <th>Name</th>
+              <th>Phone Number</th>
               <th>ProvinceId</th>
               <th>Staff Id</th>
               <th>Type Id</th>
-              <th>PriceId</th>
+              <th>Average price</th>
               <th>Address</th>
               <th>Latitude</th>
               <th>Longitude</th>
-              <th>Phone Number</th>
+              <th>Is Open</th>
+              <th>Is delete</th>
+              <th>Open time</th>
+              <th>Close time</th>
+              <th>Rate</th>
               <th>Action</th>
             </tr>
 
@@ -77,15 +82,19 @@ class TableManageRestaurant extends Component {
                 return (
                   <tr key={index}>
                     <td>{item.name}</td>
+                    <td>{item.phoneNumber}</td>
                     <td>{item.provinceId}</td>
                     <td>{item.staffId}</td>
                     <td>{item.typeId}</td>
-                    <td>{item.priceId}</td>
+                    <td>{item.averagePrice}</td>
                     <td>{item.address}</td>
                     <td>{item.latitude}</td>
                     <td>{item.longitude}</td>
-                    <td>{item.phoneBumber}</td>
-
+                    <td>{item.isOpen}</td>
+                    <td>{item.isDelete}</td>
+                    <td>{item.openTime}</td>
+                    <td>{item.closeTime}</td>
+                    <td>{item.rate}</td>
                     <td>
                       <button
                         onClick={() => this.handleEditRestaurant(item)}

@@ -1,28 +1,28 @@
 import db from "../models/index";
 const _ = require("lodash");
-let getAllHotpots = (hotpotId) => {
+let getAllDishs = (dishId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpots = "";
-      if (hotpotId === "ALL") {
-        hotpots = await db.Hotpot.findAll({});
+      let dishs = "";
+      if (dishId === "ALL") {
+        dishs = await db.Dish.findAll({});
       }
-      if (hotpotId && hotpotId !== "ALL") {
-        hotpots = await db.Hotpot.findOne({
-          where: { id: hotpotId },
+      if (dishId && dishId !== "ALL") {
+        dishs = await db.Dish.findOne({
+          where: { id: dishId },
         });
       }
-      resolve({ hotpots, data: hotpots });
+      resolve({ dishs, data: dishs });
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let getAllHotpotNames = () => {
+let getAllDishNames = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpotNames = await db.Hotpot.findAll({
+      let dishNames = await db.Dish.findAll({
         attributes: {
           exclude: ["image"],
         },
@@ -30,19 +30,19 @@ let getAllHotpotNames = () => {
 
       resolve({
         errCode: 0,
-        data: hotpotNames,
+        data: dishNames,
       });
-      console.log("Type of hotpotnames:", typeof hotpotNames);
+      console.log("Type of dishnames:", typeof dishNames);
     } catch (e) {
       reject(e);
     }
   });
 };
 
-let getAllHotpotRestaurantNames = () => {
+let getAllDishRestaurantNames = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let hotpotRestaurantNames = await db.Restaurant.findAll({
+      let dishRestaurantNames = await db.Restaurant.findAll({
         attributes: {
           exclude: ["image"],
         },
@@ -50,7 +50,7 @@ let getAllHotpotRestaurantNames = () => {
 
       resolve({
         errCode: 0,
-        data: hotpotRestaurantNames,
+        data: dishRestaurantNames,
       });
     } catch (e) {
       reject(e);
@@ -58,15 +58,15 @@ let getAllHotpotRestaurantNames = () => {
   });
 };
 
-let createNewHotpot = (data) => {
+let createNewDish = (data) => {
   console.log("CHECK data", data);
   return new Promise(async (resolve, reject) => {
     try {
-      await db.Hotpot.create({
+      await db.Dish.create({
         name: data.name,
-        priceId: data.priceId,
-        typeId: data.typeId,
+        price: data.price,
         restaurantId: data.restaurantId,
+        description: data.description,
         image: data.imageBase64,
       });
       resolve({
@@ -79,7 +79,7 @@ let createNewHotpot = (data) => {
   });
 };
 
-let getDetailHotpotById = (inputId) => {
+let getDetailDishById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!inputId) {
@@ -88,10 +88,10 @@ let getDetailHotpotById = (inputId) => {
           errMessage: "Missing required parameter!",
         });
       } else {
-        let data = await db.Hotpot.findOne({
+        let data = await db.Dish.findOne({
           where: { id: inputId },
           attributes: {
-            exclude: ["hotpotId"],
+            exclude: ["dishId"],
           },
           include: [
             //   {
@@ -138,9 +138,9 @@ let getDetailHotpotById = (inputId) => {
 };
 
 module.exports = {
-  getAllHotpots,
-  getAllHotpotNames,
-  getAllHotpotRestaurantNames,
-  createNewHotpot,
-  getDetailHotpotById,
+  getAllDishs,
+  getAllDishNames,
+  getAllDishRestaurantNames,
+  createNewDish,
+  getDetailDishById,
 };

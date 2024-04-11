@@ -11,16 +11,16 @@ export const adminMenu = [
         name: "menu.admin.crud-restaurant-redux",
         link: "/system/restaurant-redux",
       },
-      {
-        name: "menu.admin.extra-info-restaurant",
-        link: "/system/extra-info-restaurant",
-      },
-      {
-        //quản lý lịch đặt lẩu
+      // {
+      //   name: "menu.admin.extra-info-restaurant",
+      //   link: "/system/extra-info-restaurant",
+      // },
+      // {
+      //   //quản lý lịch đặt lẩu
 
-        name: "menu.admin.schedule",
-        link: "/system/schedule-manage",
-      },
+      //   name: "menu.admin.schedule",
+      //   link: "/system/schedule-manage",
+      // },
     ],
   },
   {
@@ -46,16 +46,16 @@ export const adminMenu = [
     ],
   },
 
-  {
-    //quản lý hotpot
-    name: "menu.admin.hotpot",
-    menus: [
-      {
-        name: "menu.admin.manage-hotpot",
-        link: "/system/manage-hotpot",
-      },
-    ],
-  },
+  // {
+  //   //quản lý dish
+  //   name: "menu.admin.dish",
+  //   menus: [
+  //     {
+  //       name: "menu.admin.manage-dish",
+  //       link: "/system/manage-dish",
+  //     },
+  //   ],
+  // },
   // {
   //   //quản lý loại lẩu
   //   name: "menu.admin.type",
@@ -95,12 +95,12 @@ export const staffMenu = [
         name: "menu.staff.extra-info-restaurant",
         link: "/staff/extra-info-restaurant",
       },
-      {
-        //quản lý lịch đặt lẩu
+      // {
+      //   //quản lý lịch đặt lẩu
 
-        name: "menu.staff.schedule",
-        link: "/staff/schedule-manage",
-      },
+      //   name: "menu.staff.schedule",
+      //   link: "/staff/schedule-manage",
+      // },
     ],
   },
   // {
@@ -128,12 +128,12 @@ export const staffMenu = [
   // {
 
   {
-    //quản lý hotpot
-    name: "menu.staff.hotpot",
+    //quản lý dish
+    name: "menu.staff.dish",
     menus: [
       {
-        name: "menu.staff.manage-hotpot",
-        link: "/staff/manage-hotpot",
+        name: "menu.staff.manage-dish",
+        link: "/staff/manage-dish",
       },
     ],
   },

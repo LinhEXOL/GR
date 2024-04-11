@@ -25,7 +25,7 @@ import HomePage from "./HomePage/HomePage.js";
 import CustomScrollbars from "../components/CustomScrollbars.js";
 
 import DetailRestaurant from "./Customer/Restaurant/DetailRestaurant.js";
-import DetailHotpotRestaurant from "./Customer/Restaurant/DetailHotpotRestaurant.js";
+import DetailDishRestaurant from "./Customer/Restaurant/DetailDishRestaurant.js";
 import DetailType from "./Customer/Type/DetailType.js";
 import ViewMap from "./Customer/Map/ViewMap.js";
 import Staff from "../routes/Staff.js";
@@ -77,8 +77,8 @@ class App extends Component {
                     component={DetailRestaurant}
                   />
                   <Route
-                    path={path.DETAIL_HOTPOTRESTAURANT}
-                    component={DetailHotpotRestaurant}
+                    path={path.DETAIL_DISHRESTAURANT}
+                    component={DetailDishRestaurant}
                   />
 
                   <Route path={path.DETAIL_TYPE} component={DetailType} />

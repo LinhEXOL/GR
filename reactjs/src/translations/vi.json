@@ -3,10 +3,10 @@
 "homeheader":{
     "type": "Loại lẩu",
     "searchrestaurantbytype": "Tìm lẩu theo loại",
-    "restaurant": "Nhà hàng gần bạn",
+    "near-restaurant": "Nhà hàng gần bạn",
     "nearbyrestaurant":"Chọn nhà hàng gần bạn",
     "restaurant": "Món lẩu",
-    "favoriterestaurant": "Chọn món lẩu yêu thích",
+    "favoriterestaurant": "Chọn món nhà hàng yêu thích",
     "explore": "Khám phá",
     "history":"Nguồn gốc của lẩu",
     "support": "Hỗ trợ",
@@ -20,7 +20,7 @@
     "child2":"Lẩu băng chuyền",
     "child3":"Lẩu cay",
     "child4":"Lẩu chay",
-    "findrestaurant":"Tìm lẩu"
+    "findrestaurant":"Tìm nhà hàng"
 
 },
 
@@ -29,7 +29,7 @@
             "header": "Hệ thống",
             "system-administrator": {
                 "header": "Quản trị hệ thống",
-                "restaurant-manage":"Quản lý món lẩu",
+                "restaurant-manage":"Quản lý nhà hàng",
                 "user-manage": "Quản lý người sử dụng",
                 "restaurant-redux": "Quản lý restaurant redux",
                 "register-package-group-or-account": "Đăng ký gói dịch vụ cho nhóm/tài khoản"
@@ -49,9 +49,8 @@
             "crud-restaurant-redux": "CRUD nhà hàng redux",
             "crud-user-redux": "CRUD người dùng redux",
             "restaurant": "Nhà hàng",
-            "hotpot":"Quản lí restaurant",
-            "manage-restaurant": "Quản lí nhà hàng",
-            "manage-hotpot":"Quản lí restaurant",
+            "dish":"Quản lí món ăn",
+            "manage-dish":"Quản lí món ăn",
             "type": "Loại lẩu",
             "manage-type": "Quản lí loại lẩu",
             "handbook": "Cẩm nang",
@@ -70,9 +69,8 @@
             "crud-restaurant-redux": "Xem và sửa thông tin nhà hàng",
             "crud-user-redux": "CRUD người dùng redux",
             "restaurant": "Nhà hàng",
-            "hotpot":"Quản lí restaurant",
-            "manage-restaurant": "Quản lí nhà hàng",
-            "manage-hotpot":"Quản lí restaurant",
+            "dish":"Quản lí món ăn",
+            "manage-dish":"Quản lí món ăn",
             "type": "Loại lẩu",
             "manage-type": "Quản lí loại lẩu",
             "handbook": "Cẩm nang",
@@ -85,18 +83,25 @@
 },
 
 "manage-restaurant":{
-    "add": "Thêm mới món lẩu",
+    "add": "Thêm mới nhà hàng",
     "name": "Tên",
-    "phone-number": "Số điện thoại",
-    "note": "Ghi chú",
+    "phoneNumber": "Số điện thoại",
+    "address": "Địa chỉ",
     "image": "Ảnh",
     "save": "Lưu",
     "edit": "Lưu thay đổi",
     "provinceId": "Tỉnh",
     "restaurantId": "Nhà hàng",
     "typeId": "Loại",
-    "priceId": "Giá",
-    "paymentId": "Phương thức thanh toán"
+    "paymentId": "Phương thức thanh toán",
+    "averagePrice": "Giá trung bình",
+    "latitude": "Kinh độ",
+    "longitude": "Vĩ độ",
+    "openTime": "Thời gian mở cửa",
+    "closeTime":"Thời gian đóng cửa",
+    "rate":"Rating",
+    "isOpen":"có mở cửa hay không",
+    "isDelete":"Tình trạng (0-deleted, 1-exist)"
 },
 "homepage":{
     "outstanding-restaurant":"Lẩu hot tuần qua",
@@ -105,7 +110,7 @@
     "outstanding-restaurant": "Các nhà hàng nổi bật"
 },
 "manage-schedule":{
-    "title":"Quản lý lịch đặt lẩu",
+    "title":"Quản lý lịch đặt nhà hàng",
     "choose-restaurant": "Chọn món lẩu",
     "choose-date": "Chọn ngày",
     "save": "Lưu thông tin"

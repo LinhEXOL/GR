@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      statusId: {
+      status: {
         type: Sequelize.STRING,
       },
-      restaurantId: {
+      tableId: {
         type: Sequelize.INTEGER,
       },
       customerId: {
@@ -20,10 +20,7 @@ module.exports = {
       date: {
         type: Sequelize.STRING,
       },
-      token: {
-        type: Sequelize.STRING,
-      },
-      timeType: {
+      time: {
         type: Sequelize.STRING,
       },
       createdAt: {

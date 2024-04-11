@@ -4,7 +4,7 @@ import userController from "../controllers/userController";
 import restaurantController from "../controllers/restaurantController";
 import customerController from "../controllers/customerController";
 import typeController from "../controllers/typeController";
-import hotpotController from "../controllers/hotpotController";
+import dishController from "../controllers/dishController";
 import staffController from "../controllers/staffController";
 
 let router = express.Router();
@@ -99,19 +99,16 @@ let initWebRoutes = (app) => {
     customerController.handlePostBookRestaurant
   );
 
-  router.get("/api/get-all-hotpots", hotpotController.handleGetAllHotpots);
-  router.post("/api/create-new-hotpot", hotpotController.handleCreateNewHotpot);
+  router.get("/api/get-all-dishs", dishController.handleGetAllDishs);
+  router.post("/api/create-new-dish", dishController.handleCreateNewDish);
   router.get(
-    "/api/get-detail-hotpot-by-id",
-    hotpotController.handleGetDetailHotpotById
+    "/api/get-detail-dish-by-id",
+    dishController.handleGetDetailDishById
   );
+  router.get("/api/get-all-dish-names", dishController.handleGetAllDishNames);
   router.get(
-    "/api/get-all-hotpot-names",
-    hotpotController.handleGetAllHotpotNames
-  );
-  router.get(
-    "/api/get-all-hotpotRestaurant-names",
-    hotpotController.handleGetAllHotpotRestaurantNames
+    "/api/get-all-dishRestaurant-names",
+    dishController.handleGetAllDishRestaurantNames
   );
 
   router.get(

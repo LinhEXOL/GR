@@ -9,12 +9,12 @@ import Header from "../containers/Header/Header";
 //import ManageRestaurant from "../containers/System/Admin/ManageRestaurant";
 //import ManageSchedule from "../containers/System/Admin/ManageSchedule";
 import ManageType from "../containers/System/Type/ManageType";
-//import ManageHotpot from "../containers/System/Hotpot/ManageHotpot";
+//import ManageDish from "../containers/System/Dish/ManageDish";
 import ManageSchedule from "../containers/System/Staff/ManageSchedule";
 import RestaurantRedux from "../containers/System/Staff/RestaurantRedux";
 import ExtraInfoRestaurant from "../containers/System/Staff/ExtraInfoRestaurant";
 import ManageCustomer from "../containers/System/Staff/ManageCustomer";
-import ManageHotpot from "../containers/System/Staff/ManageHotpot";
+import ManageDish from "../containers/System/Staff/ManageDish";
 
 class Staff extends Component {
   render() {
@@ -42,7 +42,7 @@ class Staff extends Component {
               <Route path="/system/manage-type" component={ManageType} /> */}
               <Route path="/staff/manage-customer" component={ManageCustomer} />
               <Route path="/staff/schedule-manage" component={ManageSchedule} />
-              <Route path="/staff/manage-hotpot" component={ManageHotpot} />
+              <Route path="/staff/manage-dish" component={ManageDish} />
               component=
               {() => {
                 return <Redirect to={systemMenuPath} />;

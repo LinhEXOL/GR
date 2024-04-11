@@ -10,11 +10,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Restaurant.belongsTo(models.Allcode, {
-        foreignKey: "priceId",
-        targetKey: "keyMap",
-        as: "priceData",
-      });
-      Restaurant.belongsTo(models.Allcode, {
         foreignKey: "provinceId",
         targetKey: "keyMap",
         as: "provinceData",
@@ -28,8 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "staffId",
         targetKey: "id",
       });
-      Restaurant.hasMany(models.Hotpot, {
+      Restaurant.hasMany(models.Dish, {
         foreignKey: "restaurantId",
+      });
+
+      Restaurant.hasMany(models.Table, {
+        foreignKey: "tableId",
       });
     }
   }
@@ -42,9 +41,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       image: {
-        type: DataTypes.STRING,
+        type: DataTypes.BLOB("long"),
       },
-      priceId: {
+      averagePrice: {
         type: DataTypes.STRING,
       },
       provinceId: {
@@ -63,6 +62,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE,
       },
       staffId: {
+        type: DataTypes.INTEGER,
+      },
+      isOpen: {
+        type: DataTypes.INTEGER,
+      },
+      openTime: {
+        type: DataTypes.STRING,
+      },
+      closeTime: {
+        type: DataTypes.STRING,
+      },
+      rate: {
+        type: DataTypes.DOUBLE,
+      },
+      isDelete: {
         type: DataTypes.INTEGER,
       },
     },

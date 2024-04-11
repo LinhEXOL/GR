@@ -12,7 +12,7 @@ class UserRedux extends Component {
   render() {
     return (
       <div className="user-redux-container">
-        <div className="title">UserRedux LINHHHHH</div>
+        <div className="title">Create User</div>
         <div className="user-redux-body">
           <div className="container">
             <div className="row">

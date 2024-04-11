@@ -13,7 +13,7 @@ module.exports = {
           address: "Hanoi",
           gender: 0,
           roleId: "R1",
-          phonenumber: "0123456789",
+          phoneNumber: "0123456789",
           createdAt: new Date(),
           updatedAt: new Date(),
         },

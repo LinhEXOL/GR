@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import HomeHeader from "../../HomePage/HomeHeader";
-import "./DetailHotpotRestaurant.scss";
+import "./DetailDishRestaurant.scss";
 import { getDetailInfoRestaurant } from "../../../services/restaurantService";
 import RestaurantSchedule from "./RestaurantSchedule";
-import HotpotRestaurantExtraInfo from "./HotpotRestaurantExtraInfo";
+import DishRestaurantExtraInfo from "./DishRestaurantExtraInfo";
 import Slider from "react-slick";
-class DetailHotpotRestaurant extends Component {
+class DetailDishRestaurant extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,7 @@ class DetailHotpotRestaurant extends Component {
     let { detailRestaurant } = this.state;
     console.log("detailrestaurant", detailRestaurant);
     let name = "";
-    let hotpotRestaurant = detailRestaurant.hotpotRestaurant;
+    let dishRestaurant = detailRestaurant.dishRestaurant;
     name = `${detailRestaurant.name}`;
     return (
       <>
@@ -53,9 +53,9 @@ class DetailHotpotRestaurant extends Component {
               autoplay={true}
               autoplaySpeed={3000}
             >
-              {hotpotRestaurant &&
-                hotpotRestaurant.length > 0 &&
-                hotpotRestaurant.map((item, index) => {
+              {dishRestaurant &&
+                dishRestaurant.length > 0 &&
+                dishRestaurant.map((item, index) => {
                   let imageBase64 = "";
                   if (item.image) {
                     imageBase64 = new Buffer(item.image, "base64").toString(
@@ -80,7 +80,7 @@ class DetailHotpotRestaurant extends Component {
             </Slider>
             <div className="content">
               <div className="name-restaurant">{name}</div>
-              <HotpotRestaurantExtraInfo
+              <DishRestaurantExtraInfo
                 restaurantIdFromParent={this.state.currentRestaurantId}
               />
               {detailRestaurant &&
@@ -136,4 +136,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DetailHotpotRestaurant);
+)(DetailDishRestaurant);

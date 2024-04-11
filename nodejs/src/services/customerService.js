@@ -8,8 +8,8 @@ let postBookRestaurant = (data) => {
         !data.firstName ||
         !data.lastName ||
         !data.email ||
-        !data.restaurantId ||
-        !data.timeType ||
+        !data.tableId ||
+        !data.time ||
         !data.date ||
         !data.phoneNumber
       ) {
@@ -35,11 +35,11 @@ let postBookRestaurant = (data) => {
           await db.Booking.findOrCreate({
             where: { customerId: user[0].id },
             defaults: {
-              statusId: "S2",
-              restaurantId: data.restaurantId,
+              statusId: "S1",
+              tableId: data.tableId,
               customerId: user[0].id,
               date: data.date,
-              timeType: data.timeType,
+              time: data.time,
             },
           });
         }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import "./HotpotRestaurantExtraInfo.scss";
+import "./DishRestaurantExtraInfo.scss";
 import Select from "react-select";
 import moment from "moment";
 import localization from "moment/locale/vi";
@@ -12,7 +12,7 @@ import {
 import { FormattedMessage } from "react-intl";
 import NumberFormat from "react-number-format";
 
-class HotpotRestaurantExtraInfo extends Component {
+class DishRestaurantExtraInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -125,4 +125,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(HotpotRestaurantExtraInfo);
+)(DishRestaurantExtraInfo);

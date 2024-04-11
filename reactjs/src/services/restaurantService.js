@@ -84,19 +84,19 @@ const getDetailTypeById = (data) => {
   );
 };
 
-const getDetailHotpotById = (data) => {
-  return axios.get(`/api/get-detail-hotpot-by-id?id=${data.id}`);
+const getDetailDishById = (data) => {
+  return axios.get(`/api/get-detail-dish-by-id?id=${data.id}`);
 };
-const getAllHotpotRestaurantNames = (data) => {
-  return axios.get("/api/get-all-hotpotRestaurant-names");
+const getAllDishRestaurantNames = (data) => {
+  return axios.get("/api/get-all-dishRestaurant-names");
 };
-const getAllHotpotNameServices = (inputId) => {
+const getAllDishNameServices = (inputId) => {
   //template string
-  return axios.get("/api/get-all-hotpot-names");
+  return axios.get("/api/get-all-dish-names");
 };
 
-const createNewHotpot = (data) => {
-  return axios.post("/api/create-new-hotpot", data);
+const createNewDish = (data) => {
+  return axios.post("/api/create-new-dish", data);
 };
 export {
   handleLoginApi,
@@ -118,8 +118,8 @@ export {
   getAllTypes,
   getDetailTypeById,
   getRestaurantByLocation,
-  getDetailHotpotById,
-  getAllHotpotRestaurantNames,
-  getAllHotpotNameServices,
-  createNewHotpot,
+  getDetailDishById,
+  getAllDishRestaurantNames,
+  getAllDishNameServices,
+  createNewDish,
 };

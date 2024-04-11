@@ -17,7 +17,7 @@ module.exports = {
       phoneNumber: {
         type: Sequelize.STRING,
       },
-      priceId: {
+      averagePrice: {
         type: Sequelize.STRING,
       },
       provinceId: {
@@ -37,6 +37,21 @@ module.exports = {
       },
       staffId: {
         type: Sequelize.INTEGER,
+      },
+      isOpen: {
+        type: Sequelize.INTEGER,
+      },
+      rate: {
+        type: Sequelize.DOUBLE,
+      },
+      isDelete: {
+        type: Sequelize.INTEGER,
+      },
+      openTime: {
+        type: Sequelize.STRING,
+      },
+      closeTime: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

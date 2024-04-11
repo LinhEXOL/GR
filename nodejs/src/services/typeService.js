@@ -3,12 +3,7 @@ let createType = async (data) => {
   return new Promise(async (resolve, reject) => {
     console.log("CHECK DATA type", data);
     try {
-      if (
-        !data.name ||
-        !data.imageBase64 ||
-        !data.descriptionHTML ||
-        !data.descriptionMarkdown
-      ) {
+      if (!data.name || !data.description) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parameter",
@@ -16,9 +11,7 @@ let createType = async (data) => {
       } else {
         await db.Type.create({
           name: data.name,
-          image: data.imageBase64,
-          descriptionHTML: data.descriptionHTML,
-          descriptionMarkdown: data.descriptionMarkdown,
+          description: data.description,
         });
         resolve({
           errCode: 0,

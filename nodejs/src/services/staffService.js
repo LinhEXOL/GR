@@ -91,15 +91,15 @@ let getRestaurantByStaffId = (staffId) => {
         });
 
         if (data) {
-          let hotpotRestaurant = [];
-          hotpotRestaurant = await db.Hotpot.findAll({
+          let dishRestaurant = [];
+          dishRestaurant = await db.Dish.findAll({
             where: { restaurantId: data.id },
             attributes: {
               exclude: ["image"],
             },
           });
 
-          data.setDataValue("hotpotRestaurant", hotpotRestaurant);
+          data.setDataValue("dishRestaurant", dishRestaurant);
         }
 
         if (!data) data = {};

@@ -12,14 +12,13 @@ class RestaurantRedux extends Component {
     super(props);
     this.state = {
       provinceArr: [],
-      priceArr: [],
       previewImgURL: "",
       isOpen: false,
       name: "",
       phoneNumber: "",
       provinceId: "",
       typeId: "",
-      priceId: "",
+      averagePrice: "",
       address: "",
       image: "",
       action: "",
@@ -28,11 +27,15 @@ class RestaurantRedux extends Component {
       staffId: "",
       longitude: "",
       latitude: "",
+      isOpen: "",
+      isDelete: "",
+      openTime: "",
+      closeTime: "",
+      rate: "",
     };
   }
 
   async componentDidMount() {
-    this.props.getPriceStart();
     this.props.getProvinceStart();
     this.props.fetchAllTypeNames();
     this.props.fetchAllRestaurantNames();
@@ -53,14 +56,6 @@ class RestaurantRedux extends Component {
   //hàm componentDidUpdate so sánh hiện tại (this) và quá khứ (prev) của provinceRedux
   // quá khứ là chưa fire event, hiện tại là đã fire event
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.priceRedux !== this.props.priceRedux) {
-      let arrPrices = this.props.priceRedux;
-      this.setState({
-        priceArr: arrPrices,
-        priceId: arrPrices && arrPrices.length > 0 ? arrPrices[0].keyMap : "",
-      });
-    }
-
     if (prevProps.provinceRedux !== this.props.provinceRedux) {
       let arrProvinces = this.props.provinceRedux;
       this.setState({
@@ -80,7 +75,6 @@ class RestaurantRedux extends Component {
     }
     if (prevProps.listRestaurants !== this.props.listRestaurants) {
       let arrProvinces = this.props.provinceRedux;
-      let arrPrices = this.props.priceRedux;
       let arrTypeNames = this.props.allTypeNames;
       this.setState({
         name: "",
@@ -93,7 +87,6 @@ class RestaurantRedux extends Component {
         provinceId:
           arrProvinces && arrProvinces.length > 0 ? arrProvinces[0].keyMap : "",
 
-        priceId: arrPrices && arrPrices.length > 0 ? arrPrices[0].keyMap : "",
         typeId:
           arrTypeNames && arrTypeNames.length > 0 ? arrTypeNames[0].id : "",
         action: CRUD_ACTIONS.CREATE,
@@ -132,7 +125,7 @@ class RestaurantRedux extends Component {
       this.props.createNewRestaurant({
         name: this.state.name,
         phoneNumber: this.state.phoneNumber,
-        priceId: this.state.priceId,
+        averagePrice: this.state.averagePrice,
         provinceId: this.state.provinceId,
         typeId: this.state.typeId,
         address: this.state.address,
@@ -140,6 +133,11 @@ class RestaurantRedux extends Component {
         staffId: this.state.staffId,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
+        isOpen: this.state.isOpen,
+        isDelete: this.state.isDelete,
+        openTime: this.state.openTime,
+        closeTime: this.state.closeTime,
+        rate: this.state.rate,
       });
     }
     if (action === CRUD_ACTIONS.EDIT) {
@@ -147,8 +145,8 @@ class RestaurantRedux extends Component {
       this.props.editRestaurantRedux({
         id: this.state.restaurantEditId,
         name: this.state.name,
-        phonenumber: this.state.phonenumber,
-        priceId: this.state.priceId,
+        phoneNumber: this.state.phoneNumber,
+        averagePrice: this.state.averagePrice,
         provinceId: this.state.provinceId,
         typeId: this.state.typeId,
         address: this.state.address,
@@ -156,6 +154,11 @@ class RestaurantRedux extends Component {
         staffId: this.state.staffId,
         longitude: this.state.longitude,
         latitude: this.state.latitude,
+        isOpen: this.state.isOpen,
+        isDelete: this.state.isDelete,
+        openTime: this.state.openTime,
+        closeTime: this.state.closeTime,
+        rate: this.state.rate,
       });
     }
   };
@@ -164,10 +167,10 @@ class RestaurantRedux extends Component {
     let isValid = true;
     let arrCheck = [
       "name",
-      //"phonenumber",
+      //"phoneNumber",
       "provinceId",
       "typeId",
-      "priceId",
+      "averagePrice",
       //"address",
       //"longitude"
       //"latitude"
@@ -198,18 +201,23 @@ class RestaurantRedux extends Component {
     }
     this.setState({
       name: restaurant.name,
-      phonenumber: restaurant.phonenumber,
+      phoneNumber: restaurant.phoneNumber,
       typeId: restaurant.typeId,
       address: restaurant.address,
       image: "",
       previewImgURL: imageBase64,
       provinceId: restaurant.provinceId,
-      priceId: restaurant.priceId,
+      averagePrice: restaurant.averagePrice,
       action: CRUD_ACTIONS.EDIT,
       restaurantEditId: restaurant.id,
       staffId: restaurant.staffId,
       longitude: restaurant.longitude,
       latitude: restaurant.latitude,
+      isOpen: restaurant.isOpen,
+      isDelete: restaurant.isDelete,
+      openTime: restaurant.openTime,
+      closeTime: restaurant.closeTime,
+      rate: restaurant.rate,
     });
   };
 
@@ -217,20 +225,24 @@ class RestaurantRedux extends Component {
     let language = this.props.language;
     let isLoadingProvince = this.props.isLoadingProvince;
     let provinces = this.state.provinceArr;
-    let prices = this.state.priceArr;
     let typeNames = this.state.listTypeNames;
 
     let {
       name,
-      phonenumber,
+      phoneNumber,
       provinceId,
       typeId,
-      priceId,
+      averagePrice,
       address,
       image,
       staffId,
       longitude,
       latitude,
+      isOpen,
+      isDelete,
+      openTime,
+      closeTime,
+      rate,
     } = this.state;
 
     return (
@@ -247,7 +259,7 @@ class RestaurantRedux extends Component {
               <div className="col-12">
                 {isLoadingProvince === true ? "Loading province" : ""}
               </div>
-              <div className="col-6">
+              <div className="col-4">
                 <label>
                   <FormattedMessage id="manage-restaurant.name" />
                 </label>
@@ -264,7 +276,20 @@ class RestaurantRedux extends Component {
                   // }
                 />
               </div>
-              <div className="col-6">
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.phoneNumber" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={phoneNumber}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "phoneNumber");
+                  }}
+                />
+              </div>
+              <div className="col-4">
                 <label>
                   {/* <FormattedMessage id="manage-restaurant.phone-number" /> */}
                   Staff ID
@@ -303,31 +328,6 @@ class RestaurantRedux extends Component {
                     })}
                 </select>
               </div>
-              <div className="col-4">
-                <label>
-                  <FormattedMessage id="manage-restaurant.priceId" />
-                </label>
-                <select
-                  className="form-control"
-                  onChange={(event) => {
-                    this.onChangeInput(event, "priceId");
-                  }}
-                  value={priceId}
-                >
-                  {prices &&
-                    prices.length > 0 &&
-                    prices.map((item, index) => {
-                      return (
-                        <option key={index} value={item.keyMap}>
-                          {language === LANGUAGES.VI
-                            ? item.valueVi
-                            : item.valueEn}
-                        </option>
-                      );
-                    })}
-                </select>
-              </div>
-
               <div className="col-8">
                 <label>
                   <FormattedMessage id="manage-restaurant.address" />
@@ -341,20 +341,7 @@ class RestaurantRedux extends Component {
                   }}
                 />
               </div>
-              <div className="col-4">
-                <label>
-                  <FormattedMessage id="manage-restaurant.longitude" />
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  value={longitude}
-                  onChange={(event) => {
-                    this.onChangeInput(event, "longitude");
-                  }}
-                />
-              </div>
-              <div className="col-4">
+              <div className="col-6">
                 <label>
                   <FormattedMessage id="manage-restaurant.latitude" />
                 </label>
@@ -367,6 +354,113 @@ class RestaurantRedux extends Component {
                   }}
                 />
               </div>
+              <div className="col-6">
+                <label>
+                  <FormattedMessage id="manage-restaurant.longitude" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={longitude}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "longitude");
+                  }}
+                />
+              </div>
+
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.typeId" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={typeId}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "typeId");
+                  }}
+                />
+              </div>
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.averagePrice" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={averagePrice}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "averagePrice");
+                  }}
+                />
+              </div>
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.rate" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={rate}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "rate");
+                  }}
+                />
+              </div>
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.openTime" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={openTime}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "openTime");
+                  }}
+                />
+              </div>
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.closeTime" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={closeTime}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "closeTime");
+                  }}
+                />
+              </div>
+
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.isOpen" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={isOpen}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "isOpen");
+                  }}
+                />
+              </div>
+              <div className="col-4">
+                <label>
+                  <FormattedMessage id="manage-restaurant.isDelete" />
+                </label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={isDelete}
+                  onChange={(event) => {
+                    this.onChangeInput(event, "isDelete");
+                  }}
+                />
+              </div>
+
               <div className="col-4">
                 <label>
                   <FormattedMessage id="manage-restaurant.image" />
@@ -430,8 +524,6 @@ class RestaurantRedux extends Component {
 const mapStateToProps = (state) => {
   return {
     language: state.app.language,
-
-    priceRedux: state.admin.prices,
     provinceRedux: state.admin.provinces,
     allTypeNames: state.admin.allTypeNames,
     isLoadingProvince: state.admin.isLoadingProvince,
@@ -442,7 +534,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPriceStart: () => dispatch(actions.fetchPriceStart()),
     getProvinceStart: () => dispatch(actions.fetchProvinceStart()),
     createNewRestaurant: (data) => dispatch(actions.createNewRestaurant(data)),
     fetchRestaurantsRedux: () => dispatch(actions.fetchAllRestaurantsStart()),

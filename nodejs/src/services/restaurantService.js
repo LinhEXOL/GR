@@ -70,7 +70,7 @@ let createNewRestaurant = (data) => {
       await db.Restaurant.create({
         name: data.name,
         phoneNumber: data.phoneNumber,
-        priceId: data.priceId,
+        averagePrice: data.averagePrice,
         provinceId: data.provinceId,
         typeId: data.typeId,
         image: data.image,
@@ -78,6 +78,11 @@ let createNewRestaurant = (data) => {
         address: data.address,
         longitude: data.longitude,
         latitude: data.latitude,
+        isOpen: data.isOpen,
+        isDelete: data.isDelete,
+        openTime: data.openTime,
+        closeTime: data.closeTime,
+        rate: data.rate,
       });
       resolve({
         errCode: 0,
@@ -131,10 +136,15 @@ let updateRestaurantData = (data) => {
         restaurant.provinceId = data.provinceId;
         restaurant.typeId = data.typeId;
         restaurant.latitude = data.latitude;
-        restaurant.priceId = data.priceId;
+        restaurant.averagePrice = data.averagePrice;
         restaurant.longitude = data.longitude;
         restaurant.staffId = data.staffId;
         restaurant.address = data.address;
+        restaurant.isOpen = data.isOpen;
+        restaurant.isDelete = data.isDelete;
+        restaurant.openTime = data.openTime;
+        restaurant.closeTime = data.closeTime;
+        restaurant.rate = data.rate;
         if (data.image) {
           restaurant.image = data.image;
         }
@@ -233,12 +243,12 @@ let getDetailRestaurantById = (inputId) => {
         }
 
         if (data) {
-          let hotpotRestaurant = [];
-          hotpotRestaurant = await db.Hotpot.findAll({
+          let dishRestaurant = [];
+          dishRestaurant = await db.Dish.findAll({
             where: { restaurantId: inputId },
           });
 
-          data.setDataValue("hotpotRestaurant", hotpotRestaurant);
+          data.setDataValue("dishRestaurant", dishRestaurant);
         }
 
         if (!data) data = {};

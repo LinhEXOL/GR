@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Hotpot extends Model {
+  class Dish extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,44 +9,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       //define association here
-      Hotpot.belongsTo(models.Allcode, {
-        foreignKey: "priceId",
-        targetKey: "keyMap",
-        as: "priceData",
-      });
-      Hotpot.hasOne(models.Markdown, { foreignKey: "hotpotId" });
-      Hotpot.belongsTo(models.Restaurant, {
+      Dish.hasOne(models.Markdown, { foreignKey: "dishId" });
+      Dish.belongsTo(models.Restaurant, {
         foreignKey: "restaurantId",
-        targetKey: "id",
-      });
-      Hotpot.belongsTo(models.Type, {
-        foreignKey: "typeId",
         targetKey: "id",
       });
     }
   }
-  Hotpot.init(
+  Dish.init(
     {
       name: {
         type: DataTypes.STRING,
       },
       image: {
-        type: DataTypes.STRING,
+        type: DataTypes.BLOB("long"),
       },
-      priceId: {
+      price: {
         type: DataTypes.STRING,
-      },
-      typeId: {
-        type: DataTypes.INTEGER,
       },
       restaurantId: {
         type: DataTypes.INTEGER,
       },
+      description: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
-      modelName: "Hotpot",
+      modelName: "Dish",
     }
   );
-  return Hotpot;
+  return Dish;
 };

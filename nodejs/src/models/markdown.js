@@ -11,15 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Markdown.belongsTo(models.Restaurant, { foreignKey: "restaurantId" });
     }
+    static associate(models) {
+      // define association here
+      Markdown.belongsTo(models.Dish, { foreignKey: "dishId" });
+    }
   }
   Markdown.init(
     {
       contentHTML: DataTypes.TEXT("long"),
       contentMarkdown: DataTypes.TEXT("long"),
       description: DataTypes.TEXT("long"),
-      hotpotId: DataTypes.INTEGER,
+      dishId: DataTypes.INTEGER,
       restaurantId: DataTypes.INTEGER,
-      typeId: DataTypes.INTEGER,
     },
     {
       sequelize,
