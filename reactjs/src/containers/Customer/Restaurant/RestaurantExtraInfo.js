@@ -85,28 +85,6 @@ class RestaurantExtraInfo extends Component {
                 <FormattedMessage id="customer.extra-info-restaurant.price" />{" "}
               </span>
 
-              {extraInfo &&
-                extraInfo.priceData &&
-                language === LANGUAGES.VI && (
-                  <NumberFormat
-                    className="currency"
-                    value={extraInfo.priceData.valueVi}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    suffix={"VND"}
-                  />
-                )}
-              {extraInfo &&
-                extraInfo.priceData &&
-                language === LANGUAGES.EN && (
-                  <NumberFormat
-                    className="currency"
-                    value={extraInfo.priceData.valueEn}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    suffix={"$"}
-                  />
-                )}
               <span
                 className="detail"
                 onClick={() => this.showHideDetailInfo(true)}
@@ -126,31 +104,7 @@ class RestaurantExtraInfo extends Component {
                   <span className="left">
                     <FormattedMessage id="customer.extra-info-restaurant.price" />
                   </span>
-                  <span className="right">
-                    {" "}
-                    {extraInfo &&
-                      extraInfo.priceData &&
-                      language === LANGUAGES.VI && (
-                        <NumberFormat
-                          className="currency"
-                          value={extraInfo.priceData.valueVi}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          suffix={"VND"}
-                        />
-                      )}
-                    {extraInfo &&
-                      extraInfo.priceData &&
-                      language === LANGUAGES.EN && (
-                        <NumberFormat
-                          className="currency"
-                          value={extraInfo.priceData.valueEn}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          suffix={"$"}
-                        />
-                      )}
-                  </span>
+                  <span className="right"> </span>
                 </div>
                 <div className="note">
                   {extraInfo && extraInfo.note ? extraInfo.note : ""}

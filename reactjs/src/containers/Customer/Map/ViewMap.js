@@ -13,6 +13,7 @@ import { getAllRestaurantNameServices } from "../../../services/restaurantServic
 import HomeHeader from "../../HomePage/HomeHeader";
 import SearchBox from "./SearchBox";
 import { point, distance } from "@turf/turf";
+import DishRestaurantExtraInfo from "../Restaurant/DishRestaurantExtraInfo";
 
 const markerIcon1 = new L.Icon({
   iconUrl: markerImage1,
@@ -120,7 +121,7 @@ class ViewMap extends Component {
   };
 
   handleViewDetailRestaurant = (restaurant) => {
-    this.props.history.push(`/detail-hotpotRestaurant/${restaurant.id}`);
+    this.props.history.push(`/detail-dishRestaurant/${restaurant.id}`);
   };
 
   calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -214,7 +215,10 @@ class ViewMap extends Component {
                 );
               }
               return (
-                <div className="res">
+                <div
+                  className="res"
+                  onClick={() => this.handleViewDetailRestaurant(item)}
+                >
                   <div className="image">
                     <div
                       className="bg-image"
@@ -225,15 +229,8 @@ class ViewMap extends Component {
                   </div>
                   <div className="info">
                     <div className="name">{name}</div>
-                    <div className="address">{item.note}</div>
-                    <div className="more">
-                      <div>Đánh giá: Tốt</div>
-                      <div>PHÙ HỢP:Đặt tiệc, tiếp khách, gia đình,</div>
-                      <div>bạn bè, sinh nhật, liên hoan…</div>
-                      <div>KHÔNG GIAN:</div>
-                      <div>- Hiện đại. Trẻ trung</div>
-                      <div>- Sức chứa: 120 khách (02 tầng)</div>{" "}
-                    </div>
+                    <div className="rate">{item.rate} sao </div>
+                    <DishRestaurantExtraInfo restaurantIdFromParent={item.id} />
                   </div>
                 </div>
               );
@@ -293,7 +290,7 @@ class ViewMap extends Component {
                         key={idex}
                         riseOnHover={true}
                         riseOffset={200}
-                        //onClick={() => this.handleViewDetailRestaurant(item)}
+                        onClick={() => this.handleViewDetailRestaurant(item)}
                       >
                         <Tooltip
                           className="tool-tip"
@@ -313,16 +310,10 @@ class ViewMap extends Component {
                             <div className="info">
                               <div className="name">{name}</div>
                               <div className="address">{item.note}</div>
-                              <div className="more">
-                                <div>Đánh giá: Tốt</div>
-                                <div>
-                                  PHÙ HỢP:Đặt tiệc, tiếp khách, gia đình,
-                                </div>
-                                <div>bạn bè, sinh nhật, liên hoan…</div>
-                                <div>KHÔNG GIAN:</div>
-                                <div>- Hiện đại. Trẻ trung</div>
-                                <div>- Sức chứa: 120 khách (02 tầng)</div>{" "}
-                              </div>
+                              <div className="rate">{item.rate} sao </div>
+                              <DishRestaurantExtraInfo
+                                restaurantIdFromParent={item.id}
+                              />
                             </div>
                           </div>
                         </Tooltip>

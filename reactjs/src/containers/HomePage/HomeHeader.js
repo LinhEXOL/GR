@@ -233,7 +233,7 @@ class HomeHeader extends Component {
             {/* <div class="section-video" data-video-disable-width="0">
               <video muted="" loop="" autoplay="" playsinline="" preload="auto">
                 <source
-                  src="https://qiaolinhotpot.com/wp-content/uploads/2022/06/侨林火锅.mp4"
+                  src="https://qiaolindish.com/wp-content/uploads/2022/06/侨林火锅.mp4"
                   type="video/mp4"
                 />
               </video>
@@ -256,7 +256,7 @@ class HomeHeader extends Component {
                   <div className="heading-wrapper">
                     <div className="left">
                       <div className="heading-text">Taste the magic of</div>
-                      <div className="title-wrapper">Flavorful Hotpot</div>
+                      <div className="title-wrapper">Flavorful Dish</div>
                     </div>
 
                     <div className="image-wrapper">
@@ -269,7 +269,7 @@ class HomeHeader extends Component {
                   </div>
 
                   <div className="description-wrapper">
-                    <p>Delight in hotpot's exquisite perfection</p>
+                    <p>Delight in dish's exquisite perfection</p>
                   </div>
                 </div>
               </div>

@@ -75,7 +75,9 @@ class Restaurant extends Component {
   }
 
   handleViewDetailRestaurant = (restaurant) => {
-    this.props.history.push(`/detail-hotpotRestaurant/${restaurant.id}`);
+    let res = this.props.history.push(
+      `/detail-dishRestaurant/${restaurant.id}`
+    );
   };
 
   handleOnChangeSelect = async (event) => {

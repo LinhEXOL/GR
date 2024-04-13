@@ -40,16 +40,16 @@ class DetailRestaurant extends Component {
     let { language } = this.props;
     let { detailRestaurant } = this.state;
     let name = "";
-    let hotpotRestaurant = detailRestaurant.hotpotRestaurant;
+    let dishRestaurant = detailRestaurant.dishRestaurant;
     name = `${detailRestaurant.name}`;
     return (
       <>
         <HomeHeader isShowBanner={false} />
         <div className="restaurant-detail-container">
           <Slider {...this.props.settings}>
-            {hotpotRestaurant &&
-              hotpotRestaurant.length > 0 &&
-              hotpotRestaurant.map((item, index) => {
+            {dishRestaurant &&
+              dishRestaurant.length > 0 &&
+              dishRestaurant.map((item, index) => {
                 let imageBase64 = "";
                 if (item.image) {
                   imageBase64 = new Buffer(item.image, "base64").toString(

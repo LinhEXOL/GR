@@ -319,42 +319,7 @@ let bulkCreateSchedule = (data) => {
   });
 };
 
-let getScheduleByDate = (restaurantId, date) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!restaurantId || !date) {
-        resolve({
-          errCode: 1,
-          errMessage: "Missing required parameter!",
-        });
-      } else {
-        let dataSchedule = await db.Schedule.findAll({
-          where: {
-            restaurantId: restaurantId,
-            date: date,
-          },
-          include: [
-            {
-              model: db.Allcode,
-              as: "timeTypeData",
-              attributes: ["valueEn", "valueVi"],
-            },
-          ],
-          raw: false,
-          nest: true,
-        });
-
-        if (!dataSchedule) dataSchedule = [];
-        resolve({
-          errCode: 0,
-          data: dataSchedule,
-        });
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
+let getScheduleByDate = (restaurantId, date) => {};
 
 let getExtraInfoRestaurantById = (restaurantId) => {
   return new Promise(async (resolve, reject) => {
@@ -371,11 +336,6 @@ let getExtraInfoRestaurantById = (restaurantId) => {
             exclude: ["id", "restaurantId"],
           },
           include: [
-            {
-              model: db.Allcode,
-              as: "priceData",
-              attributes: ["valueEn", "valueVi"],
-            },
             {
               model: db.Allcode,
               as: "provinceData",
@@ -422,11 +382,6 @@ let getProfileRestaurantById = (restaurantId) => {
             exclude: ["id", "restaurantId"],
           },
           include: [
-            {
-              model: db.Allcode,
-              as: "priceData",
-              attributes: ["valueEn", "valueVi"],
-            },
             {
               model: db.Allcode,
               as: "provinceData",

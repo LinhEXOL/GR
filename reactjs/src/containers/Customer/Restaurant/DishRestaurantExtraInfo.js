@@ -26,10 +26,6 @@ class DishRestaurantExtraInfo extends Component {
       let res = await getExtraInfoRestaurantById(
         this.props.restaurantIdFromParent
       );
-      console.log(
-        "this.props.restaurantIdFromParent extra",
-        this.props.restaurantIdFromParent
-      );
       if (res && res.errCode === 0) {
         this.setState({
           extraInfo: res.data,
@@ -43,7 +39,7 @@ class DishRestaurantExtraInfo extends Component {
       this.props.restaurantIdFromParent !== prevProps.restaurantIdFromParent
     ) {
       let res = await getExtraInfoRestaurantById(
-        this.props.RestaurantIdFromParent
+        this.props.restaurantIdFromParent
       );
       if (res && res.errCode === 0) {
         this.setState({
@@ -61,49 +57,25 @@ class DishRestaurantExtraInfo extends Component {
 
   render() {
     let { isShowDetailInfo, extraInfo } = this.state;
-    console.log(" extraInfo", extraInfo);
     let { language } = this.props;
     return (
-      <div className="Restaurant-extra-info-container">
+      <div className="restaurant-extra-info-container">
         <div className="content-up">
           <div className="address-restaurant">
             <i class="fas fa-map-marker-alt"> </i>
 
-            {extraInfo && extraInfo.note ? extraInfo.note : ""}
+            {extraInfo && extraInfo.address ? extraInfo.address : ""}
           </div>
           <div className="type">
             Loại hình: {extraInfo && extraInfo.Type ? extraInfo.Type.name : ""}
           </div>
           <div className="short-info">
             <span className="price">
-              <FormattedMessage id="customer.extra-info-Restaurant.price" />{" "}
+              <FormattedMessage id="customer.extra-info-restaurant.price" />{" "}
+              {extraInfo && extraInfo.averagePrice
+                ? extraInfo.averagePrice
+                : ""}
             </span>
-
-            {extraInfo && extraInfo.priceData && language === LANGUAGES.VI && (
-              // <NumberFormat
-              //   className="currency"
-              //   value={extraInfo.priceData.valueVi}
-              //   displayType={"text"}
-              //   thousandSeparator={true}
-              //   suffix={"VND"}
-              // />
-              <dev>
-                {extraInfo.priceData.valueVi} <span> VND </span>
-              </dev>
-            )}
-
-            {extraInfo && extraInfo.priceData && language === LANGUAGES.EN && (
-              // <NumberFormat
-              //   className="currency"
-              //   value={extraInfo.priceData.valueEn}
-              //   displayType={"text"}
-              //   thousandSeparator={true}
-              //   suffix={"$"}
-              // />
-              <dev>
-                {extraInfo.priceData.valueEn} <span> $ </span>
-              </dev>
-            )}
           </div>
         </div>
         <div className="content-down"></div>

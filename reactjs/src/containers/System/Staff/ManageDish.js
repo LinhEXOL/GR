@@ -81,7 +81,7 @@ class ManageDish extends Component {
 
   async componentDidMount() {
     let { userInfo } = this.props;
-    this.getRestaurantId(userInfo);
+    let res = this.getRestaurantId(userInfo);
   }
 
   getRestaurantId = async (userInfo) => {

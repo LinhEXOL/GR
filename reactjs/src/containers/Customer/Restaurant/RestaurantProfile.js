@@ -120,31 +120,6 @@ class RestaurantProfile extends Component {
             <Link to={`/detail-restaurant/${restaurantId}`}>Xem them</Link>
           </div>
         )}
-
-        {isShowPrice === true && (
-          <div className="price">
-            <FormattedMessage id="customer.booking-modal.price" />
-            {dataProfile &&
-            dataProfile.priceData &&
-            language === LANGUAGES.VI ? (
-              <NumberFormat
-                className="currency"
-                value={dataProfile.priceData?.valueVi}
-                displayType={"text"}
-                thousandSeparator={true}
-                suffix={"VND"}
-              />
-            ) : (
-              <NumberFormat
-                className="currency"
-                value={dataProfile.priceData?.valueEn}
-                displayType={"text"}
-                thousandSeparator={true}
-                suffix={"$"}
-              />
-            )}
-          </div>
-        )}
       </div>
     );
   }

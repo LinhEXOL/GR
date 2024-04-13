@@ -38,8 +38,7 @@ class DetailDishRestaurant extends Component {
 
   render() {
     let { language } = this.props;
-    let { detailRestaurant } = this.state;
-    console.log("detailrestaurant", detailRestaurant);
+    let { detailRestaurant, currentRestaurantId } = this.state;
     let name = "";
     let dishRestaurant = detailRestaurant.dishRestaurant;
     name = `${detailRestaurant.name}`;
@@ -81,7 +80,8 @@ class DetailDishRestaurant extends Component {
             <div className="content">
               <div className="name-restaurant">{name}</div>
               <DishRestaurantExtraInfo
-                restaurantIdFromParent={this.state.currentRestaurantId}
+                restaurantIdFromParent={currentRestaurantId}
+                detailRestaurant={detailRestaurant}
               />
               {detailRestaurant &&
                 detailRestaurant.Markdown &&

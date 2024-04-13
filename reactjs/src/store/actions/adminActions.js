@@ -45,17 +45,6 @@ export const fetchProvinceFailed = () => ({
   type: actionTypes.FETCH_PROVINCE_FAILED,
 });
 
-//price
-
-export const fetchPriceSuccess = (priceData) => ({
-  type: actionTypes.FETCH_PRICE_SUCCESS,
-  data: priceData,
-});
-
-export const fetchPriceFailed = () => ({
-  type: actionTypes.FETCH_PRICE_FAILED,
-});
-
 //payment
 
 export const fetchPaymentSuccess = (paymentData) => ({
@@ -66,25 +55,6 @@ export const fetchPaymentSuccess = (paymentData) => ({
 export const fetchPaymentFailed = () => ({
   type: actionTypes.FETCH_PAYMENT_FAILED,
 });
-
-export const fetchPriceStart = () => {
-  return async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: actionTypes.FETCH_PRICE_START,
-      });
-      let res = await getAllCodeService("PRICE");
-      if (res && res.errCode === 0) {
-        dispatch(fetchPriceSuccess(res.data));
-      } else {
-        dispatch(fetchPriceFailed());
-      }
-    } catch (e) {
-      dispatch(fetchPriceFailed());
-      console.log("fetchPriceStart error", e);
-    }
-  };
-};
 
 export const fetchPaymentStart = () => {
   return async (dispatch, getState) => {
