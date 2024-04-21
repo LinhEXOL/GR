@@ -28,9 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       lastName: DataTypes.STRING,
       address: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
-      gender: DataTypes.BOOLEAN,
-      image: DataTypes.STRING,
-      roleId: DataTypes.STRING,
+      image: DataTypes.BLOB("long"),
+      roleId: DataTypes.INTEGER,
+      type_register: DataTypes.INTEGER,
     },
     {
       sequelize,

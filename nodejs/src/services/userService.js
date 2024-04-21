@@ -1,5 +1,89 @@
+import { first } from "lodash";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+
+const salt = bcrypt.genSaltSync(10);
+const hashUserPassword = (userPassword) => {
+  let hashPassword = bcrypt.hashSync(userPassword, salt);
+  return hashPassword;
+};
+
+let checkUserEmail = (userEmail) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { email: userEmail },
+      });
+      if (user) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let checkUserPhoneNumber = (userPhoneNumber) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { phoneNumber: userPhoneNumber },
+      });
+      if (user) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let handleUserRegister = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let isExistEmail = await checkUserEmail(data.email);
+      let isExistPhoneNumber = await checkUserPhoneNumber(data.phoneNumber);
+      if (isExistEmail) {
+        return resolve({
+          errCode: 1,
+          errMessage: `Email is exist, please enter other email`,
+        });
+      }
+
+      if (isExistPhoneNumber) {
+        return resolve({
+          errCode: 1,
+          errMessage: `Phone number is exist, please enter other phone number`,
+        });
+      }
+
+      //hash user password
+      let hashPassword = hashUserPassword(data.password);
+
+      await db.User.create({
+        email: data.email,
+        password: hashPassword,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        image: data.image,
+        roleId: "3",
+        type_register: "1",
+      });
+      resolve({
+        errCode: 0,
+        message: "User is created successfully",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 let handleUserLogin = (email, password) => {
   return new Promise(async (resolve, reject) => {
@@ -24,8 +108,8 @@ let handleUserLogin = (email, password) => {
           //compare password: dùng cách 1 hay cách 2 đều chạy đúng cả =))
           // Cách 1: dùng asynchronous (bất đồng bộ)
 
-          //let check = await bcrypt.compare(password, user.password);
-          let check = {};
+          let check = await bcrypt.compare(password, user.password);
+          //let check = {};
           if (password == user.password) {
             check = 1;
           } else {
@@ -55,23 +139,6 @@ let handleUserLogin = (email, password) => {
         userData.errMessage = `Your's Email isn't exist in our system, plz try other email`;
       }
       resolve(userData);
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-let checkUserEmail = (userEmail) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let user = await db.User.findOne({
-        where: { email: userEmail },
-      });
-      if (user) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
     } catch (e) {
       reject(e);
     }
@@ -132,4 +199,5 @@ module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
   getAllCodeUserService: getAllCodeUserService,
+  handleUserRegister,
 };

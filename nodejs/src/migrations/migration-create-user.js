@@ -23,11 +23,8 @@ module.exports = {
       address: {
         type: Sequelize.STRING,
       },
-      gender: {
-        type: Sequelize.BOOLEAN,
-      },
       roleId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       phoneNumber: {
         type: Sequelize.STRING,
@@ -35,7 +32,9 @@ module.exports = {
       image: {
         type: Sequelize.BLOB("long"),
       },
-
+      type_register: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

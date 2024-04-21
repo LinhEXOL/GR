@@ -22,6 +22,7 @@ let initWebRoutes = (app) => {
   router.get("/delete-crud", homeController.deleteCRUD);
 
   router.post("/api/login", userController.handleLogin);
+  router.post("/api/register", userController.handleRegister);
   router.get(
     "/api/get-all-restaurants",
     restaurantController.handleGetAllRestaurants

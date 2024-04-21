@@ -151,7 +151,7 @@ let updateRestaurantData = (data) => {
         await restaurant.save();
         resolve({
           errCode: 0,
-          message: "Update the hopot succeeds!",
+          message: "Update the restaurant succeeds!",
         });
       }
     } catch (e) {

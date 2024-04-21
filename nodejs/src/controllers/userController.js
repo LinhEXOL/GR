@@ -1,3 +1,4 @@
+import { reject } from "lodash";
 import userService from "../services/userService";
 
 let handleLogin = async (req, res) => {
@@ -22,6 +23,51 @@ let handleLogin = async (req, res) => {
     message: userData.errMessage,
     user: userData.user ? userData.user : {},
   });
+};
+
+let handleRegister = async (req, res) => {
+  try {
+    if (
+      !req.body.email ||
+      !req.body.password ||
+      !req.body.phoneNumber ||
+      !req.body.firstName ||
+      !req.body.lastName ||
+      !req.body.address
+    ) {
+      return res.status(200).json({
+        errCode: 1,
+        errMessage: "Missing required parameter",
+        users: [],
+      });
+    }
+
+    if (req.body.password && req.body.password < 4) {
+      return res.status(200).json({
+        errCode: 1,
+        message: "Your password must have more than 3 letters",
+        data: "",
+      });
+    }
+    let userData = await userService.handleUserRegister(req.body);
+    //check email exist
+    //password nhap vao ko dung
+    //return userInfor
+    // access_token :JWT json web token
+
+    return res.status(200).json({
+      errCode: userData.errCode,
+      message: userData.errMessage,
+      //user: userData.user ? userData.user : {},
+    });
+  } catch (e) {
+    console.log("error", e);
+    return res.status(500).json({
+      errCode: -1,
+      message: "Error from server",
+      data: "",
+    });
+  }
 };
 
 let handleGetAllUsers = async (req, res) => {
@@ -59,4 +105,5 @@ module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
   getAllCodeUser: getAllCodeUser,
+  handleRegister,
 };
