@@ -10,10 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       //define association here
       Dish.hasOne(models.Markdown, { foreignKey: "dishId" });
-      Dish.belongsTo(models.Restaurant, {
-        foreignKey: "restaurantId",
+      Dish.belongsTo(models.Category, {
+        foreignKey: "categoryId",
         targetKey: "id",
       });
+      Dish.belongsTo(models.OrderItem, { foreignKey: "id" });
     }
   }
   Dish.init(
@@ -27,11 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       price: {
         type: DataTypes.STRING,
       },
-      restaurantId: {
-        type: DataTypes.INTEGER,
-      },
       description: {
         type: DataTypes.STRING,
+      },
+      categoryId: {
+        type: DataTypes.INTEGER,
       },
     },
     {

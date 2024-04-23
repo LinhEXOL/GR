@@ -1,11 +1,5 @@
 import db from "../models/index";
 const _ = require("lodash");
-require("dotenv").config();
-
-const MAX_NUMBER_SCHEDULE = 10;
-//const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
-
-console.log("MAX_NUMBER_SCHEDULE:", MAX_NUMBER_SCHEDULE);
 
 let getAllRestaurants = (restaurantId) => {
   return new Promise(async (resolve, reject) => {
@@ -64,9 +58,33 @@ let getAllTypeNames = () => {
   });
 };
 
+let checkExistRestaurant = (staffId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let res = await db.Restaurant.findOne({
+        where: { staffId: staffId },
+      });
+      if (res) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let createNewRestaurant = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let isExistRestaurant = await checkExistRestaurant(data.staffId);
+      if (isExistRestaurant) {
+        return resolve({
+          errCode: 1,
+          message: "Restaurant is exist, please enter other restaurant",
+        });
+      }
       await db.Restaurant.create({
         name: data.name,
         phoneNumber: data.phoneNumber,
@@ -123,7 +141,7 @@ let updateRestaurantData = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       }
       let restaurant = await db.Restaurant.findOne({
@@ -151,7 +169,7 @@ let updateRestaurantData = (data) => {
         await restaurant.save();
         resolve({
           errCode: 0,
-          message: "Update the hopot succeeds!",
+          message: "Update the restaurant succeeds!",
         });
       }
     } catch (e) {
@@ -166,7 +184,7 @@ let getAllCodeService = (typeInput) => {
       if (!typeInput) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       } else {
         let res = {};
@@ -206,7 +224,7 @@ let getDetailRestaurantById = (inputId) => {
       if (!inputId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter!",
+          message: "Missing required parameter!",
         });
       } else {
         console.log("HELOO");
@@ -271,7 +289,7 @@ let bulkCreateSchedule = (data) => {
       if (!data.arrSchedule || !data.restaurantId || !data.formatedDate) {
         resolve({
           errCode: 1,
-          errMessage: "Missing reqiured parameter!",
+          message: "Missing reqiured parameter!",
         });
       } else {
         let schedule = data.arrSchedule;
@@ -310,7 +328,7 @@ let bulkCreateSchedule = (data) => {
         }
         resolve({
           errCode: 0,
-          errMessage: "OK",
+          message: "OK",
         });
       }
     } catch (e) {
@@ -327,7 +345,7 @@ let getExtraInfoRestaurantById = (restaurantId) => {
       if (!restaurantId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter!",
+          message: "Missing required parameter!",
         });
       } else {
         let data = await db.Restaurant.findOne({
@@ -373,7 +391,7 @@ let getProfileRestaurantById = (restaurantId) => {
       if (!restaurantId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter!",
+          message: "Missing required parameter!",
         });
       } else {
         let data = await db.Restaurant.findOne({
@@ -416,7 +434,7 @@ let saveDetailInfoRestaurant = (inputData) => {
       ) {
         resolve({
           errCode: 1,
-          errMessage: "Missing parameter",
+          message: "Missing parameter",
         });
       } else {
         if (inputData.action === "CREATE") {
@@ -443,7 +461,7 @@ let saveDetailInfoRestaurant = (inputData) => {
 
         resolve({
           errCode: 0,
-          errMessage: "Save info restaurant succees!",
+          message: "Save info restaurant succees!",
         });
       }
     } catch (e) {
@@ -458,7 +476,7 @@ let getRestaurantByLocation = (location) => {
       if (!location) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       } else {
         let restaurants = [];
@@ -473,7 +491,7 @@ let getRestaurantByLocation = (location) => {
 
         resolve({
           errCode: 0,
-          errMessage: "OK",
+          message: "OK",
           data: restaurants,
         });
       }

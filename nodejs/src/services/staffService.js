@@ -7,7 +7,7 @@ let getListCustomerForStaff = (staffId, date) => {
       if (!staffId || !date) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       } else {
         let res = await db.Restaurant.findOne({
@@ -54,7 +54,7 @@ let getRestaurantByStaffId = (staffId) => {
       if (!staffId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter!",
+          message: "Missing required parameter!",
         });
       } else {
         let data = await db.Restaurant.findOne({

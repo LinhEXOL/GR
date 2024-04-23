@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      type: {
+      capacity: {
         type: Sequelize.STRING,
       },
       name: {
@@ -17,11 +17,11 @@ module.exports = {
       position: {
         type: Sequelize.STRING,
       },
-      restaurantId: {
-        type: Sequelize.INTEGER,
-      },
       status: {
         type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,
