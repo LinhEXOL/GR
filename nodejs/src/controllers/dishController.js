@@ -1,19 +1,10 @@
 import dishService from "../services/dishService";
-let handleGetAllDishs = async (req, res) => {
-  let id = req.query.id;
-
-  if (!id) {
-    return res.status(200).json({
-      errCode: 0,
-      errMessage: "Missing required parameter",
-      dishs: [],
-    });
-  }
-  let dishs = await dishService.getAllDishs(id);
+let handleGetAllDishes = async (req, res) => {
+  let data = await dishService.getAllDishes();
   return res.status(200).json({
-    errCode: 0,
-    errMessage: "OK",
-    dishs,
+    status: 200,
+    message: "OK",
+    data: data.data,
   });
 };
 
@@ -24,8 +15,8 @@ let handleGetAllDishNames = async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server",
+      status: -1,
+      message: "Error from server",
     });
   }
 };
@@ -37,33 +28,53 @@ let handleGetAllDishRestaurantNames = async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server",
+      status: -1,
+      message: "Error from server",
     });
   }
 };
 
 let handleCreateNewDish = async (req, res) => {
-  let message = await dishService.createNewDish(req.body);
-  return res.status(200).json(message);
+  let data = await dishService.createNewDish(req.body);
+  return res.status(data.status).json(data);
 };
 
 let handleGetDetailDishById = async (req, res) => {
   try {
-    let info = await dishService.getDetailDishById(req.query.id);
-    return res.status(200).json(info);
+    let data = await dishService.getDetailDishById(req.query.id);
+    return res.status(data.status).json(data);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server...",
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
     });
   }
 };
+
+let handleDeleteDish = async (req, res) => {
+  if (!req.body.id) {
+    return res.status(400).json({
+      status: 400,
+      message: "Missing required parameter",
+      data: "",
+    });
+  }
+  let data = await dishService.deleteDish(req.body.id);
+  return res.status(data.status).json(data);
+};
+
+let handleEditDish = async (req, res) => {
+  let data = await dishService.updateDishData(req.body);
+  return res.status(data.status).json(data);
+};
 module.exports = {
-  handleGetAllDishs,
+  handleGetAllDishes,
   handleGetAllDishNames,
   handleGetAllDishRestaurantNames,
   handleCreateNewDish,
   handleGetDetailDishById,
+  handleDeleteDish,
+  handleEditDish,
 };

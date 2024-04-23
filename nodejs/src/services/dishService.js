@@ -1,18 +1,14 @@
 import db from "../models/index";
 const _ = require("lodash");
-let getAllDishs = (dishId) => {
+let getAllDishes = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let dishs = "";
-      if (dishId === "ALL") {
-        dishs = await db.Dish.findAll({});
-      }
-      if (dishId && dishId !== "ALL") {
-        dishs = await db.Dish.findOne({
-          where: { id: dishId },
-        });
-      }
-      resolve({ dishs, data: dishs });
+      let dishes = await db.Dish.findAll({
+        raw: true,
+      });
+      resolve({
+        data: dishes,
+      });
     } catch (e) {
       reject(e);
     }
@@ -29,7 +25,7 @@ let getAllDishNames = () => {
       });
 
       resolve({
-        errCode: 0,
+        status: 0,
         data: dishNames,
       });
       console.log("Type of dishnames:", typeof dishNames);
@@ -39,18 +35,18 @@ let getAllDishNames = () => {
   });
 };
 
-let getAllDishRestaurantNames = () => {
+let getAllDishCategoryNames = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let dishRestaurantNames = await db.Restaurant.findAll({
+      let dishCategoryNames = await db.Category.findAll({
         attributes: {
           exclude: ["image"],
         },
       });
 
       resolve({
-        errCode: 0,
-        data: dishRestaurantNames,
+        status: 0,
+        data: dishCategoryNames,
       });
     } catch (e) {
       reject(e);
@@ -58,20 +54,45 @@ let getAllDishRestaurantNames = () => {
   });
 };
 
-let createNewDish = (data) => {
-  console.log("CHECK data", data);
+let checkExistDish = (name, categoryId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await db.Dish.create({
+      let res = await db.Dish.findOne({
+        where: { categoryId: categoryId, name: name },
+      });
+      if (res) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let createNewDish = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let isExistDish = await checkExistDish(data.name, data.categoryId);
+      if (isExistDish) {
+        return resolve({
+          status: 400,
+          message: "Dish is exist, please enter other dish",
+          data: "",
+        });
+      }
+      let dish = await db.Dish.create({
         name: data.name,
         price: data.price,
-        restaurantId: data.restaurantId,
+        categoryId: data.categoryId,
         description: data.description,
         image: data.imageBase64,
       });
       resolve({
-        errCode: 0,
-        message: "OK",
+        status: 201,
+        message: "OK create",
+        data: dish,
       });
     } catch (e) {
       reject(e);
@@ -84,8 +105,9 @@ let getDetailDishById = (inputId) => {
     try {
       if (!inputId) {
         resolve({
-          errCode: 1,
-          errMessage: "Missing required parameter!",
+          status: 400,
+          message: "Missing required parameter!",
+          data: "",
         });
       } else {
         let data = await db.Dish.findOne({
@@ -94,28 +116,10 @@ let getDetailDishById = (inputId) => {
             exclude: ["dishId"],
           },
           include: [
-            //   {
-            //     model: db.Allcode,
-            //     as: "priceData",
-            //     attributes: ["valueEn", "valueVi"],
-            //   },
-            //   {
-            //     model: db.Allcode,
-            //     as: "provinceData",
-            //     attributes: ["valueEn", "valueVi"],
-            //   },
-            // {
-            //   model: db.Markdown,
-            //   attributes: ["description", "contentHTML", "contentMarkdown"],
-            // },
             {
-              model: db.Restaurant,
-              attributes: ["name"],
+              model: db.Category,
+              attributes: ["id", "name", "description"],
             },
-            // {
-            //   model: db.Type,
-            //   attributes: ["name"],
-            // },
           ],
           raw: false,
           nest: true,
@@ -123,12 +127,80 @@ let getDetailDishById = (inputId) => {
         if (data && data.image) {
           data.image = new Buffer(data.image, "base64").toString("binary");
         }
+        if (data) {
+          resolve({
+            status: 200,
+            message: "OK",
+            data: data,
+          });
+        } else {
+          resolve({
+            status: 404,
+            message: "Dish is not exist",
+            dish: "",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
-        if (!data) data = {};
+let deleteDish = (dishId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dish = await db.Dish.findOne({
+        where: { id: dishId },
+      });
+      if (!dish) {
+        return resolve({
+          status: 404,
+          message: "dish is not exist!",
+          data: "",
+        });
+      }
+      await db.Dish.destroy({ where: { id: dishId } });
+      resolve({
+        status: 200,
+        message: "dish is deleted",
+        data: "",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
+let updateDishData = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
         resolve({
-          errCode: 0,
-          data,
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let dish = await db.Dish.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (dish) {
+        dish.description = data.description;
+        dish.price = data.price;
+        dish.image = data.image;
+        await dish.save();
+        resolve({
+          status: 200,
+          message: "Update the dish succeeds!",
+          data: dish,
+        });
+      } else {
+        resolve({
+          status: 404,
+          message: "dish is not exist",
+          data: "",
         });
       }
     } catch (e) {
@@ -138,9 +210,11 @@ let getDetailDishById = (inputId) => {
 };
 
 module.exports = {
-  getAllDishs,
+  getAllDishes,
   getAllDishNames,
-  getAllDishRestaurantNames,
+  getAllDishCategoryNames,
   createNewDish,
   getDetailDishById,
+  deleteDish,
+  updateDishData,
 };

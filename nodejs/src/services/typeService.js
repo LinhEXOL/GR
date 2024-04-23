@@ -6,7 +6,7 @@ let createType = async (data) => {
       if (!data.name || !data.description) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       } else {
         await db.Type.create({
@@ -15,7 +15,7 @@ let createType = async (data) => {
         });
         resolve({
           errCode: 0,
-          errMessage: "Create new type succeed!",
+          message: "Create new type succeed!",
         });
       }
     } catch (e) {
@@ -33,7 +33,7 @@ let getAllTypes = () => {
       }
       resolve({
         errCode: 0,
-        errMessage: "OK",
+        message: "OK",
         data,
       });
     } catch (e) {
@@ -48,7 +48,7 @@ let getDetailTypeById = (inputId, location) => {
       if (!inputId || !location) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parameter",
+          message: "Missing required parameter",
         });
       } else {
         let data = await db.Type.findOne({
@@ -76,7 +76,7 @@ let getDetailTypeById = (inputId, location) => {
         }
         resolve({
           errCode: 0,
-          errMessage: "OK",
+          message: "OK",
           data,
         });
       }
