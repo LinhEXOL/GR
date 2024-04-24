@@ -8,23 +8,33 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      status: {
-        type: Sequelize.STRING,
+      resDate: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
       },
-      tableId: {
+      resTime: {
+        type: Sequelize.TIME,
+        allowNull: false,
+      },
+      people: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+      },
+      resStatus: {
+        type: Sequelize.ENUM("pending", "seated", "missed"),
+        allowNull: false,
+        defaultValue: "pending",
       },
       customerId: {
         type: Sequelize.INTEGER,
-      },
-      date: {
-        type: Sequelize.STRING,
-      },
-      time: {
-        type: Sequelize.STRING,
-      },
-      total_price: {
-        type: Sequelize.DOUBLE,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,

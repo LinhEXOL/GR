@@ -45,8 +45,8 @@ let createNewTable = (data) => {
         name: data.name,
         capacity: data.capacity,
         position: data.position,
-        status: "0",
         description: data.description,
+        orderId: data.orderId,
       });
       resolve({
         status: 200,
@@ -100,7 +100,6 @@ let updateTableData = (data) => {
       });
       if (table) {
         table.description = data.description;
-        table.status = data.status;
         table.position = data.position;
         await table.save();
         resolve({
@@ -155,10 +154,23 @@ let getDetailTableById = (tableId) => {
   });
 };
 
+const freeTable = async ({ tableDAO, orderDAO }, tableId) => {
+  const table = await tableDAO.findTableById(tableId);
+  const res = await tableDAO.freeTable(orderDAO, table);
+  if (!table)
+    throw {
+      status: 404,
+      message: "Restaurant table not found!",
+    };
+
+  return await tableDAO.freeTable(orderDAO, table);
+};
+
 module.exports = {
   getAllTables,
   createNewTable,
   deleteTable,
   updateTableData,
   getDetailTableById,
+  freeTable,
 };

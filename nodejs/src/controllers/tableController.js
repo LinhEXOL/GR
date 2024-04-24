@@ -1,6 +1,8 @@
 import { Model } from "sequelize";
 import tableService from "../services/tableService";
-
+// const tableDAO = require("../DAOs/tableDAO");
+const orderDAO = require("../DAOs/orderDAO");
+const tableDAO = require("../DAOs/tableDao");
 let handleGetAllTables = async (req, res) => {
   let data = await tableService.getAllTables();
   return res.status(200).json({
@@ -46,10 +48,21 @@ let handleGetDetailTableById = async (req, res) => {
   }
 };
 
+const freeTableHandler = async (req, res) => {
+  const tableId = req.body.id;
+  const info = await tableService.freeTable({ orderDAO, tableDAO }, tableId);
+  return res.status(200).json({
+    success: true,
+    message: "Successfully freed the chosen table!",
+    item: info,
+  });
+};
+
 module.exports = {
   handleGetAllTables,
   handleCreateNewTable,
   handleDeleteTable,
   handleEditTable,
   handleGetDetailTableById,
+  freeTableHandler,
 };

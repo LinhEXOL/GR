@@ -14,22 +14,63 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "customerData",
       });
-      Order.belongsTo(models.Table, {
-        foreignKey: "tableId",
-        targetKey: "id",
-        as: "tableData",
+      Order.hasMany(models.Table, {
+        onUpdate: "cascade",
+        hooks: true,
       });
-      Order.hasMany(models.OrderItem, { foreignKey: "orderId" });
+      Order.hasMany(models.OrderItem, { onUpdate: "cascade", hooks: true });
     }
   }
   Order.init(
     {
-      customerId: DataTypes.INTEGER,
-      tableId: DataTypes.INTEGER,
-      date: DataTypes.STRING,
-      time: DataTypes.STRING,
-      status: DataTypes.STRING,
-      total_price: DataTypes.DOUBLE,
+      resDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Please enter reservation date!",
+          },
+          isDateInThePast(value) {
+            const currDate = dateTimeValidator.asDateString(new Date());
+            if (dateTimeValidator.isDateInThePast(currDate, value))
+              throw new Error("Given date is in the past!");
+          },
+        },
+      },
+      resTime: {
+        type: DataTypes.TIME,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: "Please enter reservation time!",
+          },
+        },
+      },
+      people: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          isInt: {
+            arg: true,
+            msg: "Should be an integer value!",
+          },
+          min: {
+            args: [1],
+            msg: "One person at least!",
+          },
+          max: {
+            args: [20],
+            msg: "Maximum 20 people per reservation!",
+          },
+        },
+      },
+      resStatus: {
+        type: DataTypes.ENUM("pending", "seated", "missed"),
+        allowNull: false,
+        defaultValue: "pending",
+      },
     },
     {
       sequelize,
