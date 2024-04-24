@@ -36,9 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       image: {
         type: DataTypes.BLOB("long"),
       },
-      averagePrice: {
-        type: DataTypes.STRING,
-      },
       provinceId: {
         type: DataTypes.STRING,
       },

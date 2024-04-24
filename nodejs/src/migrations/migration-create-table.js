@@ -8,16 +8,28 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      capacity: {
-        type: Sequelize.STRING,
-      },
       name: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(45),
+        allowNull: false,
+      },
+      capacity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+      },
+      isOccupied: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      orderId: {
+        type: Sequelize.INTEGER,
+        // references: {
+        //   model: "Orders",
+        //   key: "id",
+        // },
       },
       position: {
-        type: Sequelize.STRING,
-      },
-      status: {
         type: Sequelize.STRING,
       },
       description: {

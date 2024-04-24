@@ -7,6 +7,7 @@ import typeController from "../controllers/typeController";
 import dishController from "../controllers/dishController";
 import staffController from "../controllers/staffController";
 import tableController from "../controllers/tableController";
+import orderController from "../controllers/orderController";
 
 let router = express.Router();
 
@@ -147,6 +148,11 @@ let initWebRoutes = (app) => {
     "/api/get-restaurant-by-staffId",
     staffController.handleGetRestaurantByStaffId
   );
+
+  router.put("/api/edit-order", orderController.editHandler);
+  router.delete("api/delete-order", orderController.cancelHandler);
+  router.post("/api/choose-table", orderController.chooseTableHandler);
+  router.patch("/api/free-table", tableController.freeTableHandler);
 
   return app.use("/", router);
 };

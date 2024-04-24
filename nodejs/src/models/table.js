@@ -9,22 +9,79 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Table.hasMany(models.Order, {
-        foreignKey: "tableId",
+      Table.belongsTo(models.Order, {
+        onUpdate: "cascade",
+        hooks: true,
       });
     }
   }
   Table.init(
     {
-      name: DataTypes.STRING,
-      capacity: DataTypes.STRING,
-      position: DataTypes.STRING,
-      status: DataTypes.STRING,
-      description: DataTypes.TEXT,
+      name: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+        validate: {
+          async isUnique(value) {
+            const table = await Table.findOne({
+              where: {
+                name: value,
+              },
+            });
+            if (table) throw new Error("Table with this name already exists!");
+          },
+          notEmpty: {
+            arg: true,
+            msg: "Table name shouldn't be blank!",
+          },
+        },
+      },
+      capacity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        validate: {
+          notEmpty: {
+            arg: true,
+            msg: "Capacity shouldn't be blank!",
+          },
+          isInt: {
+            arg: true,
+            msg: "Should be an integer value!",
+          },
+          min: {
+            args: [1],
+            msg: "One seat needed at least!",
+          },
+          max: {
+            args: [8],
+            msg: "Maximum 8 seats per table!",
+          },
+        },
+      },
+      isOccupied: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      orderId: {
+        type: DataTypes.INTEGER,
+      },
+      description: {
+        type: DataTypes.TEXT,
+      },
+      position: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
       modelName: "Table",
+      indexes: [
+        {
+          unique: true,
+          fields: ["name"],
+        },
+      ],
     }
   );
   return Table;
