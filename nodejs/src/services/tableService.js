@@ -166,6 +166,37 @@ const freeTable = async ({ tableDAO, orderDAO }, tableId) => {
   return await tableDAO.freeTable(orderDAO, table);
 };
 
+let searchTable = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.people) {
+        resolve({
+          errCode: 1,
+          message: "Missing required parameter",
+        });
+      } else {
+        let restaurants = [];
+        if (location === "ALL") {
+          restaurants = await db.Restaurant.findAll({});
+        } else {
+          //find by location
+          restaurants = await db.Restaurant.findAll({
+            where: { provinceId: location },
+          });
+        }
+
+        resolve({
+          errCode: 0,
+          message: "OK",
+          data: restaurants,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllTables,
   createNewTable,
@@ -173,4 +204,5 @@ module.exports = {
   updateTableData,
   getDetailTableById,
   freeTable,
+  searchTable,
 };

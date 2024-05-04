@@ -87,19 +87,13 @@ let createNewRestaurant = (data) => {
       }
       await db.Restaurant.create({
         name: data.name,
-        phoneNumber: data.phoneNumber,
-        averagePrice: data.averagePrice,
         provinceId: data.provinceId,
-        typeId: data.typeId,
         image: data.image,
-        staffId: data.staffId,
         address: data.address,
         longitude: data.longitude,
         latitude: data.latitude,
         isOpen: data.isOpen,
         isDelete: data.isDelete,
-        openTime: data.openTime,
-        closeTime: data.closeTime,
         rate: data.rate,
       });
       resolve({
@@ -152,11 +146,8 @@ let updateRestaurantData = (data) => {
         restaurant.name = data.name;
         restaurant.phoneNumber = data.phoneNumber;
         restaurant.provinceId = data.provinceId;
-        restaurant.typeId = data.typeId;
         restaurant.latitude = data.latitude;
-        restaurant.averagePrice = data.averagePrice;
         restaurant.longitude = data.longitude;
-        restaurant.staffId = data.staffId;
         restaurant.address = data.address;
         restaurant.isOpen = data.isOpen;
         restaurant.isDelete = data.isDelete;
@@ -359,7 +350,6 @@ let getExtraInfoRestaurantById = (restaurantId) => {
               as: "provinceData",
               attributes: ["valueEn", "valueVi"],
             },
-            { model: db.Type, attributes: ["name", "id"] },
             {
               model: db.Markdown,
               attributes: ["description", "contentHTML", "contentMarkdown"],

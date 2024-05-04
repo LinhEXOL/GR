@@ -14,29 +14,17 @@ module.exports = {
       image: {
         type: Sequelize.BLOB("long"),
       },
-      phoneNumber: {
-        type: Sequelize.STRING,
-      },
-      averagePrice: {
-        type: Sequelize.STRING,
-      },
       provinceId: {
         type: Sequelize.STRING,
       },
       address: {
         type: Sequelize.TEXT,
       },
-      typeId: {
-        type: Sequelize.INTEGER,
-      },
       longitude: {
         type: Sequelize.DOUBLE,
       },
       latitude: {
         type: Sequelize.DOUBLE,
-      },
-      staffId: {
-        type: Sequelize.INTEGER,
       },
       isOpen: {
         type: Sequelize.INTEGER,
@@ -46,12 +34,6 @@ module.exports = {
       },
       isDelete: {
         type: Sequelize.INTEGER,
-      },
-      openTime: {
-        type: Sequelize.STRING,
-      },
-      closeTime: {
-        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
