@@ -58,11 +58,11 @@ let getAllTypeNames = () => {
   });
 };
 
-let checkExistRestaurant = (staffId) => {
+let checkExistRestaurant = (name) => {
   return new Promise(async (resolve, reject) => {
     try {
       let res = await db.Restaurant.findOne({
-        where: { staffId: staffId },
+        where: { name: name },
       });
       if (res) {
         resolve(true);
@@ -78,7 +78,7 @@ let checkExistRestaurant = (staffId) => {
 let createNewRestaurant = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let isExistRestaurant = await checkExistRestaurant(data.staffId);
+      let isExistRestaurant = await checkExistRestaurant(data.name);
       if (isExistRestaurant) {
         return resolve({
           errCode: 1,
