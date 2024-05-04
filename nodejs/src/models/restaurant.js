@@ -15,14 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         as: "provinceData",
       });
       Restaurant.hasOne(models.Markdown, { foreignKey: "restaurantId" });
-      Restaurant.belongsTo(models.Type, {
-        foreignKey: "typeId",
-        targetKey: "id",
-      });
-      Restaurant.belongsTo(models.User, {
-        foreignKey: "staffId",
-        targetKey: "id",
-      });
     }
   }
   Restaurant.init(
@@ -30,17 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
       },
-      phoneNumber: {
-        type: DataTypes.STRING,
-      },
       image: {
         type: DataTypes.BLOB("long"),
       },
       provinceId: {
         type: DataTypes.STRING,
-      },
-      typeId: {
-        type: DataTypes.INTEGER,
       },
       address: {
         type: DataTypes.TEXT,
@@ -51,17 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       latitude: {
         type: DataTypes.DOUBLE,
       },
-      staffId: {
-        type: DataTypes.INTEGER,
-      },
       isOpen: {
         type: DataTypes.INTEGER,
-      },
-      openTime: {
-        type: DataTypes.STRING,
-      },
-      closeTime: {
-        type: DataTypes.STRING,
       },
       rate: {
         type: DataTypes.DOUBLE,
