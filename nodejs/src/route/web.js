@@ -43,10 +43,7 @@ let initWebRoutes = (app) => {
   router.delete("/api/delete-table", tableController.handleDeleteTable);
 
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
-  router.get(
-    "/api/get-all-restaurants",
-    restaurantController.handleGetAllRestaurants
-  );
+
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post(
     "/api/create-new-restaurant",
@@ -58,34 +55,9 @@ let initWebRoutes = (app) => {
     restaurantController.handleDeleteRestaurant
   );
 
-  router.get("/api/allcode", restaurantController.getAllCode);
-
-  router.get(
-    "/api/top-restaurant",
-    restaurantController.handleGetTopRestaurant
-  );
   router.get(
     "/api/get-detail-restaurant-by-id",
     restaurantController.handleGetDetailRestaurantById
-  );
-
-  router.post(
-    "/api/bulk-create-schedule",
-    restaurantController.handleBulkCreateSchedule
-  );
-  router.get(
-    "/api/get-schedule-restaurant-by-date",
-    restaurantController.handleGetScheduleByDate
-  );
-
-  router.get(
-    "/api/get-extra-info-restaurant-by-id",
-    restaurantController.handleGetExtraInfoRestaurantById
-  );
-
-  router.get(
-    "/api/get-profile-restaurant-by-id",
-    restaurantController.handleGetProfileRestaurantById
   );
 
   router.get(
@@ -101,18 +73,8 @@ let initWebRoutes = (app) => {
   );
 
   router.get(
-    "/api/get-all-restaurant-names",
-    restaurantController.handleGetAllRestaurantNames
-  );
-
-  router.get(
-    "/api/get-all-type-names",
-    restaurantController.handleGetAllTypeNames
-  );
-
-  router.post(
-    "/api/save-info-restaurant",
-    restaurantController.handlePostInfoRestaurant
+    "/api/get-all-restaurants",
+    restaurantController.handleGetAllRestaurants
   );
 
   router.post(
