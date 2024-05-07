@@ -60,7 +60,7 @@ const freeTableHandler = async (req, res) => {
 
 const handleSearchTable = async (req, res) => {
   try {
-    let info = await tableService.searchTable(req.body);
+    let info = await tableService.searchAvailableTables(req.body);
 
     return res.status(200).json(info);
   } catch (e) {

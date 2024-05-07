@@ -35,6 +35,9 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
+      restaurantId: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "customerId",
         as: "customerData",
       });
+      // User.belongsTo(models.StaffRestaurantMap, {
+      //   foreignKey: "id",
+      //   targetKey: "staffId",
+      // });
+      User.hasMany(models.StaffRestaurantMap, { foreignKey: "userId" });
     }
   }
   User.init(

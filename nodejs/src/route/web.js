@@ -26,6 +26,7 @@ let initWebRoutes = (app) => {
   router.post("/api/login", userController.handleLogin);
   router.post("/api/register", userController.handleRegister);
   router.post("/api/create-new-user", userController.handleCreateNewUser);
+  router.post("/api/create-new-staff", userController.handleCreateNewStaff);
   router.put("/api/edit-user", userController.handleEditUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
   router.get(
@@ -115,6 +116,7 @@ let initWebRoutes = (app) => {
   router.delete("api/delete-order", orderController.cancelHandler);
   router.post("/api/choose-table", orderController.chooseTableHandler);
   router.patch("/api/free-table", tableController.freeTableHandler);
+  router.get("/api/search-table", tableController.handleSearchTable);
 
   return app.use("/", router);
 };

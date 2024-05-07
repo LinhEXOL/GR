@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         as: "provinceData",
       });
       Restaurant.hasOne(models.Markdown, { foreignKey: "restaurantId" });
+      Restaurant.hasMany(models.Table, {
+        onUpdate: "cascade",
+        hooks: true,
+      });
+      //Restaurant.belongsTo(models.StaffRestaurantMap, { foreignKey: "id" });
+      Restaurant.hasMany(models.StaffRestaurantMap, {
+        foreignKey: "restaurantId",
+      });
     }
   }
   Restaurant.init(

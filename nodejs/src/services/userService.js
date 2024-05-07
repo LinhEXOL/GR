@@ -328,6 +328,59 @@ let deleteUser = (userId) => {
   });
 };
 
+let createNewStaff = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let isExistEmail = await checkUserEmail(data.email);
+      let isExistPhoneNumber = await checkUserPhoneNumber(data.phoneNumber);
+      if (isExistEmail) {
+        return resolve({
+          status: 400,
+          message: "Email is exist, please enter other email",
+          data: "",
+        });
+      }
+
+      if (isExistPhoneNumber) {
+        return resolve({
+          status: 400,
+          message: "Phone number is exist, please enter other phone number",
+          data: "",
+        });
+      }
+
+      //hash user password
+      let hashPassword = bcrypt.hashSync(data.password, salt);
+
+      let user = await db.User.create({
+        email: data.email,
+        password: hashPassword.toString(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        image: data.image,
+        roleId: data.roleId,
+        type_register: "1",
+      });
+      let staffRestaurantMap = await db.StaffRestaurantMap.create({
+        staffId: user.id,
+        restaurantId: data.restaurantId,
+      });
+      resolve({
+        status: 201,
+        message: "User is created successfully",
+        data: {
+          user: user,
+          staffRestaurantMap: staffRestaurantMap,
+        },
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
@@ -337,4 +390,5 @@ module.exports = {
   getUserInfoById: getUserInfoById,
   updateUserData: updateUserData,
   deleteUser: deleteUser,
+  createNewStaff,
 };
