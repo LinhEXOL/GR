@@ -78,10 +78,7 @@ let initWebRoutes = (app) => {
     restaurantController.handleGetAllRestaurants
   );
 
-  router.post(
-    "/api/customer-book-table",
-    customerController.handlePostBookTable
-  );
+  router.post("/api/customer-book-table", customerController.handleBookTable);
 
   router.post(
     "/api/customer-pre-order-dish",

@@ -1,7 +1,7 @@
 import { some } from "lodash";
 import db from "../models/index";
 
-let postBookTable = (data) => {
+let bookTable = (data) => {
   return new Promise(async (resolve, reject) => {
     console.log("DATA", data);
     try {
@@ -95,6 +95,6 @@ let customerPreOrderDish = (data) => {
 };
 
 module.exports = {
-  postBookTable,
+  bookTable,
   customerPreOrderDish,
 };

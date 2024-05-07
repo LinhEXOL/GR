@@ -1,8 +1,8 @@
 import customerService from "../services/customerService";
 
-let handlePostBookTable = async (req, res) => {
+let handleBookTable = async (req, res) => {
   try {
-    let info = await customerService.postBookTable(req.body);
+    let info = await customerService.bookTable(req.body);
     console.log("typeof info:", typeof info);
     return res.status(200).json(info);
   } catch (e) {
@@ -29,6 +29,6 @@ let handleCustomerPreOrderDish = async (req, res) => {
 };
 
 module.exports = {
-  handlePostBookTable,
+  handleBookTable,
   handleCustomerPreOrderDish,
 };

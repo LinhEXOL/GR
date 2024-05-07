@@ -52,7 +52,7 @@ let createNewTable = (data) => {
         restaurantId: data.restaurantId,
       });
       resolve({
-        status: 200,
+        status: 201,
         message: "OK",
         data: table,
       });
