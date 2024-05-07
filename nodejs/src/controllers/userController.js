@@ -157,6 +157,47 @@ let handleGetDetailUserById = async (req, res) => {
   return res.status(data.status).json(data);
 };
 
+let handleCreateNewStaff = async (req, res) => {
+  try {
+    if (
+      !req.body.email ||
+      !req.body.password ||
+      !req.body.phoneNumber ||
+      !req.body.firstName ||
+      !req.body.lastName ||
+      !req.body.address
+    ) {
+      return res.status(400).json({
+        status: 400,
+        message: "Missing required parameter",
+        data: "",
+      });
+    }
+
+    if (req.body.password && req.body.password.length < 4) {
+      return res.status(422).json({
+        status: 422,
+        message: "Your password must have more than 3 letters",
+        data: "",
+      });
+    }
+    let data = await userService.createNewStaff(req.body);
+    //check email exist
+    //password nhap vao ko dung
+    //return userInfor
+    // access_token :JWT json web token
+
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log("error", e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server",
+      data: "",
+    });
+  }
+};
+
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
@@ -166,4 +207,5 @@ module.exports = {
   handleDeleteUser,
   handleEditUser,
   handleGetDetailUserById,
+  handleCreateNewStaff,
 };

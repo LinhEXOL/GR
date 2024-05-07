@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "cascade",
         hooks: true,
       });
+      Table.belongsTo(models.Restaurant, {
+        onUpdate: "cascade",
+        hooks: true,
+      });
     }
   }
   Table.init(
@@ -71,6 +75,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       position: {
         type: DataTypes.STRING,
+      },
+      restaurantId: {
+        type: DataTypes.INTEGER,
       },
     },
     {
