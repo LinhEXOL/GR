@@ -2,7 +2,7 @@ import { some } from "lodash";
 import db from "../models/index";
 import { where } from "sequelize";
 
-let chooseTable = (data) => {
+let bookTable = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (
@@ -40,65 +40,97 @@ let chooseTable = (data) => {
           table.isOccupied = 1;
           await table.save();
         }
-        resolve({
-          data: table,
-          status: 201,
-          message: "Choose table successfully!",
-        });
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-let bookTable = (tableId) => {
-  console.log("TableId", tableId);
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!tableId) {
-        resolve({
-          status: 400,
-          message: "Missing required parameter!",
-          data: "",
-        });
-      } else {
-        let table = await db.Table.findOne({
-          where: { id: tableId },
-        });
-        console.log("table", table);
-        let orderItems = [];
-        if (table) {
-          orderItems = await db.OrderItem.findAll({
-            where: { orderId: table.orderId },
+        for (let item of data.orderItemArray) {
+          let dish = await db.Dish.findOne({
+            where: { id: item.dishId },
+            raw: false,
+          });
+          let price = dish.price * item.quantity;
+          let orderItem = await db.OrderItem.create({
+            orderId: order.id,
+            dishId: data.dishId,
+            quantity: item.quantity,
+            price: price,
+            status: "waiting",
+            note: item.note,
           });
         }
+        let orderItems = await db.OrderItem.findAll({
+          where: { orderId: table.orderId },
+        });
         let totalDepositAmount = 0;
         for (let item of orderItems) {
           let depositAmount = item.price * 0.3;
           totalDepositAmount += depositAmount;
         }
 
-        let order = await db.Order.findOne({
-          where: { id: table.orderId },
-          raw: false,
-        });
-        if (order) {
-          order.depositAmount = totalDepositAmount;
-          await order.save();
-        }
+        order.depositAmount = totalDepositAmount;
+        await order.save();
 
         resolve({
           data: order,
           status: 201,
           message: "Book table successfully!",
         });
+        // resolve({
+        //   data: table,
+        //   status: 201,
+        //   message: "Choose table successfully!",
+        // });
       }
     } catch (e) {
       reject(e);
     }
   });
 };
+
+// let bookTable = (tableId) => {
+//   console.log("TableId", tableId);
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       if (!tableId) {
+//         resolve({
+//           status: 400,
+//           message: "Missing required parameter!",
+//           data: "",
+//         });
+//       } else {
+//         let table = await db.Table.findOne({
+//           where: { id: tableId },
+//         });
+//         console.log("table", table);
+//         let orderItems = [];
+//         if (table) {
+//           orderItems = await db.OrderItem.findAll({
+//             where: { orderId: table.orderId },
+//           });
+//         }
+//         let totalDepositAmount = 0;
+//         for (let item of orderItems) {
+//           let depositAmount = item.price * 0.3;
+//           totalDepositAmount += depositAmount;
+//         }
+
+//         let order = await db.Order.findOne({
+//           where: { id: table.orderId },
+//           raw: false,
+//         });
+//         if (order) {
+//           order.depositAmount = totalDepositAmount;
+//           await order.save();
+//         }
+
+//         resolve({
+//           data: order,
+//           status: 201,
+//           message: "Book table successfully!",
+//         });
+//       }
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
 
 let createNewOrderItem = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -183,7 +215,6 @@ let customerPreOrderDish = (data) => {
 };
 
 module.exports = {
-  chooseTable,
   bookTable,
   createNewOrderItem,
   customerPreOrderDish,

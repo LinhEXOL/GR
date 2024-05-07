@@ -79,7 +79,7 @@ let initWebRoutes = (app) => {
   );
 
   router.post("/api/book-table", customerController.handleBookTable);
-  router.post("/api/choose-table", customerController.handleChooseTable);
+  //router.post("/api/choose-table", customerController.handleChooseTable);
   router.post(
     "/api/create-new-orderItem",
     customerController.handleCreateNewOrderItem
@@ -117,7 +117,7 @@ let initWebRoutes = (app) => {
   router.delete("api/delete-order", orderController.cancelHandler);
   router.post("/api/choose-table", orderController.chooseTableHandler);
   router.patch("/api/free-table", tableController.freeTableHandler);
-  router.get("/api/search-table", tableController.handleSearchTable);
+  router.post("/api/search-table", tableController.handleSearchTable);
 
   return app.use("/", router);
 };
