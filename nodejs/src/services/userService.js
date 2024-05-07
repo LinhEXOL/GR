@@ -360,8 +360,8 @@ let createNewStaff = (data) => {
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: data.image,
-        roleId: data.roleId,
-        type_register: "2",
+        roleId: "2",
+        type_register: "1",
       });
       let staffRestaurantMap = await db.StaffRestaurantMap.create({
         staffId: user.id,
