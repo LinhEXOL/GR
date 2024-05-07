@@ -116,8 +116,8 @@ let initWebRoutes = (app) => {
   router.delete("api/delete-order", orderController.cancelHandler);
   router.post("/api/choose-table", orderController.chooseTableHandler);
   router.patch("/api/free-table", tableController.freeTableHandler);
-  router.get("/api/search-table", tableController.handleSearchTable);
-
+  router.post("/api/search-table", tableController.handleSearchTable);
+  router.get("/api/get-all-tables-by-restaurant-id", tableController.handleGetAllTableByRestaurantId);
   return app.use("/", router);
 };
 

@@ -60,6 +60,7 @@ const freeTableHandler = async (req, res) => {
 
 const handleSearchTable = async (req, res) => {
   try {
+    console.log("🚀 ~ handleSearchTable ~ req.body:", req)
     let info = await tableService.searchAvailableTables(req.body);
 
     return res.status(200).json(info);
@@ -72,6 +73,20 @@ const handleSearchTable = async (req, res) => {
   }
 };
 
+const handleGetAllTableByRestaurantId = async (req, res) => {
+  try {
+    let info = await tableService.getAllTablesByRestaurantId(req.body.restaurantId);
+    return res.status(200).json(info);
+  } catch (e) {
+    console.log("Get all code error:", e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+
+}
+
 module.exports = {
   handleGetAllTables,
   handleCreateNewTable,
@@ -80,4 +95,5 @@ module.exports = {
   handleGetDetailTableById,
   freeTableHandler,
   handleSearchTable,
+  handleGetAllTableByRestaurantId,
 };

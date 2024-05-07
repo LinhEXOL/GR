@@ -86,6 +86,31 @@ let deleteTable = (tableId) => {
     }
   });
 };
+let getAllTablesByRestaurantId = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!restaurantId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let tables = await db.Table.findAll({
+        where: { restaurantId: restaurantId },
+        raw: true,
+      });
+      resolve({
+        status: 200,
+        message: "OK",
+        data: tables,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+
+}
 
 let updateTableData = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -259,7 +284,11 @@ async function searchAvailableTables(data) {
       return !isBooked && table.capacity >= data.people;
     });
 
-    return availableTables;
+    return {
+      status: 200,
+      message: "OK",
+      data: availableTables,
+    };
   } catch (error) {
     throw new Error(`Error searching available tables: ${error.message}`);
   }
@@ -274,4 +303,5 @@ module.exports = {
   freeTable,
   searchTable,
   searchAvailableTables,
+  getAllTablesByRestaurantId
 };
