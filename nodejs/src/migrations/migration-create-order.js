@@ -22,7 +22,7 @@ module.exports = {
         defaultValue: 1,
       },
       resStatus: {
-        type: Sequelize.ENUM("pending", "seated", "missed"),
+        type: Sequelize.ENUM("pending", "seated", "missed", "comfirmed"),
         allowNull: false,
         defaultValue: "pending",
       },
@@ -35,6 +35,10 @@ module.exports = {
         // },
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
+      },
+      depositAmount: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

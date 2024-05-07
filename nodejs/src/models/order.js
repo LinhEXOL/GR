@@ -31,11 +31,11 @@ module.exports = (sequelize, DataTypes) => {
             args: true,
             msg: "Please enter reservation date!",
           },
-          isDateInThePast(value) {
-            const currDate = dateTimeValidator.asDateString(new Date());
-            if (dateTimeValidator.isDateInThePast(currDate, value))
-              throw new Error("Given date is in the past!");
-          },
+          // isDateInThePast(value) {
+          //   const currDate = dateTimeValidator.asDateString(new Date());
+          //   if (dateTimeValidator.isDateInThePast(currDate, value))
+          //     throw new Error("Given date is in the past!");
+          // },
         },
       },
       resTime: {
@@ -67,10 +67,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       resStatus: {
-        type: DataTypes.ENUM("pending", "seated", "missed"),
+        type: DataTypes.ENUM("pending", "confirmed", "seated", "missed"),
         allowNull: false,
         defaultValue: "pending",
       },
+      depositAmount: DataTypes.DOUBLE,
     },
     {
       sequelize,

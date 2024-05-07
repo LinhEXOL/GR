@@ -1,38 +1,126 @@
 import { some } from "lodash";
 import db from "../models/index";
+import { where } from "sequelize";
 
-let bookTable = (data) => {
+let chooseTable = (data) => {
   return new Promise(async (resolve, reject) => {
-    console.log("DATA", data);
     try {
-      if (!data.customerId || !data.tableId || !data.time || !data.date) {
-        throw {
+      if (
+        !data.customerId ||
+        !data.resTime ||
+        !data.resDate ||
+        !data.people ||
+        !data.tableId
+      ) {
+        resolve({
           status: 400,
-          message: "Please fill in all fields!",
-        };
+          message: "Missing required parameter!",
+          data: "",
+        });
       } else {
+        let order;
         let user = await db.User.findOne({
           where: { id: data.customerId },
         });
-        if (user) {
-          await db.Order.findOrCreate({
-            where: { customerId: user.id },
-            defaults: {
-              status: "1",
-              tableId: data.tableId,
-              customerId: user.id,
-              date: data.date,
-              time: data.time,
-              total_price: data.total_price,
-            },
+        let table = await db.Table.findOne({
+          where: { id: data.tableId },
+          raw: false,
+        });
+        console.log("table", table);
+        if (user && table) {
+          order = await db.Order.create({
+            resStatus: "pending",
+            customerId: user.id,
+            resDate: data.resDate,
+            resTime: data.resTime,
+            people: data.people,
+            depositAmount: "0",
           });
+          table.orderId = order.id;
+          table.isOccupied = 1;
+          await table.save();
         }
         resolve({
-          data: user,
+          data: table,
+          status: 201,
+          message: "Choose table successfully!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let bookTable = (tableId) => {
+  console.log("TableId", tableId);
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!tableId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter!",
+          data: "",
+        });
+      } else {
+        let table = await db.Table.findOne({
+          where: { id: tableId },
+        });
+        console.log("table", table);
+        let orderItems = [];
+        if (table) {
+          orderItems = await db.OrderItem.findAll({
+            where: { orderId: table.orderId },
+          });
+        }
+        let totalDepositAmount = 0;
+        for (let item of orderItems) {
+          let depositAmount = item.price * 0.3;
+          totalDepositAmount += depositAmount;
+        }
+
+        let order = await db.Order.findOne({
+          where: { id: table.orderId },
+          raw: false,
+        });
+        if (order) {
+          order.depositAmount = totalDepositAmount;
+          await order.save();
+        }
+
+        resolve({
+          data: order,
           status: 201,
           message: "Book table successfully!",
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let createNewOrderItem = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let dish = await db.Dish.findOne({
+        where: { id: data.dishId },
+        raw: false,
+      });
+      let price = dish.price * data.quantity;
+      let orderItem = await db.OrderItem.create({
+        orderId: data.orderId,
+        dishId: data.dishId,
+        quantity: data.quantity,
+        price: price,
+        status: "waiting",
+        note: data.note,
+      });
+      resolve({
+        status: 201,
+        message: "OK",
+        data: orderItem,
+      });
     } catch (e) {
       reject(e);
     }
@@ -95,6 +183,8 @@ let customerPreOrderDish = (data) => {
 };
 
 module.exports = {
+  chooseTable,
   bookTable,
+  createNewOrderItem,
   customerPreOrderDish,
 };
