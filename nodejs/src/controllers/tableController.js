@@ -60,15 +60,14 @@ const freeTableHandler = async (req, res) => {
 
 const handleSearchTable = async (req, res) => {
   try {
-    console.log("🚀 ~ handleSearchTable ~ req.body:", req)
-    let info = await tableService.searchAvailableTables(req.body);
-
-    return res.status(200).json(info);
+    let data = await tableService.searchAvailableTables(req.body);
+    return res.status(data.status).json(data);
   } catch (e) {
     console.log("Get all code error:", e);
-    return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server",
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
     });
   }
 };

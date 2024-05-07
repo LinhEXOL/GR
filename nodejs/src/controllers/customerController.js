@@ -1,15 +1,43 @@
 import customerService from "../services/customerService";
 
-let handlePostBookTable = async (req, res) => {
+// let handleChooseTable = async (req, res) => {
+//   try {
+//     let data = await customerService.chooseTable(req.body);
+//     return res.status(data.status).json(data);
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       status: 500,
+//       message: "Error from server...",
+//       data: "",
+//     });
+//   }
+// };
+
+let handleBookTable = async (req, res) => {
   try {
-    let info = await customerService.postBookTable(req.body);
-    console.log("typeof info:", typeof info);
-    return res.status(200).json(info);
+    let data = await customerService.bookTable(req.body);
+    return res.status(data.status).json(data);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server...",
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
+    });
+  }
+};
+
+let handleCreateNewOrderItem = async (req, res) => {
+  try {
+    let data = await customerService.createNewOrderItem(req.body);
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
     });
   }
 };
@@ -29,6 +57,8 @@ let handleCustomerPreOrderDish = async (req, res) => {
 };
 
 module.exports = {
-  handlePostBookTable,
+  // handleChooseTable,
+  handleBookTable,
   handleCustomerPreOrderDish,
+  handleCreateNewOrderItem,
 };

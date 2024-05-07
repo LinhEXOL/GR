@@ -360,7 +360,7 @@ let createNewStaff = (data) => {
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: data.image,
-        roleId: data.roleId,
+        roleId: "2",
         type_register: "1",
       });
       let staffRestaurantMap = await db.StaffRestaurantMap.create({
@@ -369,7 +369,7 @@ let createNewStaff = (data) => {
       });
       resolve({
         status: 201,
-        message: "User is created successfully",
+        message: "Staff is created successfully",
         data: {
           user: user,
           staffRestaurantMap: staffRestaurantMap,

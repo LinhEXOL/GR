@@ -1,3 +1,4 @@
+import e from "cors";
 import db from "../models/index";
 const { Op } = require("sequelize");
 
@@ -52,7 +53,7 @@ let createNewTable = (data) => {
         restaurantId: data.restaurantId,
       });
       resolve({
-        status: 200,
+        status: 201,
         message: "OK",
         data: table,
       });
@@ -197,10 +198,11 @@ const freeTable = async ({ tableDAO, orderDAO }, tableId) => {
 let searchTable = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.people) {
+      if (!data.people || !data.resDate || !data.resTime) {
         resolve({
-          errCode: 1,
+          status: 400,
           message: "Missing required parameter",
+          data: "",
         });
       } else {
         let restaurants = [];
@@ -237,61 +239,67 @@ function substractHours(timeString, hours) {
 }
 
 async function searchAvailableTables(data) {
-  console.log("RESdate", data.resDate);
-  const startTime = substractHours(data.resTime, 2); // Thêm 2 giờ
-  const endTime = addHours(data.resTime, 2); // Thêm 2 giờ
-  console.log("REStime", startTime);
-  console.log("endtime", endTime);
-
-  try {
-    // Lấy danh sách các bàn đã được đặt trong khoảng thời gian yêu cầu
-    const bookedTables = await db.Order.findAll({
-      where: {
-        resDate: data.resDate,
-        resTime: {
-          [Op.between]: [startTime, endTime], // Thêm 2 giờ để tính toán thời gian kết thúc
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.resDate || !data.resTime || !data.people) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      const startTime = substractHours(data.resTime, 2); // Thêm 2 giờ
+      const endTime = addHours(data.resTime, 2); // Thêm 2 giờ
+      // Lấy danh sách các bàn đã được đặt trong khoảng thời gian yêu cầu
+      const bookedTables = await db.Order.findAll({
+        where: {
+          resDate: data.resDate,
+          resTime: {
+            [Op.between]: [startTime, endTime], // Thêm 2 giờ để tính toán thời gian kết thúc
+          },
+          [Op.or]: [
+            { resStatus: "seated" },
+            { resStatus: "pending" }, // Thêm trạng thái pending
+            { resStatus: "confirmed" }, // Thêm trạng thái confirmed
+            // Thêm các trạng thái khác nếu cần
+          ],
         },
-        [Op.or]: [
-          { resStatus: "seated" },
-          { resStatus: "pending" }, // Thêm trạng thái pending
-          { resStatus: "confirmed" }, // Thêm trạng thái confirmed
-          // Thêm các trạng thái khác nếu cần
+        include: [
+          {
+            model: db.Table,
+          },
         ],
-      },
-      include: [
-        {
-          model: db.Table,
-        },
-      ],
-      raw: false,
-      nest: true, // Include để lấy thông tin về bàn
-    });
-    console.log("bookedTables", bookedTables);
-
-    // Lấy danh sách tất cả các bàn
-    const allTables = await db.Table.findAll();
-
-    //Lọc ra các bàn khả dụng dựa trên bàn đã đặt
-    const availableTables = allTables.filter((table) => {
-      const isBooked = bookedTables.some((order) => {
-        // Kiểm tra xem order có chứa thông tin về Tables không
-        if (order.Tables && order.Tables.length > 0) {
-          // Lặp qua mỗi bàn trong Tables để kiểm tra id
-          return order.Tables.some((orderTable) => orderTable.id === table.id);
-        }
-        return false; // Trả về false nếu không có thông tin về Tables
+        raw: false,
+        nest: true, // Include để lấy thông tin về bàn
       });
-      return !isBooked && table.capacity >= data.people;
-    });
+      console.log("bookedTables", bookedTables);
 
-    return {
-      status: 200,
-      message: "OK",
-      data: availableTables,
-    };
-  } catch (error) {
-    throw new Error(`Error searching available tables: ${error.message}`);
-  }
+      // Lấy danh sách tất cả các bàn
+      const allTables = await db.Table.findAll();
+
+      //Lọc ra các bàn khả dụng dựa trên bàn đã đặt
+      const availableTables = allTables.filter((table) => {
+        const isBooked = bookedTables.some((order) => {
+          // Kiểm tra xem order có chứa thông tin về Tables không
+          if (order.Tables && order.Tables.length > 0) {
+            // Lặp qua mỗi bàn trong Tables để kiểm tra id
+            return order.Tables.some(
+              (orderTable) => orderTable.id === table.id
+            );
+          }
+          return false; // Trả về false nếu không có thông tin về Tables
+        });
+        return !isBooked && table.capacity >= data.people;
+      });
+      resolve({
+        status: 200,
+        message: "Search tables successfully!",
+        data: availableTables,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
 
 module.exports = {
