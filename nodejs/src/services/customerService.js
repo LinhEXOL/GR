@@ -22,32 +22,30 @@ let bookTable = (data) => {
         let user = await db.User.findOne({
           where: { id: data.customerId },
         });
-        let table = await db.Table.findOne({
-          where: { id: data.tableId },
-          raw: false,
-        });
-        if (user && table) {
-          order = await db.Order.create({
-            resStatus: "pending",
-            customerId: user.id,
-            resDate: data.resDate,
-            resTime: data.resTime,
-            people: data.people,
-            depositAmount: "0",
+        if (!user) {
+          resolve({
+            status: 404,
+            message: "User is not exist",
+            data: "",
           });
-          table.orderId = order.id;
-          table.isOccupied = 1;
-          await table.save();
+          
         }
+        order = await db.Order.create({
+          resStatus: "pending",
+          customerId: user.id,
+          resDate: data.resDate,
+          resTime: data.resTime,
+          people: data.people,
+          depositAmount: "0",
+        });
         for (let item of data.orderItemArray) {
-          console.log("🚀 ~ returnnewPromise ~ item:", item)
           let dish = await db.Dish.findOne({
             where: { id: item.dishId },
             raw: false,
           });
           let price = parseFloat(dish.price) * parseFloat(item.quantity);
           
-          let orderItem = await db.OrderItem.create({
+          await db.OrderItem.create({
             orderId: order.id,
             dishId: data.dishId,
             quantity: item.quantity,

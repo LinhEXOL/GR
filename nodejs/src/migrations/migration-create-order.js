@@ -22,7 +22,7 @@ module.exports = {
         defaultValue: 1,
       },
       resStatus: {
-        type: Sequelize.ENUM("pending", "seated", "missed", "comfirmed"),
+        type: Sequelize.ENUM("pending", "seated", "missed", "confirmed"),
         allowNull: false,
         defaultValue: "pending",
       },

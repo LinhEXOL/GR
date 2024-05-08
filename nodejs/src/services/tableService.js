@@ -272,10 +272,8 @@ async function searchAvailableTables(data) {
         raw: false,
         nest: true, // Include để lấy thông tin về bàn
       });
-      console.log("bookedTables", bookedTables);
-
       // Lấy danh sách tất cả các bàn
-      const allTables = await db.Table.findAll();
+      const allTables = await db.Table.findAll().map((table) => table.isOccupied = 0);
 
       //Lọc ra các bàn khả dụng dựa trên bàn đã đặt
       const availableTables = allTables.filter((table) => {

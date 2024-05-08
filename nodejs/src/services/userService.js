@@ -82,8 +82,8 @@ let handleUserRegister = (data) => {
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: data.image,
-        roleId: "3",
-        type_register: "1",
+        roleId: 3,
+        type_register: 1,
       });
       resolve({
         status: 201,
