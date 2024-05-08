@@ -128,6 +128,10 @@ let initWebRoutes = (app) => {
     "/api/update-status-order",
     orderController.handleUpdateStatusOrder
   );
+  router.get(
+    "/api/get-all-tables-by-restaurant-id",
+    tableController.handleGetAllTableByRestaurantId
+  );
   return app.use("/", router);
 };
 

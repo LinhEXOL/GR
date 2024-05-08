@@ -87,6 +87,31 @@ let deleteTable = (tableId) => {
     }
   });
 };
+let getAllTablesByRestaurantId = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!restaurantId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let tables = await db.Table.findAll({
+        where: { restaurantId: restaurantId },
+        raw: true,
+      });
+      resolve({
+        status: 200,
+        message: "OK",
+        data: tables,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+
+}
 
 let updateTableData = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -285,4 +310,5 @@ module.exports = {
   freeTable,
   searchTable,
   searchAvailableTables,
+  getAllTablesByRestaurantId
 };
