@@ -1,5 +1,6 @@
+const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
-
+import db from "../models/index";
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
 };
@@ -170,10 +171,96 @@ const chooseTable = async (orderId, tableId, orderDAO, tableDAO) => {
   return await orderDAO.setOrderTable(orderId, tableId);
 };
 
+let getAllOrdersByRestaurantId = (restaurantId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!restaurantId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter!",
+          data: "",
+        });
+      } else {
+        let orders = await db.Order.findAll({
+          where: { restaurantId: restaurantId },
+        });
+
+        if (orders) {
+          resolve({
+            status: 200,
+            message: "OK",
+            data: orders,
+          });
+        } else {
+          resolve({
+            status: 404,
+            message: "Order is not exist",
+            data: "",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updateStatusOrder = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.orderId || !data.status) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+        });
+      }
+      let order = await db.Order.findOne({
+        where: { id: data.orderId },
+        raw: false,
+      });
+
+      order.resStatus = data.status;
+      console.log("🚀 ~ returnnewPromise ~ order:", order);
+      await order.save();
+      let bookedTables = await db.OrderTable.findAll({
+        where: {
+          orderId: data.orderId,
+        },
+        raw: false,
+      });
+      // console.log("🚀 ~ returnnewPromise ~ bookedTables:", bookedTables);
+
+      for (let i = 0; i < bookedTables.length; i++) {
+        let table = await db.Table.findOne({
+          where: {
+            id: bookedTables[i].tableId,
+          },
+          raw: false,
+        });
+        if (data.status === "seated") {
+          table.isOccupied = 1;
+        } else {
+          table.isOccupied = 0;
+        }
+        await table.save();
+      }
+
+      resolve({
+        status: 200,
+        message: "Update order status success!",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllOrders,
   registerOrder,
   editOrder,
   cancelOrder,
   chooseTable,
+  getAllOrdersByRestaurantId,
+  updateStatusOrder,
 };

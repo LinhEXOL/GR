@@ -113,12 +113,21 @@ let initWebRoutes = (app) => {
     staffController.handleGetRestaurantByStaffId
   );
 
+  router.get(
+    "/api/get-all-orders-by-restaurantId",
+    orderController.handleGetAllOrdersByRestaurantId
+  );
+  router.get("/api/get-all-orders", orderController.handleGetAllOrders);
   router.put("/api/edit-order", orderController.editHandler);
   router.delete("api/delete-order", orderController.cancelHandler);
   router.post("/api/choose-table", orderController.chooseTableHandler);
   router.patch("/api/free-table", tableController.freeTableHandler);
   router.post("/api/search-table", tableController.handleSearchTable);
 
+  router.post(
+    "/api/update-status-order",
+    orderController.handleUpdateStatusOrder
+  );
   return app.use("/", router);
 };
 

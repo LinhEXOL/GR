@@ -22,13 +22,6 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      orderId: {
-        type: Sequelize.INTEGER,
-        // references: {
-        //   model: "Orders",
-        //   key: "id",
-        // },
-      },
       position: {
         type: Sequelize.STRING,
       },
@@ -36,6 +29,9 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       restaurantId: {
+        type: Sequelize.INTEGER,
+      },
+      orderId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

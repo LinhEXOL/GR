@@ -36,6 +36,10 @@ module.exports = {
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
       },
+      restaurantId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       depositAmount: {
         type: Sequelize.DOUBLE,
         allowNull: false,

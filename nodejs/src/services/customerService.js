@@ -1,6 +1,4 @@
-import { some } from "lodash";
 import db from "../models/index";
-import { where } from "sequelize";
 
 let bookTable = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -10,74 +8,64 @@ let bookTable = (data) => {
         !data.resTime ||
         !data.resDate ||
         !data.people ||
-        !data.tableId
+        !data.tableId ||
+        !data.restaurantId
       ) {
         resolve({
           status: 400,
           message: "Missing required parameter!",
           data: "",
         });
-      } else {
-        let order;
-        let user = await db.User.findOne({
-          where: { id: data.customerId },
+      }
+      let order;
+      let user = await db.User.findOne({
+        where: { id: data.customerId },
+      });
+      if (!user) {
+        resolve({
+          status: 404,
+          message: "User not exist!",
         });
-        let table = await db.Table.findOne({
-          where: { id: data.tableId },
+      }
+      order = await db.Order.create({
+        resStatus: "pending",
+        customerId: user.id,
+        resDate: data.resDate,
+        resTime: data.resTime,
+        people: data.people,
+        depositAmount: 0,
+        restaurantId: data.restaurantId,
+      });
+      await db.OrderTable.create({
+        orderId: order.id,
+        tableId: data.tableId,
+      });
+      let totalDepositAmount = 0;
+      for (let item of data.orderItemArray) {
+        let dish = await db.Dish.findOne({
+          where: { id: item.dishId },
           raw: false,
         });
-        console.log("table", table);
-        if (user && table) {
-          order = await db.Order.create({
-            resStatus: "pending",
-            customerId: user.id,
-            resDate: data.resDate,
-            resTime: data.resTime,
-            people: data.people,
-            depositAmount: "0",
-          });
-          table.orderId = order.id;
-          table.isOccupied = 1;
-          await table.save();
-        }
-        for (let item of data.orderItemArray) {
-          let dish = await db.Dish.findOne({
-            where: { id: item.dishId },
-            raw: false,
-          });
-          let price = dish.price * item.quantity;
-          let orderItem = await db.OrderItem.create({
-            orderId: order.id,
-            dishId: data.dishId,
-            quantity: item.quantity,
-            price: price,
-            status: "waiting",
-            note: item.note,
-          });
-        }
-        let orderItems = await db.OrderItem.findAll({
-          where: { orderId: table.orderId },
+        let price = dish.price * item.quantity;
+        let depositAmount = price * 0.3;
+        totalDepositAmount += depositAmount;
+        await db.OrderItem.create({
+          orderId: order.id,
+          dishId: item.dishId,
+          quantity: item.quantity,
+          price: price,
+          status: "waiting",
+          note: item.note,
         });
-        let totalDepositAmount = 0;
-        for (let item of orderItems) {
-          let depositAmount = item.price * 0.3;
-          totalDepositAmount += depositAmount;
-        }
-
-        order.depositAmount = totalDepositAmount;
-        await order.save();
-
-        resolve({
-          data: order,
-          status: 201,
-          message: "Book table successfully!",
-        });
-        // resolve({
-        //   data: table,
-        //   status: 201,
-        //   message: "Choose table successfully!",
-        // });
       }
+      order.depositAmount = totalDepositAmount;
+      await order.save();
+
+      resolve({
+        status: 201,
+        message: "Book table successfully!",
+        data: order,
+      });
     } catch (e) {
       reject(e);
     }
@@ -194,7 +182,7 @@ let customerPreOrderDish = (data) => {
           await db.OrderItem.findOrCreate({
             where: { orderId: order.id },
             defaults: {
-              status: "0",
+              status: 0,
               orderId: order.id,
               dishId: data.dishId,
               price: data.price,
