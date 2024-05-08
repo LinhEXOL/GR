@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "cascade",
         hooks: true,
       });
+      Table.hasMany(models.OrderTable, {
+        foreignKey: "tableId",
+      });
     }
   }
   Table.init(
@@ -67,9 +70,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      orderId: {
-        type: DataTypes.INTEGER,
-      },
       description: {
         type: DataTypes.TEXT,
       },
@@ -77,6 +77,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       restaurantId: {
+        type: DataTypes.INTEGER,
+      },
+      orderId: {
         type: DataTypes.INTEGER,
       },
     },

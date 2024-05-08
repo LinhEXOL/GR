@@ -241,7 +241,12 @@ function substractHours(timeString, hours) {
 async function searchAvailableTables(data) {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.resDate || !data.resTime || !data.people) {
+      if (
+        !data.resDate ||
+        !data.resTime ||
+        !data.people ||
+        !data.restaurantId
+      ) {
         resolve({
           status: 400,
           message: "Missing required parameter",
@@ -251,7 +256,7 @@ async function searchAvailableTables(data) {
       const startTime = substractHours(data.resTime, 2); // Thêm 2 giờ
       const endTime = addHours(data.resTime, 2); // Thêm 2 giờ
       // Lấy danh sách các bàn đã được đặt trong khoảng thời gian yêu cầu
-      const bookedTables = await db.Order.findAll({
+      const orders = await db.Order.findAll({
         where: {
           resDate: data.resDate,
           resTime: {
@@ -264,31 +269,27 @@ async function searchAvailableTables(data) {
             // Thêm các trạng thái khác nếu cần
           ],
         },
-        include: [
-          {
-            model: db.Table,
-          },
-        ],
         raw: false,
         nest: true, // Include để lấy thông tin về bàn
       });
-      // Lấy danh sách tất cả các bàn
-      const allTables = await db.Table.findAll().map((table) => table.isOccupied = 0);
-
-      //Lọc ra các bàn khả dụng dựa trên bàn đã đặt
-      const availableTables = allTables.filter((table) => {
-        const isBooked = bookedTables.some((order) => {
-          // Kiểm tra xem order có chứa thông tin về Tables không
-          if (order.Tables && order.Tables.length > 0) {
-            // Lặp qua mỗi bàn trong Tables để kiểm tra id
-            return order.Tables.some(
-              (orderTable) => orderTable.id === table.id
-            );
-          }
-          return false; // Trả về false nếu không có thông tin về Tables
+      console.log("orders", orders);
+      let bookedTables = [];
+      for (let item of orders) {
+        let table = await db.OrderTable.findAll({
+          where: { orderId: item.id },
         });
-        return !isBooked && table.capacity >= data.people;
+        table.map((t) => bookedTables.push(t.tableId));
+      }
+
+      const allTables = await db.Table.findAll({
+        where: { restaurantId: data.restaurantId },
       });
+      let availableTables = [];
+      for (let i = 0; i < allTables.length; i++) {
+        if (bookedTables.findIndex((e) => e === allTables[i].id) !== -1)
+          continue;
+        availableTables.push(allTables[i]);
+      }
       resolve({
         status: 200,
         message: "Search tables successfully!",

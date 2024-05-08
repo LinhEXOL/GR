@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.BLOB("long"),
       },
       price: {
-        type: Sequelize.STRING,
+        type: Sequelize.DOUBLE,
       },
       categoryId: {
         type: Sequelize.INTEGER,

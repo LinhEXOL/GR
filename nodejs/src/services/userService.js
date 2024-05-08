@@ -230,7 +230,7 @@ let createNewUser = (data) => {
         phoneNumber: data.phoneNumber,
         image: data.image,
         roleId: data.roleId,
-        type_register: "1",
+        type_register: 1,
       });
       resolve({
         status: 201,
@@ -359,9 +359,9 @@ let createNewStaff = (data) => {
         lastName: data.lastName,
         address: data.address,
         phoneNumber: data.phoneNumber,
-        image: data.image,
-        roleId: "2",
-        type_register: "1",
+        image: null,
+        roleId: 2,
+        type_register: 1,
       });
       let staffRestaurantMap = await db.StaffRestaurantMap.create({
         staffId: user.id,

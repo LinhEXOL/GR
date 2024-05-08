@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BLOB("long"),
       },
       price: {
-        type: DataTypes.STRING,
+        type: DataTypes.DOUBLE,
       },
       description: {
         type: DataTypes.STRING,

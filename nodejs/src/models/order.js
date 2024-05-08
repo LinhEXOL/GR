@@ -14,11 +14,19 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "customerData",
       });
-      Order.hasMany(models.Table, {
-        onUpdate: "cascade",
-        hooks: true,
-      });
+      // Order.hasMany(models.Table, {
+      //   onUpdate: "cascade",
+      //   hooks: true,
+      // });
       Order.hasMany(models.OrderItem, { onUpdate: "cascade", hooks: true });
+      Order.hasMany(models.OrderTable, {
+        foreignKey: "orderId",
+      });
+      Order.belongsTo(models.Restaurant, {
+        foreignKey: "restaurantId",
+        targetKey: "id",
+        as: "restaurantData",
+      });
     }
   }
   Order.init(
@@ -72,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "pending",
       },
       depositAmount: DataTypes.DOUBLE,
+      restaurantId: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -2,9 +2,8 @@ const orderService = require("../services/orderService");
 const orderDAO = require("../DAOs/orderDAO");
 const tableDAO = require("../DAOs/tableDao");
 
-const getAllHandler = async (req, res) => {
+const handleGetAllOrders = async (req, res) => {
   const orders = await orderService.getAllOrders(orderDAO);
-
   return res.status(200).json({
     success: true,
     collection: orders,
@@ -61,11 +60,42 @@ const chooseTableHandler = async (req, res) => {
     item: info,
   });
 };
+const handleGetAllOrdersByRestaurantId = async (req, res) => {
+  try {
+    let data = await orderService.getAllOrdersByRestaurantId(
+      req.query.restaurantId
+    );
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
+    });
+  }
+};
+
+const handleUpdateStatusOrder = async (req, res) => {
+  try {
+    let data = await orderService.updateStatusOrder(req.body);
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
+    });
+  }
+};
 
 module.exports = {
-  getAllHandler,
+  handleGetAllOrders,
   registerHandler,
   editHandler,
   cancelHandler,
   chooseTableHandler,
+  handleGetAllOrdersByRestaurantId,
+  handleUpdateStatusOrder,
 };
