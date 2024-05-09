@@ -255,6 +255,32 @@ let updateStatusOrder = (data) => {
   });
 };
 
+const getAllOrdersByCustomerId = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.customerId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let orders = await db.Order.findAll({
+        where: { customerId: data.customerId },
+      });
+
+      resolve({
+        status: 200,
+        message: "OK",
+        data: orders,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+
 module.exports = {
   getAllOrders,
   registerOrder,
@@ -263,4 +289,5 @@ module.exports = {
   chooseTable,
   getAllOrdersByRestaurantId,
   updateStatusOrder,
+  getAllOrdersByCustomerId,
 };

@@ -1,6 +1,7 @@
 import e from "cors";
 import db from "../models/index";
 const { Op } = require("sequelize");
+const moment = require("moment");
 
 let getAllTables = () => {
   return new Promise(async (resolve, reject) => {
@@ -49,7 +50,7 @@ let createNewTable = (data) => {
         capacity: data.capacity,
         position: data.position,
         description: data.description,
-        orderId: data.orderId,
+        orderId: 0,
         restaurantId: data.restaurantId,
       });
       resolve({
@@ -110,8 +111,7 @@ let getAllTablesByRestaurantId = (restaurantId) => {
       reject(e);
     }
   });
-
-}
+};
 
 let updateTableData = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -253,12 +253,14 @@ async function searchAvailableTables(data) {
           data: "",
         });
       }
-      const startTime = substractHours(data.resTime, 2); // Thêm 2 giờ
-      const endTime = addHours(data.resTime, 2); // Thêm 2 giờ
+      let resTime = moment(data.resTime, "HH:mm:ss");
+      const startTime = resTime.clone().subtract(2, "hours").format("HH:mm:ss");
+      const endTime = resTime.clone().add(2, "hours").format("HH:mm:ss");
       // Lấy danh sách các bàn đã được đặt trong khoảng thời gian yêu cầu
       const orders = await db.Order.findAll({
         where: {
           resDate: data.resDate,
+          restaurantId: data.restaurantId,
           resTime: {
             [Op.between]: [startTime, endTime], // Thêm 2 giờ để tính toán thời gian kết thúc
           },
@@ -272,7 +274,6 @@ async function searchAvailableTables(data) {
         raw: false,
         nest: true, // Include để lấy thông tin về bàn
       });
-      console.log("orders", orders);
       let bookedTables = [];
       for (let item of orders) {
         let table = await db.OrderTable.findAll({
@@ -310,5 +311,5 @@ module.exports = {
   freeTable,
   searchTable,
   searchAvailableTables,
-  getAllTablesByRestaurantId
+  getAllTablesByRestaurantId,
 };

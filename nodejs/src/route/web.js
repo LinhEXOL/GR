@@ -128,9 +128,14 @@ let initWebRoutes = (app) => {
     "/api/update-status-order",
     orderController.handleUpdateStatusOrder
   );
-  router.get(
-    "/api/get-all-tables-by-restaurant-id",
-    tableController.handleGetAllTableByRestaurantId
+  // router.get(
+  //   "/api/get-all-tables-by-restaurant-id",
+  //   tableController.handleGetAllTableByRestaurantId
+  // );
+
+  router.post(
+    "/api/get-all-orders-by-customer-id",
+    orderController.handleGetAllOrderByCustomerId
   );
   return app.use("/", router);
 };
