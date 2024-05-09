@@ -1,5 +1,6 @@
 const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
+const { fn, col } = db.sequelize;
 import db from "../models/index";
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
@@ -280,6 +281,80 @@ const getAllOrdersByCustomerId = (data) => {
   });
 };
 
+let getDetailOrderByOrderId = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter!",
+          data: "",
+        });
+      }
+      let order = await db.Order.findOne({
+        where: { id: data.orderId },
+      });
+
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+      }
+      let tables = [];
+      let bookedTables = await db.OrderTable.findAll({
+        where: { orderId: data.orderId },
+      });
+      for (let i = 0; i < bookedTables.length; i++) {
+        let table = await db.Table.findOne({
+          where: { id: bookedTables[i].tableId },
+        });
+        tables.push(table);
+      }
+      let orderItems = await db.OrderItem.findAll({
+        where: { orderId: data.orderId },
+      });
+      let dishes = [];
+      for (let i = 0; i < orderItems.length; i++) {
+        let dish = await db.Dish.findOne({
+          where: { id: orderItems[i].dishId },
+        });
+        dishes.push({
+          dishId: dish.id,
+          dishName: dish.name,
+          price: dish.price,
+          dishImage: dish.image,
+          categoryId: dish.categoryId,
+          description: dish.description,
+          quantity: orderItems[i].quantity,
+        });
+      }
+      let user = await db.User.findOne({
+        where: { id: order.customerId },
+        attributes: [
+          [fn("CONCAT", col("lastName"), " ", col("firstName")), "name"],
+          "email",
+          "phoneNumber",
+        ],
+      });
+      resolve({
+        status: 200,
+        message: "Get detail order successfully",
+        data: [
+          {
+            order: order,
+            tables: tables,
+            orderItems: dishes,
+            user: user,
+          },
+        ],
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 module.exports = {
   getAllOrders,
@@ -290,4 +365,5 @@ module.exports = {
   getAllOrdersByRestaurantId,
   updateStatusOrder,
   getAllOrdersByCustomerId,
+  getDetailOrderByOrderId,
 };

@@ -137,6 +137,10 @@ let initWebRoutes = (app) => {
     "/api/get-all-orders-by-customer-id",
     orderController.handleGetAllOrderByCustomerId
   );
+  router.post(
+    "/api/get-detail-order-by-orderId",
+    orderController.handleGetDetailOrderByOrderId
+  );
   return app.use("/", router);
 };
 
