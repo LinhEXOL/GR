@@ -1,5 +1,6 @@
 const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
+const { fn, col } = db.sequelize;
 import db from "../models/index";
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
@@ -255,6 +256,61 @@ let updateStatusOrder = (data) => {
   });
 };
 
+let getDetailOrderByOrderId = (orderId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter!",
+          data: "",
+        });
+      } else {
+        let order = await db.Order.findOne({
+          where: { id: orderId },
+        });
+
+        if (order) {
+          let tables = await db.OrderTable.findAll({
+            where: { orderId: orderId },
+          });
+          let orderItems = await db.OrderItem.findAll({
+            where: { orderId: orderId },
+          });
+          let user = await db.User.findOne({
+            where: { id: order.customerId },
+            attributes: [
+              [fn("CONCAT", col("lastName"), " ", col("firstName")), "name"],
+              "email",
+              "phoneNumber",
+            ],
+          });
+          resolve({
+            status: 200,
+            message: "Get detail order successfully",
+            data: [
+              {
+                order: order,
+                tables: tables,
+                orderItems: orderItems,
+                user: user,
+              },
+            ],
+          });
+        } else {
+          resolve({
+            status: 404,
+            message: "Order is not exist",
+            data: "",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllOrders,
   registerOrder,
@@ -263,4 +319,5 @@ module.exports = {
   chooseTable,
   getAllOrdersByRestaurantId,
   updateStatusOrder,
+  getDetailOrderByOrderId,
 };

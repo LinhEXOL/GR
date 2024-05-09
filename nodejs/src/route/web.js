@@ -132,6 +132,10 @@ let initWebRoutes = (app) => {
     "/api/get-all-tables-by-restaurant-id",
     tableController.handleGetAllTableByRestaurantId
   );
+  router.post(
+    "/api/get-detail-order-by-orderId",
+    orderController.handleGetDetailOrderByOrderId
+  );
   return app.use("/", router);
 };
 
