@@ -186,7 +186,7 @@ let getAllOrdersByRestaurantId = (restaurantId) => {
           where: { restaurantId: restaurantId },
         });
 
-        if (orders) {
+        if (orders && orders.length > 0) {
           resolve({
             status: 200,
             message: "OK",
@@ -213,12 +213,20 @@ let updateStatusOrder = (data) => {
         resolve({
           status: 400,
           message: "Missing required parameter",
+          data: "",
         });
       }
       let order = await db.Order.findOne({
         where: { id: data.orderId },
         raw: false,
       });
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+      }
 
       order.resStatus = data.status;
       console.log("🚀 ~ returnnewPromise ~ order:", order);
@@ -249,6 +257,7 @@ let updateStatusOrder = (data) => {
       resolve({
         status: 200,
         message: "Update order status success!",
+        data: order,
       });
     } catch (e) {
       reject(e);
