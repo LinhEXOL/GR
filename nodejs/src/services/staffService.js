@@ -25,7 +25,7 @@ let getListCustomerForStaff = (staffId, date) => {
             {
               model: db.User,
               as: "customerData",
-              attributes: ["email", "firstName", "lastName", "phonenumber"],
+              attributes: ["email", "fullName", "phonenumber"],
             },
             {
               model: db.Allcode,

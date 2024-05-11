@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Order.belongsTo(models.User, {
-        foreignKey: "customerId",
-        targetKey: "id",
-        as: "customerData",
-      });
+      // Order.belongsTo(models.User, {
+      //   foreignKey: "customerId",
+      //   targetKey: "id",
+      //   as: "customerData",
+      // });
       // Order.hasMany(models.Table, {
       //   onUpdate: "cascade",
       //   hooks: true,
@@ -75,12 +75,21 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       resStatus: {
-        type: DataTypes.ENUM("pending", "confirmed", "seated", "missed"),
+        type: DataTypes.ENUM(
+          "pending",
+          "confirmed",
+          "seated",
+          "done",
+          "cancel"
+        ),
         allowNull: false,
         defaultValue: "pending",
       },
       depositAmount: DataTypes.DOUBLE,
       restaurantId: DataTypes.INTEGER,
+      fullName: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      totalAmount: DataTypes.DOUBLE,
     },
     {
       sequelize,

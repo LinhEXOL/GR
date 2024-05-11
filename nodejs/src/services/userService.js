@@ -77,8 +77,7 @@ let handleUserRegister = (data) => {
       let user = await db.User.create({
         email: data.email,
         password: hashPassword,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        fullName: data.fullName,
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: data.image,
@@ -104,14 +103,7 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         //user already exist
         let user = await db.User.findOne({
-          attributes: [
-            "email",
-            "roleId",
-            "password",
-            "firstName",
-            "lastName",
-            "id",
-          ],
+          attributes: ["email", "roleId", "password", "fullName", "id"],
           where: { email: email },
           raw: true,
         });
@@ -224,8 +216,7 @@ let createNewUser = (data) => {
       let user = await db.User.create({
         email: data.email,
         password: hashPassword.toString(),
-        firstName: data.firstName,
-        lastName: data.lastName,
+        fullName: data.fullName,
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: data.image,
@@ -278,8 +269,7 @@ let updateUserData = (data) => {
         raw: false,
       });
       if (user) {
-        user.firstName = data.firstName;
-        user.lastName = data.lastName;
+        user.fullName = data.fullName;
         user.address = data.address;
         await user.save();
 
@@ -355,8 +345,7 @@ let createNewStaff = (data) => {
       let user = await db.User.create({
         email: data.email,
         password: hashPassword.toString(),
-        firstName: data.firstName,
-        lastName: data.lastName,
+        fullName: data.fullName,
         address: data.address,
         phoneNumber: data.phoneNumber,
         image: null,

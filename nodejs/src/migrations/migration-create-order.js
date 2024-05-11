@@ -22,25 +22,27 @@ module.exports = {
         defaultValue: 1,
       },
       resStatus: {
-        type: Sequelize.ENUM("pending", "seated", "missed", "comfirmed"),
+        type: Sequelize.ENUM("pending", "seated", "missed", "confirmed"),
         allowNull: false,
         defaultValue: "pending",
-      },
-      customerId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        // references: {
-        //   model: "Users",
-        //   key: "id",
-        // },
-        // onDelete: "CASCADE",
-        // onUpdate: "CASCADE",
       },
       restaurantId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
       depositAmount: {
+        type: Sequelize.DOUBLE,
+        allowNull: false,
+      },
+      fullName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      phoneNumber: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      totalAmount: {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },

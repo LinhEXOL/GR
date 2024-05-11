@@ -20,9 +20,6 @@ module.exports = {
       price: {
         type: Sequelize.DOUBLE,
       },
-      status: {
-        type: Sequelize.STRING,
-      },
       note: {
         type: Sequelize.STRING,
       },

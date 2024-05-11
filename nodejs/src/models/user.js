@@ -14,10 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "keyMap",
         as: "roleData",
       });
-      User.hasMany(models.Order, {
-        foreignKey: "customerId",
-        as: "customerData",
-      });
+      // User.hasMany(models.Order, {
+      //   foreignKey: "customerId",
+      //   as: "customerData",
+      // });
       // User.belongsTo(models.StaffRestaurantMap, {
       //   foreignKey: "id",
       //   targetKey: "staffId",
@@ -29,8 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      fullName: DataTypes.STRING,
       address: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
       image: DataTypes.BLOB("long"),

@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       dishId: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
       price: DataTypes.DOUBLE,
-      status: DataTypes.STRING,
       note: DataTypes.STRING,
     },
     {
