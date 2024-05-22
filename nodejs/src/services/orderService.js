@@ -1,6 +1,7 @@
 const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
 const { fn, col } = db.sequelize;
+import { raw } from "body-parser";
 import db from "../models/index";
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
@@ -171,10 +172,10 @@ const chooseTable = async (orderId, tableId, orderDAO, tableDAO) => {
   return await orderDAO.setOrderTable(orderId, tableId);
 };
 
-let getAllOrdersByRestaurantId = (restaurantId) => {
+let getAllOrdersByRestaurantId = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!restaurantId) {
+      if (!data.restaurantId) {
         resolve({
           status: 400,
           message: "Missing required parameter!",
@@ -182,22 +183,14 @@ let getAllOrdersByRestaurantId = (restaurantId) => {
         });
       } else {
         let orders = await db.Order.findAll({
-          where: { restaurantId: restaurantId },
+          where: { restaurantId: data.restaurantId },
         });
 
-        if (orders && orders.length > 0) {
-          resolve({
-            status: 200,
-            message: "OK",
-            data: orders,
-          });
-        } else {
-          resolve({
-            status: 404,
-            message: "Order is not exist",
-            data: "",
-          });
-        }
+        resolve({
+          status: 200,
+          message: "OK",
+          data: orders,
+        });
       }
     } catch (e) {
       reject(e);
@@ -228,7 +221,6 @@ let updateStatusOrder = (data) => {
       }
 
       order.resStatus = data.status;
-      console.log("🚀 ~ returnnewPromise ~ order:", order);
       await order.save();
       let bookedTables = await db.OrderTable.findAll({
         where: {
@@ -236,8 +228,6 @@ let updateStatusOrder = (data) => {
         },
         raw: false,
       });
-      // console.log("🚀 ~ returnnewPromise ~ bookedTables:", bookedTables);
-
       for (let i = 0; i < bookedTables.length; i++) {
         let table = await db.Table.findOne({
           where: {
@@ -264,10 +254,120 @@ let updateStatusOrder = (data) => {
   });
 };
 
-const getAllOrdersByCustomerId = (data) => {
+const createOrderByStaff = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.customerId) {
+      if (
+        !data.resTime ||
+        !data.resDate ||
+        !data.people ||
+        !data.restaurantId ||
+        !data.fullName ||
+        !data.phoneNumber ||
+        !data.tables
+      ) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let order;
+      order = await db.Order.create({
+        resStatus: "pending",
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
+        resDate: data.resDate,
+        resTime: data.resTime,
+        people: data.people,
+        depositAmount: 0,
+        restaurantId: data.restaurantId,
+      });
+      let totalDepositAmount = 0;
+      for (let item of data.orderItemArray) {
+        let dish = await db.Dish.findOne({
+          where: { id: item.dishId },
+          raw: false,
+        });
+        let price = dish.price * item.quantity;
+        let depositAmount = price * 0.3;
+        totalDepositAmount += depositAmount;
+        await db.OrderItem.create({
+          orderId: order.id,
+          dishId: item.dishId,
+          quantity: item.quantity,
+          price: price,
+          status: "waiting",
+          note: item.note,
+        });
+      }
+      order.depositAmount = totalDepositAmount;
+      order.totalAmount = totalDepositAmount / 0.3;
+      await order.save();
+      for (let table of data.tables) {
+        await db.Table.update(
+          { orderId: order.id },
+          {
+            where: {
+              id: table,
+            },
+          }
+        );
+      }
+      resolve({
+        status: 201,
+        message: "Create order successfully",
+        data: order,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const updateOrder = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+        return;
+      }
+      let order = await db.Order.findOne({
+        where: { id: data.orderId },
+        raw: false,
+      });
+
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+        return;
+      }
+      for (let key in data) {
+        if (key !== "orderId") order[key] = data[key];
+        await order.save();
+      }
+      resolve({
+        status: 200,
+        message: "Update order status success!",
+        data: order,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const getAllOrdersByCustomerPhoneNumber = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.customerPhoneNumber) {
         resolve({
           status: 400,
           message: "Missing required parameter",
@@ -275,7 +375,7 @@ const getAllOrdersByCustomerId = (data) => {
         });
       }
       let orders = await db.Order.findAll({
-        where: { customerId: data.customerId },
+        where: { phoneNumber: data.customerPhoneNumber },
       });
 
       resolve({
@@ -310,38 +410,47 @@ let getDetailOrderByOrderId = (data) => {
           data: "",
         });
       }
-      let tables = [];
-      let bookedTables = await db.OrderTable.findAll({
-        where: { orderId: data.orderId },
+      let dishes = [];
+      // let bookedTables = await db.OrderTable.findAll({
+      //   where: { orderId: data.orderId },
+      // });
+      // if (bookedTables.length > 0) {
+      //   for (let i = 0; i < bookedTables.length; i++) {
+      //     let table = await db.Table.findOne({
+      //       where: { id: bookedTables[i].tableId },
+      //     });
+      //     tables.push(table);
+      //   }
+      // }
+      let tables = await db.Table.findAll({
+        where: { orderId: order.id },
+        attributes: ["name"],
       });
-      for (let i = 0; i < bookedTables.length; i++) {
-        let table = await db.Table.findOne({
-          where: { id: bookedTables[i].tableId },
-        });
-        tables.push(table);
-      }
+
       let orderItems = await db.OrderItem.findAll({
         where: { orderId: data.orderId },
       });
-      let dishes = [];
-      for (let i = 0; i < orderItems.length; i++) {
-        let dish = await db.Dish.findOne({
-          where: { id: orderItems[i].dishId },
-        });
-        dishes.push({
-          dishId: dish.id,
-          dishName: dish.name,
-          price: dish.price,
-          dishImage: dish.image,
-          categoryId: dish.categoryId,
-          description: dish.description,
-          quantity: orderItems[i].quantity,
-        });
+      if (orderItems.length > 0) {
+        for (let i = 0; i < orderItems.length; i++) {
+          let dish = await db.Dish.findOne({
+            where: { id: orderItems[i].dishId },
+          });
+          dishes.push({
+            id: orderItems[i].id,
+            dishId: dish.id,
+            dishName: dish.name,
+            price: orderItems[i].price,
+            quantity: orderItems[i].quantity,
+          });
+        }
       }
-      let user = await db.User.findOne({
-        where: { id: order.customerId },
-        attributes: ["fullName", "email", "phoneNumber"],
-      });
+      // let user = await db.User.findOne({
+      //   where: { phoneNumber: order.phoneNumber.toString() },
+      //   attributes: ["fullName", "email", "phoneNumber"],
+      // });
+      // if (!user) {
+      //   user = "Guest"
+      // }
       resolve({
         status: 200,
         message: "Get detail order successfully",
@@ -350,9 +459,97 @@ let getDetailOrderByOrderId = (data) => {
             order: order,
             tables: tables,
             orderItems: dishes,
-            user: user,
+            // user: user,
           },
         ],
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const updateOrderItem = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.items || !data.orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let order = await db.Order.findOne({
+        where: { id: data.orderId },
+      });
+
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+      }
+      for (let item of data.items) {
+        if (item.action === "add") {
+          await db.OrderItem.create({
+            orderId: data.orderId,
+            dishId: item.dishId,
+            quantity: item.quantity,
+            price: item.price,
+          });
+          continue;
+        }
+        if (item.action === "delete") {
+          await db.OrderItem.destroy({
+            where: {
+              id: item.id,
+            },
+          });
+          continue;
+        }
+        let orderItem = await db.OrderItem.findOne({
+          where: {
+            id: item.id,
+          },
+          raw: false,
+        });
+        if (!orderItem) {
+          resolve({
+            status: 404,
+            message: "Order item is not exist",
+            data: "",
+          });
+          return;
+        }
+        for (let key in item) {
+          if (key !== "id") orderItem[key] = item[key];
+        }
+        await orderItem.save();
+      }
+      let dishes = [];
+
+      let orderItems = await db.OrderItem.findAll({
+        where: { orderId: data.orderId },
+      });
+      if (orderItems.length > 0) {
+        for (let i = 0; i < orderItems.length; i++) {
+          let dish = await db.Dish.findOne({
+            where: { id: orderItems[i].dishId },
+          });
+          dishes.push({
+            id: orderItems[i].id,
+            dishId: dish.id,
+            dishName: dish.name,
+            price: orderItems[i].price,
+            quantity: orderItems[i].quantity,
+          });
+        }
+      }
+      resolve({
+        status: 200,
+        message: "Update order item successfully",
+        data: dishes,
       });
     } catch (e) {
       reject(e);
@@ -368,6 +565,9 @@ module.exports = {
   chooseTable,
   getAllOrdersByRestaurantId,
   updateStatusOrder,
-  getAllOrdersByCustomerId,
+  getAllOrdersByCustomerPhoneNumber,
   getDetailOrderByOrderId,
+  updateOrder,
+  updateOrderItem,
+  createOrderByStaff,
 };

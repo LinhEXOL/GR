@@ -4,12 +4,13 @@ let bookTable = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (
-        !data.customerId ||
         !data.resTime ||
         !data.resDate ||
         !data.people ||
-        !data.tableId ||
-        !data.restaurantId
+        !data.restaurantId ||
+        !data.fullName ||
+        !data.phoneNumber ||
+        !data.email
       ) {
         resolve({
           status: 400,
@@ -18,28 +19,18 @@ let bookTable = (data) => {
         });
       }
       let order;
-      let user = await db.User.findOne({
-        where: { id: data.customerId },
-      });
-      if (!user) {
-        resolve({
-          status: 404,
-          message: "User not exist!",
-        });
-      }
       order = await db.Order.create({
         resStatus: "pending",
-        customerId: user.id,
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
         resDate: data.resDate,
         resTime: data.resTime,
         people: data.people,
         depositAmount: 0,
         restaurantId: data.restaurantId,
+        email: data.email,
       });
-      await db.OrderTable.create({
-        orderId: order.id,
-        tableId: data.tableId,
-      });
+
       let totalDepositAmount = 0;
       for (let item of data.orderItemArray) {
         let dish = await db.Dish.findOne({
@@ -59,6 +50,7 @@ let bookTable = (data) => {
         });
       }
       order.depositAmount = totalDepositAmount;
+      order.totalAmount = totalDepositAmount/0.3;
       await order.save();
 
       resolve({

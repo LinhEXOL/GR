@@ -8,10 +8,11 @@ import dishController from "../controllers/dishController";
 import staffController from "../controllers/staffController";
 import tableController from "../controllers/tableController";
 import orderController from "../controllers/orderController";
+import paymentController from "../controllers/paymentController";
 
 let router = express.Router();
 
-let initWebRoutes = (app) => {
+let initWebRoutes = (app, io) => {
   router.get("/", homeController.getHomePage);
   router.get("/about", homeController.getAboutPage);
   router.get("/crud", homeController.getCRUD);
@@ -40,7 +41,7 @@ let initWebRoutes = (app) => {
   );
 
   router.post("/api/create-new-table", tableController.handleCreateNewTable);
-  router.put("/api/edit-table", tableController.handleEditTable);
+  router.post("/api/edit-table", tableController.handleEditTable);
   router.delete("/api/delete-table", tableController.handleDeleteTable);
 
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
@@ -78,8 +79,7 @@ let initWebRoutes = (app) => {
     restaurantController.handleGetAllRestaurants
   );
 
-  router.post("/api/book-table", customerController.handleBookTable);
-  //router.post("/api/choose-table", customerController.handleChooseTable);
+  router.post("/api/book-table", (req, res) => customerController.handleBookTable(req, res, io));
   router.post(
     "/api/create-new-orderItem",
     customerController.handleCreateNewOrderItem
@@ -124,19 +124,17 @@ let initWebRoutes = (app) => {
     "/api/update-status-order",
     orderController.handleUpdateStatusOrder
   );
-  // router.get(
-  //   "/api/get-all-tables-by-restaurant-id",
-  //   tableController.handleGetAllTableByRestaurantId
-  // );
 
   router.post(
-    "/api/get-all-orders-by-customer-id",
-    orderController.handleGetAllOrderByCustomerId
+    "/api/get-all-orders-of-customer",
+    orderController.handleGetAllOrderByCustomerPhoneNumber
   );
+
   router.post(
     "/api/update-status-order",
     orderController.handleUpdateStatusOrder
   );
+
   router.post(
     "/api/get-all-orders-by-restaurantId",
     orderController.handleGetAllOrdersByRestaurantId
@@ -146,6 +144,14 @@ let initWebRoutes = (app) => {
     "/api/get-detail-order-by-orderId",
     orderController.handleGetDetailOrderByOrderId
   );
+
+  router.post("/api/update-order", orderController.handleUpdateOrder);
+  router.post("/api/update-order-item", orderController.handleUpdateOrderItem);
+  router.post("/api/get-available-tables", tableController.handleGetAvailableTables);
+  router.post("/api/get-all-tables-by-restaurantId", tableController.handleGetAllTableByRestaurantId);
+  router.post("/api/create-order-by-staff", staffController.createOrder);
+  router.post("/api/create-payment", paymentController.handlePaymentWithVNP);
+  router.get("/api/vnpay_return", (req, res) =>  paymentController.handlePaymentResultWithVNP(req, res, io));
   return app.use("/", router);
 };
 

@@ -22,7 +22,7 @@ module.exports = {
         defaultValue: 1,
       },
       resStatus: {
-        type: Sequelize.ENUM("pending", "seated", "missed", "confirmed"),
+        type: Sequelize.ENUM("pending", "seated", "confirmed", "done", "cancel"),
         allowNull: false,
         defaultValue: "pending",
       },
@@ -30,21 +30,33 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      depositAmount: {
-        type: Sequelize.DOUBLE,
-        allowNull: false,
-      },
       fullName: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phoneNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      depositAmount: {
+        type: Sequelize.DOUBLE,
+        allowNull: true,
       },
       totalAmount: {
         type: Sequelize.DOUBLE,
-        allowNull: false,
+        allowNull: true,
+      },
+      paymentStatus: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      refundedAmount: {
+        type: Sequelize.DOUBLE,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

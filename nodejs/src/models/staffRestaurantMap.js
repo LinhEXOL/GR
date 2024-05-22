@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       //   onUpdate: "cascade",
       //   hooks: true,
       // });
-      StaffRestaurantMap.belongsTo(models.User, { foreignKey: "userId" });
+      StaffRestaurantMap.belongsTo(models.User, { foreignKey: "id" });
       StaffRestaurantMap.belongsTo(models.Restaurant, {
         foreignKey: "restaurantId",
       });

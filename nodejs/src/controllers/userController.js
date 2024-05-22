@@ -37,9 +37,8 @@ let handleRegister = async (req, res) => {
       !req.body.email ||
       !req.body.password ||
       !req.body.phoneNumber ||
-      !req.body.firstName ||
-      !req.body.lastName ||
-      !req.body.address
+      !req.body.address ||
+      !req.body.fullName
     ) {
       return res.status(400).json({
         status: 400,
@@ -84,10 +83,8 @@ let handleGetAllUsers = async (req, res) => {
 let getAllCodeUser = async (req, res) => {
   try {
     let data = await userService.getAllCodeUserService(req.query.type);
-    console.log(data);
     return res.status(200).json(data);
   } catch (e) {
-    console.log("Get all code error:", e);
     return res.status(400).json({
       status: 400,
       message: "Error from server",
@@ -101,9 +98,8 @@ let handleCreateNewUser = async (req, res) => {
       !req.body.email ||
       !req.body.password ||
       !req.body.phoneNumber ||
-      !req.body.firstName ||
-      !req.body.lastName ||
-      !req.body.address
+      !req.body.address ||
+      !req.body.fullName
     ) {
       return res.status(400).json({
         status: 400,
@@ -127,7 +123,6 @@ let handleCreateNewUser = async (req, res) => {
 
     return res.status(data.status).json(data);
   } catch (e) {
-    console.log("error", e);
     return res.status(500).json({
       status: 500,
       message: "Error from server",
@@ -163,9 +158,8 @@ let handleCreateNewStaff = async (req, res) => {
       !req.body.email ||
       !req.body.password ||
       !req.body.phoneNumber ||
-      !req.body.firstName ||
-      !req.body.lastName ||
-      !req.body.address
+      !req.body.address ||
+      !req.body.fullName
     ) {
       return res.status(400).json({
         status: 400,
@@ -182,11 +176,6 @@ let handleCreateNewStaff = async (req, res) => {
       });
     }
     let data = await userService.createNewStaff(req.body);
-    //check email exist
-    //password nhap vao ko dung
-    //return userInfor
-    // access_token :JWT json web token
-
     return res.status(data.status).json(data);
   } catch (e) {
     console.log("error", e);

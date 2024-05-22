@@ -103,7 +103,7 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         //user already exist
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "password", "fullName", "id"],
+          attributes: ["email", "roleId", "password", "fullName", "id", "phoneNumber"],
           where: { email: email },
           raw: true,
         });
@@ -117,6 +117,13 @@ let handleUserLogin = (email, password) => {
           // let check = bcrypt.compareSync(password, user.password);
 
           if (check) {
+            if(user.roleId === 2) {
+              let staffRestaurantMap = await db.StaffRestaurantMap.findOne({
+                where: { staffId: user.id },
+                raw: true,
+              });
+              user.restaurantId = staffRestaurantMap.restaurantId;
+            }
             resolve({ status: 200, message: "OK", data: user });
 
             delete user.password;

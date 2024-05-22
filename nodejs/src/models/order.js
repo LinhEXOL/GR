@@ -85,11 +85,41 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "pending",
       },
-      depositAmount: DataTypes.DOUBLE,
       restaurantId: DataTypes.INTEGER,
-      fullName: DataTypes.STRING,
-      phoneNumber: DataTypes.STRING,
-      totalAmount: DataTypes.DOUBLE,
+      fullName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      totalAmount: {
+        type: DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: 0, // mặc định ban đầu là 0
+      },
+      depositAmount: {
+        type: DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: 0, // mặc định ban đầu là 0
+      },
+      // Thêm trường thông tin của giao dịch thanh toán
+      paymentStatus: {
+        type: DataTypes.ENUM("pending", "deposited", "paid", "refunded"),
+        allowNull: true,
+        defaultValue: "pending",
+      },
+      refundedAmount: {
+        type: DataTypes.DOUBLE,
+        allowNull: true,
+        defaultValue: 0, // Số tiền đã hoàn trả, mặc định ban đầu là 0
+      },
+
     },
     {
       sequelize,

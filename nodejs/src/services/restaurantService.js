@@ -50,7 +50,6 @@ let getAllTypeNames = () => {
         errCode: 0,
         data: typeNames,
       });
-      console.log("Type of typenames:", typeof typeNames);
     } catch (e) {
       reject(e);
     }

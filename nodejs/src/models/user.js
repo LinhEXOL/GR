@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       //   foreignKey: "id",
       //   targetKey: "staffId",
       // });
-      User.hasMany(models.StaffRestaurantMap, { foreignKey: "userId" });
+      User.hasMany(models.StaffRestaurantMap, { foreignKey: "id" });
     }
   }
   User.init(

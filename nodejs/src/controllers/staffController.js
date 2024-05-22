@@ -1,5 +1,5 @@
 import staffService from "../services/staffService";
-
+import orderService from "../services/orderService";
 let handleGetListCustomerForStaff = async (req, res) => {
   try {
     let info = await staffService.getListCustomerForStaff(
@@ -29,7 +29,22 @@ let handleGetRestaurantByStaffId = async (req, res) => {
   }
 };
 
+const createOrder = async (req, res) => {
+  try {
+    let data = await orderService.createOrderByStaff(req.body);
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+      data: "",
+    });
+  }
+};
+
 module.exports = {
   handleGetListCustomerForStaff,
   handleGetRestaurantByStaffId,
+  createOrder
 };

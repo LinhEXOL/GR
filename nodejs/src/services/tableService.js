@@ -17,11 +17,11 @@ let getAllTables = () => {
     }
   });
 };
-let checkExistTable = (name) => {
+let checkExistTable = (name, restaurantId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let res = await db.Table.findOne({
-        where: { name: name },
+        where: { name: name, restaurantId },
       });
       if (res) {
         resolve(true);
@@ -37,7 +37,7 @@ let checkExistTable = (name) => {
 let createNewTable = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let isExistTable = await checkExistTable(data.name);
+      let isExistTable = await checkExistTable(data.name, data.restaurantId);
       if (isExistTable) {
         return resolve({
           status: 400,
@@ -88,10 +88,10 @@ let deleteTable = (tableId) => {
     }
   });
 };
-let getAllTablesByRestaurantId = (restaurantId) => {
+let getAllTablesByRestaurantId = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!restaurantId) {
+      if (!data.restaurantId) {
         resolve({
           status: 400,
           message: "Missing required parameter",
@@ -99,7 +99,7 @@ let getAllTablesByRestaurantId = (restaurantId) => {
         });
       }
       let tables = await db.Table.findAll({
-        where: { restaurantId: restaurantId },
+        where: { restaurantId: data.restaurantId },
         raw: true,
       });
       resolve({
@@ -128,8 +128,11 @@ let updateTableData = (data) => {
         raw: false,
       });
       if (table) {
-        table.description = data.description;
-        table.position = data.position;
+        for (let key in data) {
+          if (key !== "id") {
+            table[key] = data[key];
+          }
+        }
         await table.save();
         resolve({
           status: 200,
@@ -302,6 +305,44 @@ async function searchAvailableTables(data) {
   });
 }
 
+const getAvailableTables = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.restaurantId || !data.people) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+
+      let tables = await db.Table.findAll({
+        where: {
+          restaurantId: data.restaurantId,
+          orderId: 0,
+        },
+        raw: true,
+      });
+
+      let availableTables = [];
+
+      for (let table of tables) {
+        if (table.capacity == data.people) {
+          availableTables.push(table);
+        }
+      }
+
+      resolve({
+        status: 200,
+        message: "OK",
+        data: availableTables,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllTables,
   createNewTable,
@@ -312,4 +353,5 @@ module.exports = {
   searchTable,
   searchAvailableTables,
   getAllTablesByRestaurantId,
+  getAvailableTables,
 };

@@ -63,9 +63,9 @@ const chooseTableHandler = async (req, res) => {
 const handleGetAllOrdersByRestaurantId = async (req, res) => {
   try {
     let data = await orderService.getAllOrdersByRestaurantId(
-      req.query.restaurantId
+      req.body
     );
-    return res.status(data.status).json(data);
+    return res.json(data);
   } catch (e) {
     console.log(e);
     return res.status(500).json({
@@ -102,9 +102,9 @@ let handleGetDetailOrderByOrderId = async (req, res) => {
   }
 };
 
-const handleGetAllOrderByCustomerId = async (req, res) => {
+const handleGetAllOrderByCustomerPhoneNumber = async (req, res) => {
   try {
-    let data = await orderService.getAllOrdersByCustomerId(req.body);
+    let data = await orderService.getAllOrdersByCustomerPhoneNumber(req.body);
 
     return res.status(data.status).json(data);
   } catch (e) {
@@ -115,6 +115,32 @@ const handleGetAllOrderByCustomerId = async (req, res) => {
     });
   }
 };
+const handleUpdateOrder = async (req, res) => {
+  try {
+    let data = await orderService.updateOrder(req.body);
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+    });
+  }
+};
+
+const handleUpdateOrderItem = async (req, res) => {
+  try {
+    let data = await orderService.updateOrderItem(req.body);
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+    });
+  }
+
+}
 module.exports = {
   handleGetAllOrders,
   registerHandler,
@@ -123,6 +149,8 @@ module.exports = {
   chooseTableHandler,
   handleGetAllOrdersByRestaurantId,
   handleUpdateStatusOrder,
-  handleGetAllOrderByCustomerId,
+  handleGetAllOrderByCustomerPhoneNumber,
   handleGetDetailOrderByOrderId,
+  handleUpdateOrder,
+  handleUpdateOrderItem,
 };
