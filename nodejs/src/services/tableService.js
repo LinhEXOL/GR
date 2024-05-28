@@ -323,6 +323,17 @@ const getAvailableTables = (data) => {
         },
         raw: true,
       });
+      if(data.orderId) {
+        let tmp = await db.Table.findAll({
+          where: {
+            restaurantId: data.restaurantId,
+            orderId: data.orderId,
+          },
+          raw: true,
+        });
+        tables = tables.concat(tmp);
+        tables.sort((a, b) => a.id - b.id);
+      }
 
       let availableTables = [];
 

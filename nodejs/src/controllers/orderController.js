@@ -62,9 +62,7 @@ const chooseTableHandler = async (req, res) => {
 };
 const handleGetAllOrdersByRestaurantId = async (req, res) => {
   try {
-    let data = await orderService.getAllOrdersByRestaurantId(
-      req.body
-    );
+    let data = await orderService.getAllOrdersByRestaurantId(req.body);
     return res.json(data);
   } catch (e) {
     console.log(e);
@@ -115,9 +113,11 @@ const handleGetAllOrderByCustomerPhoneNumber = async (req, res) => {
     });
   }
 };
-const handleUpdateOrder = async (req, res) => {
+const handleUpdateOrder = async (req, res, io) => {
   try {
-    let data = await orderService.updateOrder(req.body);
+    let data = await orderService.newUpdateOrder(req.body);
+    if(data.status === 200) io.emit('update-order', 'success');
+    else io.emit('update-order', 'fail');
     return res.status(data.status).json(data);
   } catch (e) {
     console.log(e);
@@ -139,8 +139,8 @@ const handleUpdateOrderItem = async (req, res) => {
       message: "Error from server...",
     });
   }
+};
 
-}
 module.exports = {
   handleGetAllOrders,
   registerHandler,

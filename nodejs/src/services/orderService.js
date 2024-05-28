@@ -424,7 +424,7 @@ let getDetailOrderByOrderId = (data) => {
       // }
       let tables = await db.Table.findAll({
         where: { orderId: order.id },
-        attributes: ["name"],
+        attributes: ["id","name", "capacity", "position", "description"],
       });
 
       let orderItems = await db.OrderItem.findAll({
@@ -557,6 +557,83 @@ const updateOrderItem = (data) => {
   });
 };
 
+const newUpdateOrder = (data) => {
+  return new Promise(async (resolve, reject) => {
+    console.log("🚀 ~ newUpdateOrder ~ data:", data)
+    try {
+      if (!data.orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+        return;
+      }
+      
+      let order = await db.Order.findOne({
+        where: { id: data.orderId },
+        raw: false,
+      });
+
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+        return;
+      }
+      if(data.newOrderItems) {
+        let totalAmount = 0;
+        await db.OrderItem.destroy({
+          where: {
+            orderId: data.orderId,
+          },
+        });
+        for (let item of data.newOrderItems) {
+          totalAmount += item.total;
+          await db.OrderItem.create({
+            orderId: data.orderId,
+            dishId: item.dishId,
+            quantity: item.quantity,
+            price: item.total,
+          });
+        }
+        order.totalAmount = totalAmount;
+        await order.save();
+      }
+      if(data.newTables) {
+        await db.Table.update(
+          { orderId: 0 },
+          {
+            where: {
+              orderId: order.id,
+            },
+          }
+        );
+        for (let table of data.newTables) {
+          await db.Table.update(
+            { orderId: order.id },
+            {
+              where: {
+                id: table.id,
+              },
+            }
+          );
+        }
+      }
+      resolve({
+        status: 200,
+        message: "Update order status success!",
+        data: order,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+
+}
+
 module.exports = {
   getAllOrders,
   registerOrder,
@@ -569,5 +646,6 @@ module.exports = {
   getDetailOrderByOrderId,
   updateOrder,
   updateOrderItem,
+  newUpdateOrder,
   createOrderByStaff,
 };

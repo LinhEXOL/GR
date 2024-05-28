@@ -79,7 +79,9 @@ let initWebRoutes = (app, io) => {
     restaurantController.handleGetAllRestaurants
   );
 
-  router.post("/api/book-table", (req, res) => customerController.handleBookTable(req, res, io));
+  router.post("/api/book-table", (req, res) =>
+    customerController.handleBookTable(req, res, io)
+  );
   router.post(
     "/api/create-new-orderItem",
     customerController.handleCreateNewOrderItem
@@ -145,13 +147,23 @@ let initWebRoutes = (app, io) => {
     orderController.handleGetDetailOrderByOrderId
   );
 
-  router.post("/api/update-order", orderController.handleUpdateOrder);
+  router.post("/api/update-order", (req, res) =>
+    orderController.handleUpdateOrder(req, res, io)
+  );
   router.post("/api/update-order-item", orderController.handleUpdateOrderItem);
-  router.post("/api/get-available-tables", tableController.handleGetAvailableTables);
-  router.post("/api/get-all-tables-by-restaurantId", tableController.handleGetAllTableByRestaurantId);
+  router.post(
+    "/api/get-available-tables",
+    tableController.handleGetAvailableTables
+  );
+  router.post(
+    "/api/get-all-tables-by-restaurantId",
+    tableController.handleGetAllTableByRestaurantId
+  );
   router.post("/api/create-order-by-staff", staffController.createOrder);
   router.post("/api/create-payment", paymentController.handlePaymentWithVNP);
-  router.get("/api/vnpay_return", (req, res) =>  paymentController.handlePaymentResultWithVNP(req, res, io));
+  router.get("/api/vnpay_return", (req, res) =>
+    paymentController.handlePaymentResultWithVNP(req, res, io)
+  );
   return app.use("/", router);
 };
 
