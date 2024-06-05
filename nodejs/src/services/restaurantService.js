@@ -91,7 +91,7 @@ let createNewRestaurant = (data) => {
         address: data.address,
         longitude: data.longitude,
         latitude: data.latitude,
-        isOpen: data.isOpen,
+        isOpen: 0,
         isDelete: "0",
       });
       resolve({

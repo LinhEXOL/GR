@@ -19,7 +19,7 @@ let createNewCategory = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let res = await db.Category.findOne({
-        whare: { name: data.name },
+        where: { name: data.name },
       });
       if (res) {
         return resolve({

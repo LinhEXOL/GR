@@ -112,7 +112,7 @@ let initWebRoutes = (app, io) => {
   router.delete("/api/delete-combo", comboController.handleDeleteCombo);
   router.put("/api/edit-combo", comboController.handleEditCombo);
 
-  router.get(
+  router.post(
     "/api/get-all-categories",
     categoryController.handleGetAllCategories
   );
@@ -120,8 +120,8 @@ let initWebRoutes = (app, io) => {
     "/api/create-new-category",
     categoryController.handleCreateNewCategory
   );
-  router.put("/api/edit-category", categoryController.handleEditCategory);
-  router.delete(
+  router.post("/api/edit-category", categoryController.handleEditCategory);
+  router.post(
     "/api/delete-category",
     categoryController.handleDeleteCategory
   );

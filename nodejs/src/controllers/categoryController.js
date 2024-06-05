@@ -1,7 +1,7 @@
 import categoryService from "../services/categoryService";
 let handleGetAllCategories = async (req, res) => {
   let data = await categoryService.getAllCategories();
-  return res.status(200).json({
+  return res.json({
     status: 200,
     message: "OK",
     data: data.data,
@@ -10,7 +10,7 @@ let handleGetAllCategories = async (req, res) => {
 
 let handleCreateNewCategory = async (req, res) => {
   let data = await categoryService.createNewCategory(req.body);
-  return res.status(data.status).json(data);
+  return res.json(data);
 };
 
 let handleDeleteCategory = async (req, res) => {

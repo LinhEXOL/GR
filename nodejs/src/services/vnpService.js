@@ -1,7 +1,9 @@
 const e = require("express");
 import db from "../models/index";
-
+const shortUUID = require("short-uuid");
 const moment = require("moment");
+import mailer from "./mailService";
+
 const tmnCode = "HSMY45J3";
 const secretKey = "P8RDKPM5JGHHJWKEDRER8WB2HZ0WHDAC";
 const returnUrl = "http://localhost:8080/api/vnpay_return";
@@ -9,7 +11,15 @@ let createPaymentWithVNP = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       process.env.TZ = "Asia/Ho_Chi_Minh";
-      
+
+      let invoice = await db.Invoice.create({
+        id: shortUUID.generate(),
+        orderId: req.body.orderId,
+        received: req.body.received,
+        type: req.body.type,
+        change: req.body.change,
+      });
+
       let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
       let date = new Date();
       let createDate = moment(date).format("YYYYMMDDHHmmss");
@@ -20,7 +30,7 @@ let createPaymentWithVNP = (req) => {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 
-      let orderId = req.body.orderId;
+      let orderId = invoice.id;
       let amount = req.body.amount;
       let bankCode = req.body.bankCode;
 
@@ -78,8 +88,7 @@ const getReturn = (req) => {
       delete vnp_Params["vnp_SecureHashType"];
 
       vnp_Params = sortObject(vnp_Params);
-      console.log("🚀 ~ returnnewPromise ~ vnp_Params:", vnp_Params)
-
+      console.log("🚀 ~ returnnewPromise ~ vnp_Params:", vnp_Params);
       let querystring = require("qs");
       let signData = querystring.stringify(vnp_Params, { encode: false });
       let crypto = require("crypto");
@@ -87,34 +96,75 @@ const getReturn = (req) => {
       let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
 
       if (secureHash === signed) {
-        let order = await db.Order.findOne({
+        let invoice = await db.Invoice.findOne({
           where: { id: vnp_Params["vnp_TxnRef"] },
+          raw: false,
         });
-        if (!order) {
+        if (!invoice) {
           resolve({
             status: 404,
             message: "Order is not exist",
             data: "",
           });
         }
-        if (order.depositAmount * 100 != vnp_Params["vnp_Amount"]) {
-          console.log("🚀 ~ returnnewPromise ~ order.amount * 100 :", order.amount * 100 )
+
+        console.log("🚀 ~ returnnewPromise ~ invoice:", invoice);
+        let order = await db.Order.findOne({
+          where: { id: invoice.orderId },
+          raw: false,
+        });
+        console.log("🚀 ~ returnnewPromise ~ order:", order);
+        if (
+          invoice.type === "deposit" &&
+          invoice.received !== vnp_Params["vnp_Amount"] / 100
+        ) {
           resolve({
             status: 400,
             message: "Amount is not match",
             data: "",
           });
         }
+
+        if (
+          invoice.type === "checkout" &&
+          order.totalAmount - order.depositAmount !==
+            vnp_Params["vnp_Amount"] / 100
+        ) {
+          resolve({
+            status: 400,
+            message: "Amount is not match",
+            data: "",
+          });
+        }
+
         if (vnp_Params["vnp_ResponseCode"] == "00") {
-          await db.Order.update(
-            { paymentStatus: "deposited" },
-            { where: { id: vnp_Params["vnp_TxnRef"] } }
-          );
+          if (invoice.type === "deposit") {
+            order.paymentStatus = "deposited";
+            order.resStatus = "confirmed";
+            await order.save();
+            console.log("update order status");
+          }
+          if (invoice.type === "checkout") {
+            order.paymentStatus = "paid";
+            order.resStatus = "done";
+            await order.save();
+          }
+          if (invoice.type === "refund") {
+            order.paymentStatus = "refunded";
+            order.resStatus = "cancel";
+            await order.save();
+          }
+          invoice.status = "success";
+          await mailer.notifyOrderPlaceSuccess(order);
+          console.log("update invoice status");
+          await invoice.save();
           resolve({
             status: 200,
             message: "success",
           });
         } else {
+          invoice.status = "failed";
+          await invoice.save();
           resolve({
             status: 400,
             message: "Payment failed",
