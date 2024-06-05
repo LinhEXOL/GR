@@ -6,7 +6,7 @@
   "vnp_ReturnUrl": "http://localhost:8888/order/vnpay_return",
   "development": {
     "username": "root",
-    "password": "123456",
+    "password": "23082002",
     "database": "restaurant",
     "host": "127.0.0.1",
     "dialect": "mysql",
