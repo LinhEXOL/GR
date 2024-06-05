@@ -9,6 +9,7 @@ import staffController from "../controllers/staffController";
 import tableController from "../controllers/tableController";
 import orderController from "../controllers/orderController";
 import paymentController from "../controllers/paymentController";
+import categoryController from "../controllers/categoryController";
 
 let router = express.Router();
 
@@ -103,6 +104,20 @@ let initWebRoutes = (app, io) => {
   router.get(
     "/api/get-all-dishRestaurant-names",
     dishController.handleGetAllDishRestaurantNames
+  );
+
+  router.get(
+    "/api/get-all-categories",
+    categoryController.handleGetAllCategories
+  );
+  router.post(
+    "/api/create-new-category",
+    categoryController.handleCreateNewCategory
+  );
+  router.put("/api/edit-category", categoryController.handleEditCategory);
+  router.delete(
+    "/api/delete-category",
+    categoryController.handleDeleteCategory
   );
 
   router.get(
