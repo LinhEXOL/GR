@@ -424,7 +424,7 @@ let getDetailOrderByOrderId = (data) => {
       // }
       let tables = await db.Table.findAll({
         where: { orderId: order.id },
-        attributes: ["id","name", "capacity", "position", "description"],
+        attributes: ["id", "name", "capacity", "position", "description"],
       });
 
       let orderItems = await db.OrderItem.findAll({
@@ -559,7 +559,7 @@ const updateOrderItem = (data) => {
 
 const newUpdateOrder = (data) => {
   return new Promise(async (resolve, reject) => {
-    console.log("🚀 ~ newUpdateOrder ~ data:", data)
+    console.log("🚀 ~ newUpdateOrder ~ data:", data);
     try {
       if (!data.orderId) {
         resolve({
@@ -569,7 +569,6 @@ const newUpdateOrder = (data) => {
         });
         return;
       }
-      
       let order = await db.Order.findOne({
         where: { id: data.orderId },
         raw: false,
@@ -583,7 +582,11 @@ const newUpdateOrder = (data) => {
         });
         return;
       }
-      if(data.newOrderItems) {
+      if (data.orderStatus) {
+        order.resStatus = data.orderStatus;
+        await order.save();
+      }
+      if (data.newOrderItems) {
         let totalAmount = 0;
         await db.OrderItem.destroy({
           where: {
@@ -602,7 +605,7 @@ const newUpdateOrder = (data) => {
         order.totalAmount = totalAmount;
         await order.save();
       }
-      if(data.newTables) {
+      if (data.newTables) {
         await db.Table.update(
           { orderId: 0 },
           {
@@ -631,8 +634,40 @@ const newUpdateOrder = (data) => {
       reject(e);
     }
   });
+};
 
-}
+
+const checkoutOrder = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !data.orderId ||
+        !data.receivedMoney ||
+        data.orderId === "" ||
+        data.receivedMoney === ""
+      )
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+        });
+      let order = await db.Order.findOne({
+        where: {id: data.orderId},
+        raw: false
+      })
+      if (!order) {
+        resolve({
+          status: 404,
+          message: "Order is not exist",
+          data: "",
+        });
+        return;
+      }
+      
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 module.exports = {
   getAllOrders,

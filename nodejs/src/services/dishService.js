@@ -87,7 +87,7 @@ let createNewDish = (data) => {
         price: data.price,
         categoryId: data.categoryId,
         description: data.description,
-        image: data.imageBase64,
+        image: data.image,
       });
       resolve({
         status: 201,
