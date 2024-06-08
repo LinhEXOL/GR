@@ -8,8 +8,8 @@ module.exports = {
           model: "Combos",
           key: "id",
         },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       dishId: {
         type: Sequelize.INTEGER,
@@ -17,8 +17,8 @@ module.exports = {
           model: "Dishes",
           key: "id",
         },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
+        // onDelete: "CASCADE",
+        // onUpdate: "CASCADE",
       },
       createdAt: {
         allowNull: false,

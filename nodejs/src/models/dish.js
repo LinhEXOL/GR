@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
       },
       categoryId: {
         type: DataTypes.INTEGER,
