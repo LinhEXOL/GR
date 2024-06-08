@@ -21,7 +21,7 @@ import restaurantService from "../services/restaurantService";
 let handleGetAllRestaurants = async (req, res) => {
   try {
     let data = await restaurantService.getAllRestaurants();
-    return res.status(200).json({
+    return res.json({
       status: 200,
       message: "OK",
       data: data.data,

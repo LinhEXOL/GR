@@ -24,7 +24,15 @@ let getAllRestaurants = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let restaurants = await db.Restaurant.findAll({
-        attributes: {},
+        attributes: [
+          "id",
+          "name",
+          "address",
+          "provinceId",
+          "latitude",
+          "longitude",
+          "isOpen",
+        ],
       });
       resolve({
         status: 200,
