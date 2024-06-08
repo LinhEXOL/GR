@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       description: {
-        type: Sequelize.STRING("long"),
+        type: Sequelize.TEXT("long"),
       },
       createdAt: {
         allowNull: false,
