@@ -24,11 +24,13 @@ let getAllRestaurants = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let restaurants = await db.Restaurant.findAll({
+        where: { isDelete: "0"},
         attributes: [
           "id",
           "name",
           "address",
           "provinceId",
+          "image",
           "latitude",
           "longitude",
           "isOpen",
@@ -130,7 +132,7 @@ let deleteRestaurant = (restaurantId) => {
         restaurant.isDelete = "1";
         restaurant.isOpen = "0";
         await restaurant.save();
-        resolve({
+        return resolve({
           status: 200,
           message: "Delete the table succeeds! (Restaurant still exists in db)",
           data: restaurant,
@@ -143,10 +145,11 @@ let deleteRestaurant = (restaurantId) => {
 };
 
 let updateRestaurantData = (data) => {
+
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter",
           data: "",
@@ -157,24 +160,19 @@ let updateRestaurantData = (data) => {
         raw: false,
       });
       if (restaurant) {
-        restaurant.name = data.name;
-        restaurant.provinceId = data.provinceId;
-        restaurant.latitude = data.latitude;
-        restaurant.longitude = data.longitude;
-        restaurant.address = data.address;
-        restaurant.isOpen = data.isOpen;
-        restaurant.isDelete = data.isDelete;
-        if (data.image) {
-          restaurant.image = data.image;
+        for (let key in data) {
+          if (key !== "id" && data[key] !== null) {
+            restaurant[key] = data[key];
+          }
         }
         await restaurant.save();
-        resolve({
+        return resolve({
           status: 200,
           message: "Update the restaurant succeeds!",
           data: restaurant,
         });
       } else {
-        resolve({
+        return resolve({
           status: 404,
           message: "Restaurant is not exist",
           data: "",

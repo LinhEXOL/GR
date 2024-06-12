@@ -11,6 +11,7 @@ import orderController from "../controllers/orderController";
 import paymentController from "../controllers/paymentController";
 import categoryController from "../controllers/categoryController";
 import comboController from "../controllers/comboController";
+import adminController from "../controllers/adminController";
 
 let router = express.Router();
 
@@ -29,9 +30,15 @@ let initWebRoutes = (app, io) => {
   router.post("/api/login", userController.handleLogin);
   router.post("/api/register", userController.handleRegister);
   router.post("/api/create-new-user", userController.handleCreateNewUser);
-  router.post("/api/create-new-staff", userController.handleCreateNewStaff);
-  router.put("/api/edit-user", userController.handleEditUser);
-  router.delete("/api/delete-user", userController.handleDeleteUser);
+  router.post("/api/create-new-staff", (req, res) =>
+    userController.handleCreateNewStaff(req, res, io)
+  );
+  router.post("/api/edit-user", (req, res) =>
+    userController.handleEditUser(req, res, io)
+  );
+  router.post("/api/delete-user", (req, res) =>
+    userController.handleDeleteUser(req, res, io)
+  );
   router.get(
     "/api/get-detail-user-by-id",
     userController.handleGetDetailUserById
@@ -42,21 +49,26 @@ let initWebRoutes = (app, io) => {
     tableController.handleGetDetailTableById
   );
 
-  router.post("/api/create-new-table", tableController.handleCreateNewTable);
+  router.post("/api/create-new-table", (req, res) =>
+    tableController.handleCreateNewTable(req, res, io)
+  );
   router.post("/api/edit-table", tableController.handleEditTable);
-  router.delete("/api/delete-table", tableController.handleDeleteTable);
+  router.post("/api/delete-table", (req, res) =>
+    tableController.handleDeleteTable(req, res, io)
+  );
 
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
 
-  router.get("/api/get-all-users", userController.handleGetAllUsers);
-  router.post(
-    "/api/create-new-restaurant",
-    restaurantController.handleCreateNewRestaurant
+  router.get("/api/get-all-users", userController.handleGetAllUsers);  
+  router.post("/api/create-new-restaurant", (req, res) =>
+    restaurantController.handleCreateNewRestaurant(req, res, io)
   );
-  router.put("/api/edit-restaurant", restaurantController.handleEditRestaurant);
-  router.delete(
-    "/api/delete-restaurant",
-    restaurantController.handleDeleteRestaurant
+  router.post("/api/edit-restaurant", (req, res) =>
+    restaurantController.handleEditRestaurant(req, res, io)
+  );
+  router.post(
+    "/api/delete-restaurant", (req, res) =>
+    restaurantController.handleDeleteRestaurant(req, res, io)
   );
 
   router.get(
@@ -94,9 +106,15 @@ let initWebRoutes = (app, io) => {
   );
 
   router.get("/api/get-all-dishes", dishController.handleGetAllDishes);
-  router.post("/api/create-new-dish", dishController.handleCreateNewDish);
-  router.put("/api/edit-dish", dishController.handleEditDish);
-  router.delete("/api/delete-dish", dishController.handleDeleteDish);
+  router.post("/api/create-new-dish", (req, res) =>
+    dishController.handleCreateNewDish(req, res, io)
+  );
+  router.post("/api/edit-dish", (req, res) =>
+    dishController.handleEditDish(req, res, io)
+  );
+  router.post("/api/delete-dish", (req, res) =>
+    dishController.handleDeleteDish(req, res, io)
+  );
   router.get(
     "/api/get-detail-dish-by-id",
     dishController.handleGetDetailDishById
@@ -121,10 +139,7 @@ let initWebRoutes = (app, io) => {
     categoryController.handleCreateNewCategory
   );
   router.post("/api/edit-category", categoryController.handleEditCategory);
-  router.post(
-    "/api/delete-category",
-    categoryController.handleDeleteCategory
-  );
+  router.post("/api/delete-category", categoryController.handleDeleteCategory);
 
   router.get(
     "/api/get-list-customer-for-staff",
@@ -134,6 +149,10 @@ let initWebRoutes = (app, io) => {
   router.get(
     "/api/get-restaurant-by-staffId",
     staffController.handleGetRestaurantByStaffId
+  );
+
+  router.post("/api/update-table", (req, res) =>
+    staffController.handleUpdateTable(req, res, io)
   );
 
   router.get("/api/get-all-orders", orderController.handleGetAllOrders);
@@ -185,6 +204,8 @@ let initWebRoutes = (app, io) => {
   router.get("/api/vnpay_return", (req, res) =>
     paymentController.handlePaymentResultWithVNP(req, res, io)
   );
+
+  router.post("/api/get-all-staff", adminController.handleGetAllStaff);
   return app.use("/", router);
 };
 

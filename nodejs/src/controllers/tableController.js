@@ -12,12 +12,15 @@ let handleGetAllTables = async (req, res) => {
   });
 };
 
-let handleCreateNewTable = async (req, res) => {
+let handleCreateNewTable = async (req, res, io) => {
   let data = await tableService.createNewTable(req.body);
+  if(data.status === 201) {
+    io.emit("new-table", "success");
+  }
   return res.json(data);
 };
 
-let handleDeleteTable = async (req, res) => {
+let handleDeleteTable = async (req, res, io) => {
   if (!req.body.id) {
     return res.status(400).json({
       status: 400,
@@ -25,8 +28,11 @@ let handleDeleteTable = async (req, res) => {
       data: "",
     });
   }
-  let data = await tableService.deleteTable(req.body.id);
-  return res.status(data.status).json(data);
+  let data = await tableService.deleteTable(req.body);
+  if(data.status === 200) {
+    io.emit("delete-table", "success");
+  }
+  return res.json(data);
 };
 
 let handleEditTable = async (req, res) => {

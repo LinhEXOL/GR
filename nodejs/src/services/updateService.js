@@ -1,5 +1,5 @@
-import { raw } from "body-parser";
 import db from "../models/index";
+import mailer from "./mailService";
 
 const updateOrderStatus = async () => {
   const Op = db.Sequelize.Op;
@@ -21,6 +21,7 @@ const updateOrderStatus = async () => {
   for (let order of orders) {
     order.resStatus = "cancel";
     await order.save();
+    if (order.email) await mailer.notifyOrderCanceled(order);
   }
 
   console.log("Update order status successfully");

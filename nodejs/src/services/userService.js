@@ -103,7 +103,14 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         //user already exist
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "password", "fullName", "id", "phoneNumber"],
+          attributes: [
+            "email",
+            "roleId",
+            "password",
+            "fullName",
+            "id",
+            "phoneNumber",
+          ],
           where: { email: email },
           raw: true,
         });
@@ -117,7 +124,7 @@ let handleUserLogin = (email, password) => {
           // let check = bcrypt.compareSync(password, user.password);
 
           if (check) {
-            if(user.roleId === 2) {
+            if (user.roleId === 2) {
               let staffRestaurantMap = await db.StaffRestaurantMap.findOne({
                 where: { staffId: user.id },
                 raw: true,
@@ -271,22 +278,45 @@ let getUserInfoById = (userId) => {
 let updateUserData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (!data.id)
+        return resolve({
+          status: 400,
+          message: "Missing required parameter",
+        });
       let user = await db.User.findOne({
         where: { id: data.id },
         raw: false,
       });
       if (user) {
-        user.fullName = data.fullName;
-        user.address = data.address;
+        for (let key in data) {
+          if (key !== "id") {
+            user[key] = data[key];
+            if(key === "restaurantId") {
+              let staffRestaurantMap = await db.StaffRestaurantMap.findOne({
+                where: { staffId: data.id },
+                raw: false,
+              });
+              if(staffRestaurantMap) {
+                staffRestaurantMap.restaurantId = data.restaurantId;
+                await staffRestaurantMap.save();
+              } else {
+                await db.StaffRestaurantMap.create({
+                  staffId: data.id,
+                  restaurantId: data.restaurantId,
+                });
+              }
+            }
+          }
+        }
+        user.updateAt = new Date();
         await user.save();
-
-        resolve({
+        return resolve({
           status: 200,
           message: "Update the user successfully!",
           data: user,
         });
       } else {
-        resolve({
+        return resolve({
           status: 404,
           message: "User not found!",
           data: "",
@@ -313,8 +343,9 @@ let deleteUser = (userId) => {
       }
       if (user) {
         await db.User.destroy({ where: { id: userId } });
+        await db.StaffRestaurantMap.destroy({ where: { staffId: userId } });
       }
-      resolve({
+      return resolve({
         status: 200,
         message: "user is deleted",
         data: "",

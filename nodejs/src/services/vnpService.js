@@ -4,14 +4,25 @@ const shortUUID = require("short-uuid");
 const moment = require("moment");
 import mailer from "./mailService";
 
-const tmnCode = "HSMY45J3";
-const secretKey = "P8RDKPM5JGHHJWKEDRER8WB2HZ0WHDAC";
-const returnUrl = "http://localhost:8080/api/vnpay_return";
+const tmnCode = process.env.VNP_TMN_CODE;
+
+const secretKey = process.env.VNP_HASH_SECRET;
+
+const returnUrl = process.env.VNP_RETURN_URL;
+
 let createPaymentWithVNP = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       process.env.TZ = "Asia/Ho_Chi_Minh";
-
+      if (req.body.type === "deposit") {
+        let res = await createOrder(req.body.order);
+        if (res.status !== 200) {
+          return resolve(res);
+        }
+        req.body.orderId = res.order.id;
+        req.body.change = 0;
+        req.body.amount = res.order.depositAmount;
+      }
       let invoice = await db.Invoice.create({
         id: shortUUID.generate(),
         orderId: req.body.orderId,
@@ -161,8 +172,17 @@ const getReturn = (req) => {
           resolve({
             status: 200,
             message: "success",
+            orderId: order.id,
           });
         } else {
+          if (invoice.type === "deposit") {
+            await db.Order.destroy({
+              where: { id: invoice.orderId },
+            });
+            await db.OrderItem.destroyAll({
+              where: { orderId: invoice.orderId },
+            });
+          }
           invoice.status = "failed";
           await invoice.save();
           resolve({
@@ -212,6 +232,81 @@ const vnpayIPN = (req) => {
   });
 };
 
+async function createOrder(data) {
+  try {
+    if (
+      !data.order.resTime ||
+      !data.order.resDate ||
+      !data.order.people ||
+      !data.order.restaurantId ||
+      !data.order.fullName ||
+      !data.order.phoneNumber ||
+      !data.order.email ||
+      data.order.resTime === "" ||
+      data.order.resDate === "" ||
+      data.order.people === "" ||
+      data.order.restaurantId === "" ||
+      data.order.fullName === "" ||
+      data.order.phoneNumber === "" ||
+      data.order.email === ""
+    ) {
+      return {
+        status: 400,
+        message: "Missing required parameter!",
+      };
+    }
+    let order;
+    order = await db.Order.create({
+      resStatus: "pending",
+      fullName: data.order.fullName,
+      phoneNumber: data.order.phoneNumber,
+      resDate: data.order.resDate,
+      resTime: data.order.resTime,
+      people: data.order.people,
+      depositAmount: 0,
+      restaurantId: data.order.restaurantId,
+      email: data.order.email,
+    });
+
+    let totalDepositAmount = 0;
+
+    for (let item of data.orderItems) {
+      let dish = await db.Dish.findOne({
+        where: { id: item.dishId },
+        raw: false,
+      });
+      let price = dish.price * item.quantity;
+      let depositAmount = price * 0.3;
+      totalDepositAmount += depositAmount;
+      await db.OrderItem.create({
+        orderId: order.id,
+        dishId: item.dishId,
+        quantity: item.quantity,
+        price: price,
+        status: "waiting",
+        note: item.note,
+      });
+    }
+    order.depositAmount = totalDepositAmount;
+    order.totalAmount = totalDepositAmount / 0.3;
+    await order.save();
+    return {
+      status: 200,
+      message: "success",
+      order: order,
+    };
+  } catch (error) {
+    if (order) {
+      await db.Order.destroy({
+        where: { id: order.id },
+      });
+    }
+    return {
+      status: 500,
+      message: "Error from server...",
+    };
+  }
+}
 function sortObject(obj) {
   let sorted = {};
   let str = [];

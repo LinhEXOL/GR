@@ -1,4 +1,4 @@
-import e from "cors";
+
 import db from "../models/index";
 const { Op } = require("sequelize");
 const moment = require("moment");
@@ -53,7 +53,7 @@ let createNewTable = (data) => {
         orderId: 0,
         restaurantId: data.restaurantId,
       });
-      resolve({
+      return resolve({
         status: 201,
         message: "OK",
         data: table,
@@ -64,11 +64,11 @@ let createNewTable = (data) => {
   });
 };
 
-let deleteTable = (tableId) => {
+let deleteTable = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const table = await db.Table.findOne({
-        where: { id: tableId },
+        where: { id: data.id },
       });
       if (!table) {
         return resolve({
@@ -77,8 +77,15 @@ let deleteTable = (tableId) => {
           data: "",
         });
       }
-      await db.Table.destroy({ where: { id: tableId } });
-      resolve({
+      if(table.orderId !== 0) {
+        return resolve({
+          status: 400,
+          message: "Table is in used, can not delete!",
+          data: "",
+        });
+      }
+      await db.Table.destroy({ where: { id: data.id} });
+      return resolve({
         status: 200,
         message: "table is deleted",
         data: "",
@@ -117,7 +124,7 @@ let updateTableData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter",
           data: "",
@@ -134,13 +141,13 @@ let updateTableData = (data) => {
           }
         }
         await table.save();
-        resolve({
+        return resolve({
           status: 200,
           message: "Update the table succeeds!",
-          data: table,
+          table: table,
         });
       } else {
-        resolve({
+       return resolve({
           status: 404,
           message: "Table is not exist",
           data: "",
@@ -323,7 +330,7 @@ const getAvailableTables = (data) => {
         },
         raw: true,
       });
-      if(data.orderId) {
+      if (data.orderId) {
         let tmp = await db.Table.findAll({
           where: {
             restaurantId: data.restaurantId,

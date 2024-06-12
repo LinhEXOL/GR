@@ -1,8 +1,8 @@
 const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
-const { fn, col } = db.sequelize;
-import { raw } from "body-parser";
 import db from "../models/index";
+import mailer from "./mailService";
+
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
 };
@@ -262,11 +262,9 @@ const createOrderByStaff = (data) => {
         !data.resDate ||
         !data.people ||
         !data.restaurantId ||
-        !data.fullName ||
-        !data.phoneNumber ||
         !data.tables
       ) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter",
           data: "",
@@ -301,8 +299,9 @@ const createOrderByStaff = (data) => {
           note: item.note,
         });
       }
-      order.depositAmount = totalDepositAmount;
+      order.depositAmount = 0;
       order.totalAmount = totalDepositAmount / 0.3;
+      order.resStatus = "seated";
       await order.save();
       for (let table of data.tables) {
         await db.Table.update(
@@ -314,7 +313,7 @@ const createOrderByStaff = (data) => {
           }
         );
       }
-      resolve({
+      return resolve({
         status: 201,
         message: "Create order successfully",
         data: order,
@@ -583,8 +582,15 @@ const newUpdateOrder = (data) => {
         return;
       }
       if (data.orderStatus) {
+        let preStatus = order.resStatus;
         order.resStatus = data.orderStatus;
         await order.save();
+        if (preStatus === "pending" && data.orderStatus === "confirmed") {
+          await mailer.notifyOrderPlaceSuccess(order);
+        }
+        if(data.orderStatus === "canceled") {
+          await mailer.notifyOrderCanceled(order);
+        }
       }
       if (data.newOrderItems) {
         let totalAmount = 0;
@@ -636,7 +642,6 @@ const newUpdateOrder = (data) => {
   });
 };
 
-
 const checkoutOrder = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -651,9 +656,9 @@ const checkoutOrder = (data) => {
           message: "Missing required parameter",
         });
       let order = await db.Order.findOne({
-        where: {id: data.orderId},
-        raw: false
-      })
+        where: { id: data.orderId },
+        raw: false,
+      });
       if (!order) {
         resolve({
           status: 404,
@@ -662,7 +667,6 @@ const checkoutOrder = (data) => {
         });
         return;
       }
-      
     } catch (e) {
       reject(e);
     }

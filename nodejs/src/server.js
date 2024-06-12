@@ -40,7 +40,7 @@ initWebRoutes(app, io);
 
 connectDB();
 
-// 0 */5 * * *  5 phút 1 lần 
+// 0 */5 * * * *  5 phút 1 lần 
 
 cron.schedule(" 0 59 23 * * *", async() => {
   console.log("Running a task update order status ...");

@@ -3,15 +3,13 @@ import db from "../models/index";
 
 const handlePaymentWithVNP = async (req, res) => {
   try {
-    let order = await db.Order.findOne({
-      where: {
-        id: req.body.orderId,
-      },
-    });
-    if (req.body.type === "deposit") {
-      req.body.change = 0;
-      req.body.amount = order.depositAmount;
-    } else {
+    if (req.body.type !== "deposit") {
+      let order = await db.Order.findOne({
+        where: {
+          id: req.body.orderId,
+        },
+   
+      });
       req.body.change =
         req.body.received - order.totalAmount + order.depositAmount;
       req.body.amount = order.totalAmount - order.depositAmount;
@@ -33,7 +31,10 @@ const handlePaymentResultWithVNP = async (req, res, io) => {
   try {
     let data = await vnpService.getReturn(req);
     if (data.status === 200) {
-      io.emit("payment-res", "success");
+      io.emit("payment-res", {
+        message: "success",
+        orderId: data.orderId,
+      });
       return res.render("paymentSuccess");
     } else {
       io.emit("payment-res", "fail"); // Emit event
