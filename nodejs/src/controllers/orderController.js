@@ -113,6 +113,21 @@ const handleGetAllOrderByCustomerPhoneNumber = async (req, res) => {
     });
   }
 };
+
+const handleGetAllOrderByCustomerId = async (req, res) => {
+  try {
+    let data = await orderService.getAllOrdersByCustomerId(req.body);
+
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+    });
+  }
+};
+
 const handleUpdateOrder = async (req, res, io) => {
   try {
     let data = await orderService.newUpdateOrder(req.body);
@@ -153,4 +168,5 @@ module.exports = {
   handleGetDetailOrderByOrderId,
   handleUpdateOrder,
   handleUpdateOrderItem,
+  handleGetAllOrderByCustomerId,
 };

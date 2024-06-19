@@ -206,6 +206,7 @@ let initWebRoutes = (app, io) => {
 
   router.post("/api/get-all-staff", adminController.handleGetAllStaff);
   router.post("/api/change-password", userController.handleChangePassword);
+  router.post("/api/get-all-order-by-customerId", orderController.handleGetAllOrderByCustomerId);
   return app.use("/", router);
 };
 

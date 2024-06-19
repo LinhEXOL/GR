@@ -35,6 +35,7 @@ let bookTable = (data) => {
         depositAmount: 0,
         restaurantId: data.restaurantId,
         email: data.email,
+        cusId: data.id ?? null,
       });
 
       let totalDepositAmount = 0;

@@ -298,10 +298,10 @@ let updateUserData = (data) => {
               data: "",
             });
           }
-          await db.Order.update(
-            { email: data.email },
-            { where: { email: user.email } }
-          );
+          // await db.Order.update(
+          //   { email: data.email },
+          //   { where: { email: user.email } }
+          // );
         }
         if (data.phoneNumber) {
           let isExistPhoneNumber = await checkUserPhoneNumber(data.phoneNumber);
@@ -312,10 +312,10 @@ let updateUserData = (data) => {
               data: "",
             });
           }
-          await db.Order.update(
-            { phoneNumber: data.phoneNumber },
-            { where: { phoneNumber: user.phoneNumber } }
-          );
+          // await db.Order.update(
+          //   { phoneNumber: data.phoneNumber },
+          //   { where: { phoneNumber: user.phoneNumber } }
+          // );
         }
         for (let key in data) {
           if (key !== "id") {

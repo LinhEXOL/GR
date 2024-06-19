@@ -388,6 +388,31 @@ const getAllOrdersByCustomerPhoneNumber = (data) => {
   });
 };
 
+const getAllOrdersByCustomerId = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      }
+      let orders = await db.Order.findAll({
+        where: { cusId: data.id},
+      });
+
+      resolve({
+        status: 200,
+        message: "OK",
+        data: orders,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let getDetailOrderByOrderId = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -687,4 +712,5 @@ module.exports = {
   updateOrderItem,
   newUpdateOrder,
   createOrderByStaff,
+  getAllOrdersByCustomerId,
 };
