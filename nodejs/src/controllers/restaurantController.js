@@ -112,7 +112,7 @@ let handleEditRestaurant = async (req, res, io) => {
 let handleGetDetailRestaurantById = async (req, res) => {
   try {
     let data = await restaurantService.getDetailRestaurantById(req.query.id);
-    return res.status(data.status).json(data);
+    return res.json(data);
   } catch (e) {
     console.log(e);
     return res.status(500).json({

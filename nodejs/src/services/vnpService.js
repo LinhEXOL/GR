@@ -266,6 +266,7 @@ async function createOrder(data) {
       depositAmount: 0,
       restaurantId: data.order.restaurantId,
       email: data.order.email,
+      cusId: data.order.cusId ?? null,
     });
 
     let totalDepositAmount = 0;

@@ -24,7 +24,7 @@ let getAllRestaurants = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let restaurants = await db.Restaurant.findAll({
-        where: { isDelete: "0"},
+        where: { isDelete: "0" },
         attributes: [
           "id",
           "name",
@@ -145,7 +145,6 @@ let deleteRestaurant = (restaurantId) => {
 };
 
 let updateRestaurantData = (data) => {
-
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
@@ -228,7 +227,7 @@ let getDetailRestaurantById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!inputId) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter!",
           data: "",
@@ -237,17 +236,14 @@ let getDetailRestaurantById = (inputId) => {
         let data = await db.Restaurant.findOne({
           where: { id: inputId },
         });
-        if (data && data.image) {
-          data.image = Buffer.from(data.image, "base64").toString("binary");
-        }
         if (data) {
-          resolve({
+          return resolve({
             status: 200,
             message: "OK",
             data: data,
           });
         } else {
-          resolve({
+          return resolve({
             status: 404,
             message: "Restaurant is not exist",
             data: "",
