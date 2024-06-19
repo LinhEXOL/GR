@@ -20,7 +20,7 @@ let handleLogin = async (req, res) => {
     //return userInfor
     // access_token :JWT json web token
 
-    return res.status(data.status).json(data);
+    return res.json(data);
   } catch (e) {
     console.log("error", e);
     return res.status(500).json({
@@ -197,6 +197,21 @@ let handleCreateNewStaff = async (req, res, io) => {
   }
 };
 
+const handleChangePassword = async (req, res) => {
+  try {
+    let data = await userService.changePassword(req.body);
+    return res.json(data);
+  }
+  catch (e) {
+    console.log("error", e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server",
+      data: "",
+    });
+  }
+}
+
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
@@ -207,4 +222,5 @@ module.exports = {
   handleEditUser,
   handleGetDetailUserById,
   handleCreateNewStaff,
+  handleChangePassword
 };

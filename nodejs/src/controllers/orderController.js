@@ -90,7 +90,7 @@ const handleUpdateStatusOrder = async (req, res) => {
 let handleGetDetailOrderByOrderId = async (req, res) => {
   try {
     let data = await orderService.getDetailOrderByOrderId(req.body);
-    return res.status(data.status).json(data);
+    return res.json(data);
   } catch (e) {
     console.log(e);
     return res.status(500).json({

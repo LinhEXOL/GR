@@ -392,7 +392,7 @@ let getDetailOrderByOrderId = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.orderId) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter!",
           data: "",
@@ -403,7 +403,7 @@ let getDetailOrderByOrderId = (data) => {
       });
 
       if (!order) {
-        resolve({
+        return resolve({
           status: 404,
           message: "Order is not exist",
           data: "",
@@ -450,7 +450,7 @@ let getDetailOrderByOrderId = (data) => {
       // if (!user) {
       //   user = "Guest"
       // }
-      resolve({
+      return resolve({
         status: 200,
         message: "Get detail order successfully",
         data: [
@@ -588,7 +588,7 @@ const newUpdateOrder = (data) => {
         if (preStatus === "pending" && data.orderStatus === "confirmed") {
           await mailer.notifyOrderPlaceSuccess(order);
         }
-        if(data.orderStatus === "canceled") {
+        if (data.orderStatus === "canceled") {
           await mailer.notifyOrderCanceled(order);
         }
       }

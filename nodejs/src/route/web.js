@@ -59,15 +59,14 @@ let initWebRoutes = (app, io) => {
 
   router.get("/api/get-all-tables", tableController.handleGetAllTables);
 
-  router.get("/api/get-all-users", userController.handleGetAllUsers);  
+  router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post("/api/create-new-restaurant", (req, res) =>
     restaurantController.handleCreateNewRestaurant(req, res, io)
   );
   router.post("/api/edit-restaurant", (req, res) =>
     restaurantController.handleEditRestaurant(req, res, io)
   );
-  router.post(
-    "/api/delete-restaurant", (req, res) =>
+  router.post("/api/delete-restaurant", (req, res) =>
     restaurantController.handleDeleteRestaurant(req, res, io)
   );
 
@@ -206,6 +205,7 @@ let initWebRoutes = (app, io) => {
   );
 
   router.post("/api/get-all-staff", adminController.handleGetAllStaff);
+  router.post("/api/change-password", userController.handleChangePassword);
   return app.use("/", router);
 };
 

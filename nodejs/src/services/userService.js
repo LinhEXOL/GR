@@ -110,6 +110,7 @@ let handleUserLogin = (email, password) => {
             "fullName",
             "id",
             "phoneNumber",
+            "image",
           ],
           where: { email: email },
           raw: true,
@@ -288,15 +289,43 @@ let updateUserData = (data) => {
         raw: false,
       });
       if (user) {
+        if (data.email) {
+          let isExistEmail = await checkUserEmail(data.email);
+          if (isExistEmail) {
+            return resolve({
+              status: 400,
+              message: "Email is exist, please enter other email",
+              data: "",
+            });
+          }
+          await db.Order.update(
+            { email: data.email },
+            { where: { email: user.email } }
+          );
+        }
+        if (data.phoneNumber) {
+          let isExistPhoneNumber = await checkUserPhoneNumber(data.phoneNumber);
+          if (isExistPhoneNumber) {
+            return resolve({
+              status: 400,
+              message: "Phone number is exist, please enter other phone number",
+              data: "",
+            });
+          }
+          await db.Order.update(
+            { phoneNumber: data.phoneNumber },
+            { where: { phoneNumber: user.phoneNumber } }
+          );
+        }
         for (let key in data) {
           if (key !== "id") {
             user[key] = data[key];
-            if(key === "restaurantId") {
+            if (key === "restaurantId") {
               let staffRestaurantMap = await db.StaffRestaurantMap.findOne({
                 where: { staffId: data.id },
                 raw: false,
               });
-              if(staffRestaurantMap) {
+              if (staffRestaurantMap) {
                 staffRestaurantMap.restaurantId = data.restaurantId;
                 await staffRestaurantMap.save();
               } else {
@@ -313,6 +342,46 @@ let updateUserData = (data) => {
         return resolve({
           status: 200,
           message: "Update the user successfully!",
+          data: user,
+        });
+      } else {
+        return resolve({
+          status: 404,
+          message: "User not found!",
+          data: "",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
+
+let changePassword = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id || !data.currentPassword || !data.newPassword) {
+        return resolve({
+          status: 400,
+          message: "Missing required parameter",
+        });
+      }
+      let user = await db.User.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (user) {
+        let check = await bcrypt.compare(data.currentPassword, user.password);
+        if (!check)
+          return resolve({
+            status: 400,
+            message: "Current password is incorrect!",
+          });
+        user.password = await bcrypt.hashSync(data.newPassword, salt);
+        await user.save();
+        return resolve({
+          status: 200,
+          message: "Change password successfully!",
           data: user,
         });
       } else {
@@ -418,4 +487,5 @@ module.exports = {
   updateUserData: updateUserData,
   deleteUser: deleteUser,
   createNewStaff,
+  changePassword,
 };
