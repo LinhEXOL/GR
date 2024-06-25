@@ -13,21 +13,27 @@ let handleCreateNewCategory = async (req, res) => {
   return res.json(data);
 };
 
-let handleDeleteCategory = async (req, res) => {
+let handleDeleteCategory = async (req, res, io) => {
   if (!req.body.id) {
-    return res.status(400).json({
+    return res.json({
       status: 400,
       message: "Missing required parameter",
       data: "",
     });
   }
   let data = await categoryService.deleteCategory(req.body.id);
-  return res.status(data.status).json(data);
+  if(data.status === 200){
+    io.sockets.emit("update-data", "success");
+  }
+  return res.json(data);
 };
 
-let handleEditCategory = async (req, res) => {
+let handleEditCategory = async (req, res, io) => {
   let data = await categoryService.updateCategoryData(req.body);
-  return res.status(data.status).json(data);
+  if(data.status === 200){
+    io.sockets.emit("update-data", "success");
+  }
+  return res.json(data);
 };
 module.exports = {
   handleGetAllCategories,

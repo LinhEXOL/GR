@@ -137,8 +137,12 @@ let initWebRoutes = (app, io) => {
     "/api/create-new-category",
     categoryController.handleCreateNewCategory
   );
-  router.post("/api/edit-category", categoryController.handleEditCategory);
-  router.post("/api/delete-category", categoryController.handleDeleteCategory);
+  router.post("/api/edit-category", (req, res) =>
+    categoryController.handleEditCategory(req, res, io)
+  );
+  router.post("/api/delete-category", (req, res) =>
+    categoryController.handleDeleteCategory(req, res, io)
+  );
 
   router.get(
     "/api/get-list-customer-for-staff",
@@ -206,7 +210,10 @@ let initWebRoutes = (app, io) => {
 
   router.post("/api/get-all-staff", adminController.handleGetAllStaff);
   router.post("/api/change-password", userController.handleChangePassword);
-  router.post("/api/get-all-order-by-customerId", orderController.handleGetAllOrderByCustomerId);
+  router.post(
+    "/api/get-all-order-by-customerId",
+    orderController.handleGetAllOrderByCustomerId
+  );
   return app.use("/", router);
 };
 

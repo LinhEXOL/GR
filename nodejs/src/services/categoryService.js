@@ -57,6 +57,16 @@ let deleteCategory = (categoryId) => {
         });
       }
       await db.Category.destroy({ where: { id: categoryId } });
+      await db.Dish.update(
+        {
+          categoryId: null,
+        },
+        {
+          where: {
+            categoryId: categoryId,
+          },
+        }
+      );
       resolve({
         status: 200,
         message: "category is deleted",
@@ -72,7 +82,7 @@ let updateCategoryData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
-        resolve({
+        return resolve({
           status: 400,
           message: "Missing required parameter",
           data: "",
@@ -83,15 +93,20 @@ let updateCategoryData = (data) => {
         raw: false,
       });
       if (category) {
-        category.description = data.description;
+        for (let key in data) {
+          if (key !== "id") {
+            category[key] = data[key];
+          }
+        }
+        category.updatedAt = new Date();
         await category.save();
-        resolve({
+        return resolve({
           status: 200,
           message: "Update the category succeeds!",
           data: category,
         });
       } else {
-        resolve({
+        return resolve({
           status: 404,
           message: "category is not exist",
           data: "",
