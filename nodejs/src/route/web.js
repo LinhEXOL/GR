@@ -12,6 +12,7 @@ import paymentController from "../controllers/paymentController";
 import categoryController from "../controllers/categoryController";
 import comboController from "../controllers/comboController";
 import adminController from "../controllers/adminController";
+import invoiceController from "../controllers/invoiceController";
 
 let router = express.Router();
 
@@ -194,6 +195,15 @@ let initWebRoutes = (app, io) => {
     orderController.handleUpdateOrder(req, res, io)
   );
   router.post("/api/update-order-item", orderController.handleUpdateOrderItem);
+
+  router.post("/api/checkout-order", (req, res) =>
+    orderController.handleCheckoutOrder(req, res, io)
+  );
+
+  router.post("/api/create-invoice", (req, res) =>
+    invoiceController.handleCreateInvoice(req, res, io)
+  );
+
   router.post(
     "/api/get-available-tables",
     tableController.handleGetAvailableTables

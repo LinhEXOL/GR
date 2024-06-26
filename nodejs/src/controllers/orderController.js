@@ -131,8 +131,8 @@ const handleGetAllOrderByCustomerId = async (req, res) => {
 const handleUpdateOrder = async (req, res, io) => {
   try {
     let data = await orderService.newUpdateOrder(req.body);
-    if(data.status === 200) io.emit('update-order', 'success');
-    else io.emit('update-order', 'fail');
+    if (data.status === 200) io.emit("update-order", "success");
+    else io.emit("update-order", "fail");
     return res.status(data.status).json(data);
   } catch (e) {
     console.log(e);
@@ -156,6 +156,21 @@ const handleUpdateOrderItem = async (req, res) => {
   }
 };
 
+const handleCheckoutOrder = async (req, res, io) => {
+  try {
+    let data = await orderService.checkoutOrder(req.body);
+    if (data.status === 200) io.emit("checkout-order", "success");
+    else io.emit("checkout-order", "fail");
+    return res.status(data.status).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: 500,
+      message: "Error from server...",
+    });
+  }
+};
+
 module.exports = {
   handleGetAllOrders,
   registerHandler,
@@ -169,4 +184,5 @@ module.exports = {
   handleUpdateOrder,
   handleUpdateOrderItem,
   handleGetAllOrderByCustomerId,
+  handleCheckoutOrder,
 };

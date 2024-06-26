@@ -2,6 +2,7 @@ const table = require("../models/table");
 const dateTimeValidator = require("../utils/dateAndTimeValidator");
 import db from "../models/index";
 import mailer from "./mailService";
+const invoiceService = require("../services/invoiceService");
 
 const getAllOrders = async (orderDAO) => {
   return await orderDAO.findAllOrders();
@@ -399,7 +400,7 @@ const getAllOrdersByCustomerId = (data) => {
         });
       }
       let orders = await db.Order.findAll({
-        where: { cusId: data.id},
+        where: { cusId: data.id },
       });
 
       resolve({
@@ -692,6 +693,16 @@ const checkoutOrder = (data) => {
         });
         return;
       }
+      let subAmount = order.totalAmount - order.depositAmount;
+      let change = data.receivedMoney - subAmount;
+      return resolve({
+        status: 200,
+        message: "Checkout successful",
+        data: {
+          subAmount,
+          change,
+        },
+      });
     } catch (e) {
       reject(e);
     }
@@ -713,4 +724,5 @@ module.exports = {
   newUpdateOrder,
   createOrderByStaff,
   getAllOrdersByCustomerId,
+  checkoutOrder,
 };
