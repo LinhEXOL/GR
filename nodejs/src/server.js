@@ -7,7 +7,10 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 
-const {updateOrderStatus, updateTable} = require("./controllers/updateController");
+const {
+  updateOrderStatus,
+  updateTable,
+} = require("./controllers/updateController");
 
 var cron = require("node-cron");
 
@@ -29,10 +32,10 @@ let server = http.createServer(app);
 // Create a Socket.IO server and attach it to the HTTP server
 let io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3001",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 viewEngine(app);
@@ -40,9 +43,9 @@ initWebRoutes(app, io);
 
 connectDB();
 
-// 0 */5 * * * *  5 phút 1 lần 
+// 0 */5 * * * *  5 phút 1 lần
 
-cron.schedule(" 0 59 23 * * *", async() => {
+cron.schedule(" 0 59 23 * * *", async () => {
   console.log("Running a task update order status ...");
   await updateOrderStatus();
   console.log("Running a task update table ...");

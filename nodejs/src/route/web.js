@@ -163,7 +163,9 @@ let initWebRoutes = (app, io) => {
   router.put("/api/edit-order", orderController.editHandler);
   router.delete("api/delete-order", orderController.cancelHandler);
   router.post("/api/choose-table", orderController.chooseTableHandler);
-  router.patch("/api/free-table", tableController.freeTableHandler);
+  router.post("/api/free-table", (req, res) =>
+    tableController.freeTableHandler(req, res, io)
+  );
   router.post("/api/search-table", tableController.handleSearchTable);
 
   router.post(

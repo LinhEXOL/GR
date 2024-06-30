@@ -1,4 +1,3 @@
-
 import db from "../models/index";
 const { Op } = require("sequelize");
 const moment = require("moment");
@@ -77,14 +76,14 @@ let deleteTable = (data) => {
           data: "",
         });
       }
-      if(table.orderId !== 0) {
+      if (table.orderId !== 0) {
         return resolve({
           status: 400,
           message: "Table is in used, can not delete!",
           data: "",
         });
       }
-      await db.Table.destroy({ where: { id: data.id} });
+      await db.Table.destroy({ where: { id: data.id } });
       return resolve({
         status: 200,
         message: "table is deleted",
@@ -147,7 +146,7 @@ let updateTableData = (data) => {
           table: table,
         });
       } else {
-       return resolve({
+        return resolve({
           status: 404,
           message: "Table is not exist",
           data: "",
@@ -193,16 +192,54 @@ let getDetailTableById = (tableId) => {
   });
 };
 
-const freeTable = async ({ tableDAO, orderDAO }, tableId) => {
-  const table = await tableDAO.findTableById(tableId);
-  const res = await tableDAO.freeTable(orderDAO, table);
-  if (!table)
-    throw {
-      status: 404,
-      message: "Restaurant table not found!",
-    };
+const freeTable = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.orderId) {
+        resolve({
+          status: 400,
+          message: "Missing required parameter",
+          data: "",
+        });
+      } else {
+        // Tìm các bàn có orderId trùng với tham số orderId
+        // let tables = await db.Table.findAll({ where: { orderId: orderId } });
 
-  return await tableDAO.freeTable(orderDAO, table);
+        // // Kiểm tra nếu không tìm thấy bàn nào thì trả về lỗi 404
+        // if (!tables || tables.length === 0) {
+        //   throw {
+        //     status: 404,
+        //     message: "Restaurant table not found!",
+        //   };
+        // }
+
+        // Update orderId của từng bàn thành 0
+        // const updatePromises = tables.map(async (table) => {
+        //   await db.Table.update({ orderId: 0 }, { where: { id: table.id } });
+        // });
+
+        let tables = await db.Table.update(
+          { orderId: 0 },
+          { where: { orderId: data.orderId } }
+        );
+        console.log("🚀 ~ returnnewPromise ~ orderId:", data.orderId);
+
+        console.log("TABLE", tables);
+
+        // Chờ cho tất cả các promise update hoàn thành
+        //await Promise.all(updatePromises);
+
+        // Resolve với thông báo thành công
+        resolve({
+          status: 200,
+          message: "Successfully freed the chosen table",
+          data: "",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
 
 let searchTable = (data) => {
