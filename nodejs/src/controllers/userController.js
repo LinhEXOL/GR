@@ -40,7 +40,7 @@ let handleRegister = async (req, res) => {
       !req.body.address ||
       !req.body.fullName
     ) {
-      return res.status(400).json({
+      return res.json({
         status: 400,
         message: "Missing required parameter",
         data: "",
@@ -48,7 +48,7 @@ let handleRegister = async (req, res) => {
     }
 
     if (req.body.password && req.body.password.length < 4) {
-      return res.status(422).json({
+      return res.json({
         status: 422,
         message: "Your password must have more than 3 letters",
         data: "",
@@ -60,10 +60,10 @@ let handleRegister = async (req, res) => {
     //return userInfor
     // access_token :JWT json web token
 
-    return res.status(data.status).json(data);
+    return res.json(data);
   } catch (e) {
     console.log("error", e);
-    return res.status(500).json({
+    return res.json({
       status: 500,
       message: "Error from server",
       data: "",
@@ -201,8 +201,7 @@ const handleChangePassword = async (req, res) => {
   try {
     let data = await userService.changePassword(req.body);
     return res.json(data);
-  }
-  catch (e) {
+  } catch (e) {
     console.log("error", e);
     return res.status(500).json({
       status: 500,
@@ -210,7 +209,7 @@ const handleChangePassword = async (req, res) => {
       data: "",
     });
   }
-}
+};
 
 module.exports = {
   handleLogin: handleLogin,
@@ -222,5 +221,5 @@ module.exports = {
   handleEditUser,
   handleGetDetailUserById,
   handleCreateNewStaff,
-  handleChangePassword
+  handleChangePassword,
 };

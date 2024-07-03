@@ -4,19 +4,19 @@ module.exports = {
     await queryInterface.createTable("ComboDishes", {
       comboId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Combos",
-          key: "id",
-        },
+        // references: {
+        //   model: "Combos",
+        //   key: "id",
+        // },
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
       },
       dishId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "Dishes",
-          key: "id",
-        },
+        // references: {
+        //   model: "Dishes",
+        //   key: "id",
+        // },
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
       },

@@ -32,9 +32,9 @@ let server = http.createServer(app);
 // Create a Socket.IO server and attach it to the HTTP server
 let io = new Server(server, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    credentials: false,
   },
 });
 

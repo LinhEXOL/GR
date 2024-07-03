@@ -19,21 +19,6 @@ const validateTime = (currDate, resDate, resTime) => {
   }
 };
 
-const checkClosingOpeningTime = (resTime) => {
-  if (resTime > "23:00:59") {
-    throw {
-      status: 400,
-      message:
-        "Order must be made at least an hour before closing time (12:00 AM)",
-    };
-  } else if (resTime < "11:00:59") {
-    throw {
-      status: 400,
-      message: "You can't make order before opening time! (11:00 AM)",
-    };
-  }
-};
-
 const isFieldEmpty = (payload) => {
   if (
     !payload.fullName ||
