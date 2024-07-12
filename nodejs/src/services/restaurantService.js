@@ -23,19 +23,7 @@ const _ = require("lodash");
 let getAllRestaurants = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let restaurants = await db.Restaurant.findAll({
-        where: { isDelete: "0" },
-        attributes: [
-          "id",
-          "name",
-          "address",
-          "provinceId",
-          "image",
-          "latitude",
-          "longitude",
-          "isOpen",
-        ],
-      });
+      let restaurants = await db.Restaurant.findAll();
       resolve({
         status: 200,
         message: "OK",
@@ -96,13 +84,11 @@ let createNewRestaurant = (data) => {
       }
       let restaurant = await db.Restaurant.create({
         name: data.name,
-        provinceId: data.provinceId,
+        province: data.province,
         image: data.image,
         address: data.address,
         longitude: data.longitude,
         latitude: data.latitude,
-        isOpen: 0,
-        isDelete: "0",
       });
       resolve({
         status: 200,
@@ -129,8 +115,6 @@ let deleteRestaurant = (restaurantId) => {
           data: "",
         });
       } else {
-        restaurant.isDelete = "1";
-        restaurant.isOpen = "0";
         await restaurant.save();
         return resolve({
           status: 200,
@@ -459,7 +443,7 @@ let getRestaurantByLocation = (location) => {
         } else {
           //find by location
           restaurants = await db.Restaurant.findAll({
-            where: { provinceId: location },
+            where: { province: location },
           });
         }
         if (restaurants && restaurants.length != 0) {

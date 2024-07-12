@@ -60,13 +60,13 @@ let getDetailTypeById = (inputId, location) => {
           if (location === "ALL") {
             restaurantType = await db.Restaurant.findAll({
               where: { typeId: inputId },
-              attributes: ["id", "provinceId"],
+              attributes: ["id", "province"],
             });
           } else {
             //find by location
             restaurantType = await db.Restaurant.findAll({
-              where: { typeId: inputId, provinceId: location },
-              attributes: ["id", "provinceId"],
+              where: { typeId: inputId, province: location },
+              attributes: ["id", "province"],
             });
           }
 
